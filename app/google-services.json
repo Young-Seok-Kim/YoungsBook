@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "3981914964",
+    "project_id": "youngsbook-65af7",
+    "storage_bucket": "youngsbook-65af7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3981914964:android:16f113c64db890ba818ec1",
+        "android_client_info": {
+          "package_name": "com.example.youngsbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3981914964-u62hhq0q7p8101hgqbubm6nvpor1iovj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.youngsbook",
+            "certificate_hash": "ebe1243efd67572c686f62a7d53ef1f2d128acfd"
+          }
+        },
+        {
+          "client_id": "3981914964-fq9lnqe76ok13htducmp3r7ck2hgrjjg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8vBqfPtjtn70JqTyExkR6KmTOkkHimLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3981914964-fq9lnqe76ok13htducmp3r7ck2hgrjjg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
