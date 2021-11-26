@@ -1,4 +1,4 @@
-package com.example.youngsbook.ui.login
+package com.youngsbook.ui.login
 
 /**
  * Authentication result : success (user details) or error message.

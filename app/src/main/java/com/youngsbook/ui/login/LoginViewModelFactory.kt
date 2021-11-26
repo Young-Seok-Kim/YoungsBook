@@ -1,9 +1,9 @@
-package com.example.youngsbook.ui.login
+package com.youngsbook.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.youngsbook.data.LoginDataSource
-import com.example.youngsbook.data.LoginRepository
+import com.youngsbook.data.LoginDataSource
+import com.youngsbook.data.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

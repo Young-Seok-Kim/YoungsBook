@@ -1,4 +1,4 @@
-package com.example.youngsbook.common
+package com.youngsbook
 
 class Data {
 

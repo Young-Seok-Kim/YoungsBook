@@ -7,18 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:3981914964:android:16f113c64db890ba818ec1",
+        "mobilesdk_app_id": "1:3981914964:android:d29bfa7f1b60a798818ec1",
         "android_client_info": {
-          "package_name": "com.example.youngsbook"
+          "package_name": "com.youngsbook"
         }
       },
       "oauth_client": [
         {
-          "client_id": "3981914964-u62hhq0q7p8101hgqbubm6nvpor1iovj.apps.googleusercontent.com",
+          "client_id": "3981914964-k7fttvtgidqbdg04u5uc16cfrv6r19nh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.youngsbook",
-            "certificate_hash": "ebe1243efd67572c686f62a7d53ef1f2d128acfd"
+            "package_name": "com.youngsbook",
+            "certificate_hash": "ebe1243efd67572c686f62a7d53ef1 f2d128acfd"
           }
         },
         {

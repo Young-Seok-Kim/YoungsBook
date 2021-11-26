@@ -1,4 +1,4 @@
-package com.example.youngsbook
+package com.youngsbook
 
 import org.junit.Test
 

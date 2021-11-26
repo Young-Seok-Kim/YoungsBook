@@ -1,4 +1,4 @@
-package com.example.youngsbook.ui.login
+package com.youngsbook.ui.login
 
 import android.app.Activity
 import androidx.lifecycle.Observer
@@ -12,9 +12,9 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import com.example.youngsbook.databinding.ActivityLoginBinding
+import com.youngsbook.databinding.ActivityLoginBinding
 
-import com.example.youngsbook.R
+import com.youngsbook.R
 
 class LoginActivity : AppCompatActivity() {
 

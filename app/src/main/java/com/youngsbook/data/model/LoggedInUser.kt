@@ -1,4 +1,4 @@
-package com.example.youngsbook.data.model
+package com.youngsbook.data.model
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

@@ -1,4 +1,4 @@
-package com.example.youngsbook.ui.login
+package com.youngsbook.ui.login
 
 /**
  * User details post authentication that is exposed to the UI

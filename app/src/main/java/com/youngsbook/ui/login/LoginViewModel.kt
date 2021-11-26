@@ -1,13 +1,13 @@
-package com.example.youngsbook.ui.login
+package com.youngsbook.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import com.example.youngsbook.data.LoginRepository
-import com.example.youngsbook.data.Result
+import com.youngsbook.data.LoginRepository
+import com.youngsbook.data.Result
 
-import com.example.youngsbook.R
+import com.youngsbook.R
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
