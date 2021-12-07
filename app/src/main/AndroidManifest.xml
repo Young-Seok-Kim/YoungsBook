@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.youngsbook">
+    <!-- 네트워크 사용에 대한 퍼미션 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.YoungsBook"
-        android:fullBackupContent="true">
+        android:fullBackupContent="true"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"

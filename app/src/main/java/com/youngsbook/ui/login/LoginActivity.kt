@@ -16,6 +16,12 @@ import com.youngsbook.databinding.ActivityLoginBinding
 
 import com.youngsbook.R
 
+import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.youngsbook.common.NetworkConnect
+
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
@@ -91,12 +97,26 @@ class LoginActivity : AppCompatActivity() {
                 false
             }
 
-            login?.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+            login?.setOnClickListener { // 로그인 버튼 클릭시 이벤트
+//                loading.visibility = View.VISIBLE
+//                loginViewModel.login(username.text.toString(), password.text.toString())
+                val gsonObj = Gson()
+                val jsonobj = JsonObject()
+                jsonobj.addProperty("컬럼", "Value")
+                val jsonData = gsonObj.toJson(jsonobj)
+                Log.d("Json 확인",jsonData)
+                NetworkConnect.setRetrofitInit()
+
             }
+
         }
     }
+
+    private fun test()
+    {
+
+    }
+
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
@@ -113,6 +133,8 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
+
+
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.
