@@ -1,4 +1,4 @@
-package com.youngsbook.main
+package com.youngsbook.common.network
 
 import retrofit2.Call
 import retrofit2.http.*
@@ -7,7 +7,7 @@ interface RetrofitService {
     //post1
     // 매개변수를 미리 정해두는 방식
     @FormUrlEncoded
-    @POST("/")
+    @POST("/test")
     fun postRequest(
         @Field("id") id: String,
         @Field("pw") pw: String

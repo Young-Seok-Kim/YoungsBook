@@ -1,9 +1,7 @@
-package com.youngsbook.common
+package com.youngsbook.common.network
 
 import android.util.Log
 import com.google.gson.GsonBuilder
-import com.youngsbook.main.ResponseDTO
-import com.youngsbook.main.RetrofitService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,7 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkConnect {
     val gson = GsonBuilder().setLenient().create()
     public fun setRetrofitInit(){
-        var mRetrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:8080/YoungsBook/").addConverterFactory(GsonConverterFactory.create(gson)).build()
+        var mRetrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:8080/YoungsBook/").addConverterFactory(GsonConverterFactory.create(
+            gson
+        )).build()
 
         val server : RetrofitService = mRetrofit.create(RetrofitService::class.java)
 

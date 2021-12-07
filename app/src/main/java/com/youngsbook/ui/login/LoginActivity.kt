@@ -19,7 +19,7 @@ import com.youngsbook.R
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.youngsbook.common.NetworkConnect
+import com.youngsbook.common.network.NetworkConnect
 
 
 class LoginActivity : AppCompatActivity() {
