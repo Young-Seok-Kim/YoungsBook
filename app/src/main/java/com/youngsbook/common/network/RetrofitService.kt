@@ -16,8 +16,8 @@ interface RetrofitService {
     //post2
     // 호출하는 곳에서 매개변수를 HashMap 형태로 보내는 방식
     @POST("{path}")
-    fun testRequest(
-        @Path("path")path: String,
+    fun connectRequest(
+        @Path("path") retrofitPath: String,
         @Body parameters: HashMap<String, Any>
     ): Call<ResponseDTO>
 }

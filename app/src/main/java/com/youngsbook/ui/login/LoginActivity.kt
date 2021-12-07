@@ -100,12 +100,16 @@ class LoginActivity : AppCompatActivity() {
             login?.setOnClickListener { // 로그인 버튼 클릭시 이벤트
 //                loading.visibility = View.VISIBLE
 //                loginViewModel.login(username.text.toString(), password.text.toString())
-                val gsonObj = Gson()
-                val jsonobj = JsonObject()
-                jsonobj.addProperty("컬럼", "Value")
-                val jsonData = gsonObj.toJson(jsonobj)
-                Log.d("Json 확인",jsonData)
-                NetworkConnect.setRetrofitInit()
+
+                var params:HashMap<String, Any> = HashMap<String, Any>()
+                params.put("id", "kys1682")
+                params.put("pw", 123456)
+
+
+                NetworkConnect.connectNetwork("login.do", params,
+                    onSuccess = { -> Toast.makeText(context,"연결성공",Toast.LENGTH_SHORT).show()}
+                ,   onFail = { -> Toast.makeText(context,"연결실패",Toast.LENGTH_SHORT).show()}
+                )
 
             }
 
