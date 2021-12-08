@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
 
                 NetworkConnect.connectNetwork("login.do", params,
                     onSuccess = { -> Toast.makeText(context,"연결성공",Toast.LENGTH_SHORT).show()}
-                ,   onFail = { -> Toast.makeText(context,"연결실패",Toast.LENGTH_SHORT).show()}
+                    ,context
                 )
 
             }
