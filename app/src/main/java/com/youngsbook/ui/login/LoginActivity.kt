@@ -16,9 +16,6 @@ import com.youngsbook.databinding.ActivityLoginBinding
 
 import com.youngsbook.R
 
-import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.youngsbook.common.network.NetworkConnect
 
 
@@ -33,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = binding.username
+        val userid = binding.userid
         val password = binding.password
         val login = binding.buttonLogin
         val loading = binding.loading
@@ -48,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
             login?.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
+                userid?.error = getString(loginState.usernameError)
             }
             if (loginState.passwordError != null) {
                 password.error = getString(loginState.passwordError)
@@ -71,9 +68,9 @@ class LoginActivity : AppCompatActivity() {
             finish()
         })
 
-        username.afterTextChanged {
+        userid?.afterTextChanged {
             loginViewModel.loginDataChanged(
-                username.text.toString(),
+                userid?.text.toString(),
                 password.text.toString()
             )
         }
@@ -81,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
         password.apply {
             afterTextChanged {
                 loginViewModel.loginDataChanged(
-                    username.text.toString(),
+                    userid?.text.toString(),
                     password.text.toString()
                 )
             }
@@ -90,35 +87,35 @@ class LoginActivity : AppCompatActivity() {
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
                         loginViewModel.login(
-                            username.text.toString(),
+                            userid?.text.toString(),
                             password.text.toString()
                         )
                 }
                 false
             }
 
-            login?.setOnClickListener { // 로그인 버튼 클릭시 이벤트
-//                loading.visibility = View.VISIBLE
-//                loginViewModel.login(username.text.toString(), password.text.toString())
-
-                var params:HashMap<String, Any> = HashMap<String, Any>()
-                params.put("id", "kys1682")
-                params.put("pw", 123456)
-
-
-                NetworkConnect.connectNetwork("login.do", params,
-                    onSuccess = { -> Toast.makeText(context,"연결성공",Toast.LENGTH_SHORT).show()}
-                    ,context
-                )
-
-            }
-
         }
+
+        initButton()
     }
 
-    private fun test()
+    private fun initButton()
     {
+        binding.buttonLogin?.setOnClickListener { // 로그인 버튼 클릭시 이벤트
+                binding.loading.visibility = View.VISIBLE
+//                loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
 
+            var params: HashMap<String, Any> = HashMap<String, Any>()
+            params.put("id", binding.userid!!.text.toString())
+            params.put("pw", binding.password.text.toString())
+
+            NetworkConnect.connectNetwork("login.do",
+                params,
+                onSuccess = { -> Toast.makeText(applicationContext, "연결성공", Toast.LENGTH_SHORT).show() },
+                applicationContext
+            )
+            binding.loading.visibility = View.INVISIBLE
+        }
     }
 
 
