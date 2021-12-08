@@ -1,6 +1,7 @@
 package com.youngsbook.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.R
 
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.ui.main.MainActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -30,6 +32,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.buttonSignUp!!.isEnabled = true
 
         val userid = binding.userid
         val password = binding.password
@@ -71,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
 
         userid?.afterTextChanged {
             loginViewModel.loginDataChanged(
-                userid?.text.toString(),
+                userid.text.toString(),
                 password.text.toString()
             )
         }
@@ -104,19 +108,28 @@ class LoginActivity : AppCompatActivity() {
     {
         binding.buttonLogin?.setOnClickListener { // 로그인 버튼 클릭시 이벤트
                 binding.loading.visibility = View.VISIBLE
-//                loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
+                loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
 
-            var params: JsonObject = JsonObject()
-            params.addProperty("id", binding.userid!!.text.toString())
-            params.addProperty("pw", binding.password.text.toString())
+            val enterLogin: JsonObject = JsonObject()
+            enterLogin.addProperty("id", binding.userid!!.text.toString())
+            enterLogin.addProperty("pw", binding.password.text.toString())
 
-            NetworkConnect.connectNetwork("login.do",
-                params,
-                onSuccess = { -> Toast.makeText(applicationContext, "연결성공", Toast.LENGTH_SHORT).show() },
-                applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
+            NetworkConnect.connectNetwork("login.do"
+                ,enterLogin
+                ,applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                ,onSuccess = { ->
+                    Toast.makeText(applicationContext, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                    openMainActivity()
+                }
+
             )
             binding.loading.visibility = View.INVISIBLE
         }
+    }
+
+    private fun openMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
 
