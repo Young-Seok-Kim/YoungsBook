@@ -1,3 +1,6 @@
 package com.youngsbook.common.network
 
-data class ResponseDTO (var result: HashMap<String, Any> )
+import com.google.gson.JsonObject
+import kotlin.collections.HashMap
+
+data class ResponseDTO (var returnValue : String)

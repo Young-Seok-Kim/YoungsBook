@@ -12,6 +12,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.google.gson.JsonObject
 import com.youngsbook.databinding.ActivityLoginBinding
 
 import com.youngsbook.R
@@ -105,14 +106,14 @@ class LoginActivity : AppCompatActivity() {
                 binding.loading.visibility = View.VISIBLE
 //                loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
 
-            var params: HashMap<String, Any> = HashMap<String, Any>()
-            params.put("id", binding.userid!!.text.toString())
-            params.put("pw", binding.password.text.toString())
+            var params: JsonObject = JsonObject()
+            params.addProperty("id", binding.userid!!.text.toString())
+            params.addProperty("pw", binding.password.text.toString())
 
             NetworkConnect.connectNetwork("login.do",
                 params,
                 onSuccess = { -> Toast.makeText(applicationContext, "연결성공", Toast.LENGTH_SHORT).show() },
-                applicationContext
+                applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
             )
             binding.loading.visibility = View.INVISIBLE
         }

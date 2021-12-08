@@ -1,5 +1,6 @@
 package com.youngsbook.common.network
 
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,6 +19,6 @@ interface RetrofitService {
     @POST("{path}")
     fun connectRequest(
         @Path("path") retrofitPath: String,
-        @Body parameters: HashMap<String, Any>
+        @Body parameters: JsonObject
     ): Call<ResponseDTO>
 }
