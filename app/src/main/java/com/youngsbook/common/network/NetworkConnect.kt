@@ -25,6 +25,8 @@ object NetworkConnect {
 
                 Log.d("Retrofit", "$path 요청성공")
 
+                NetworkConnect.endProgress()
+
                 if(response!!.isSuccessful) {
                     onSuccess()
                 }

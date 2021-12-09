@@ -117,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                 val enterLogin: JsonObject = JsonObject()
                 enterLogin.addProperty("id", binding.userid!!.text.toString())
                 enterLogin.addProperty("pw", binding.password.text.toString())
-                NetworkConnect.startProgress(this)
+                NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
                     NetworkConnect.connectNetwork("login.do",
                         enterLogin,
