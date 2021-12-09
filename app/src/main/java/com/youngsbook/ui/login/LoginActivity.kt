@@ -2,6 +2,7 @@ package com.youngsbook.ui.login
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -20,6 +21,9 @@ import com.youngsbook.R
 
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.ui.main.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class LoginActivity : AppCompatActivity() {
@@ -27,13 +31,19 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
+    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var editor : SharedPreferences.Editor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonSignUp!!.isEnabled = true
+        sharedPreferences = getSharedPreferences("loginInfo", MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
+        checkSharedPreference() // 저장된 값을 가져오는 함수
+
 
         val userid = binding.userid
         val password = binding.password
@@ -45,9 +55,6 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
-
-            // disable login button unless both username / password is valid
-            login?.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
                 userid?.error = getString(loginState.usernameError)
@@ -63,9 +70,6 @@ class LoginActivity : AppCompatActivity() {
             loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
             }
             setResult(Activity.RESULT_OK)
 
@@ -106,42 +110,76 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initButton()
     {
-        binding.buttonLogin?.setOnClickListener { // 로그인 버튼 클릭시 이벤트
-                binding.loading.visibility = View.VISIBLE
-                loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
+        binding.buttonLogin!!.setOnClickListener { // 로그인 버튼 클릭시 이벤트
 
-            val enterLogin: JsonObject = JsonObject()
-            enterLogin.addProperty("id", binding.userid!!.text.toString())
-            enterLogin.addProperty("pw", binding.password.text.toString())
+            if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
+                loginViewModel.login(binding.userid!!.text.toString(),binding.password.text.toString())
 
-            NetworkConnect.connectNetwork("login.do"
-                ,enterLogin
-                ,applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
-                ,onSuccess = { ->
-                    Toast.makeText(applicationContext, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                    openMainActivity()
+                val enterLogin: JsonObject = JsonObject()
+                enterLogin.addProperty("id", binding.userid!!.text.toString())
+                enterLogin.addProperty("pw", binding.password.text.toString())
+                NetworkConnect.startProgress(this)
+                CoroutineScope(Dispatchers.Default).launch {
+                    NetworkConnect.connectNetwork("login.do",
+                        enterLogin,
+                        applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                        , onSuccess = { ->
+                            if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
+                                editor.putBoolean(getString(R.string.login_information), true)
+                                editor.putString(
+                                    getString(R.string.auto_login_id),
+                                    binding.userid!!.text.toString()
+                                )
+                                editor.putString(
+                                    getString(R.string.auto_login_password),
+                                    binding.password.text.toString()
+                                )
+                                editor.commit()
+                            } else {
+                                editor.putBoolean(getString(R.string.login_information), false)
+                                editor.putString(getString(R.string.auto_login_id), "")
+                                editor.putString(getString(R.string.auto_login_password), "")
+                                editor.commit()
+                            }
+
+                            openMainActivity()
+                        }
+                    )
                 }
-
-            )
-            binding.loading.visibility = View.INVISIBLE
+                NetworkConnect.endProgress()
+            }
+            else
+            {
+                Toast.makeText(applicationContext, "아이디, 비밀번호를 규칙에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show()
+                binding.userid?.text
+                return@setOnClickListener
+            }
         }
+
+        binding.buttonSignUp!!.setOnClickListener(){
+            NetworkConnect.startProgress(this)
+        }
+
+    }
+
+    private fun checkBeforeLogin() : Boolean // 아이디와 비밀번호를 자리수에 맞게 입력하는지 확인
+    {
+        if((binding.userid?.text?.length ?: 0) >= 1 && binding.password.text.length >= 6)
+            return true
+        
+        return false
+    }
+
+    fun checkSharedPreference()
+    {
+        binding.checkboxSaveLoginInfo!!.isChecked = sharedPreferences.getBoolean(getString(R.string.login_information),false)
+        binding.userid!!.setText(sharedPreferences.getString(getString(R.string.auto_login_id),""))
+        binding.password.setText(sharedPreferences.getString(getString(R.string.auto_login_password),""))
     }
 
     private fun openMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-    }
-
-
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
