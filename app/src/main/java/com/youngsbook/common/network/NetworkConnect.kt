@@ -33,9 +33,17 @@ object NetworkConnect {
                 }
             }
             override fun onFailure(call: Call<ResponseDTO>?, t: Throwable?) {
+                NetworkConnect.endProgress()
+                Toast.makeText(contextForConnect, "서버연결 요청실패", Toast.LENGTH_SHORT).show()
                 Log.d("Retrofit", "$path 요청실패")
             }
         })
+    }
+    suspend fun test(path : String, param : JsonObject
+                     , contextForConnect : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
+                     , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
+    ){
+        RetrofitInstance.SERVER.connectRequest(path, param).execute()
     }
 
     fun startProgress(context: Context) // 서버와 통신하는동안 터치할수 없도록 하는 코드
@@ -52,10 +60,9 @@ object NetworkConnect {
 
     }
 
-    fun endProgress() // 터치 할수 없도록 한 세팅을 다시 터치가능하도록 세팅
+    fun endProgress()
     {
         if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             progressDialog!!.dismiss()
             progressDialog = null
         }

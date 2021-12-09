@@ -113,7 +113,6 @@ class LoginActivity : AppCompatActivity() {
         binding.buttonLogin!!.setOnClickListener { // 로그인 버튼 클릭시 이벤트
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
-                loginViewModel.login(binding.userid!!.text.toString(),binding.password.text.toString())
 
                 val enterLogin: JsonObject = JsonObject()
                 enterLogin.addProperty("id", binding.userid!!.text.toString())
@@ -124,6 +123,7 @@ class LoginActivity : AppCompatActivity() {
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
+                            loginViewModel.login(binding.userid!!.text.toString(),binding.password.text.toString())
                             if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
                                 editor.putBoolean(getString(R.string.login_information), true)
                                 editor.putString(
@@ -143,10 +143,12 @@ class LoginActivity : AppCompatActivity() {
                             }
 
                             openMainActivity()
+
                         }
                     )
+
                 }
-                NetworkConnect.endProgress()
+
             }
             else
             {
@@ -158,6 +160,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.buttonSignUp!!.setOnClickListener(){
             NetworkConnect.startProgress(this)
+            NetworkConnect.endProgress()
         }
 
     }
