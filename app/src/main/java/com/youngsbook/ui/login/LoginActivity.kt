@@ -24,6 +24,8 @@ import com.youngsbook.ui.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class LoginActivity : AppCompatActivity() {
@@ -113,17 +115,20 @@ class LoginActivity : AppCompatActivity() {
         binding.buttonLogin!!.setOnClickListener { // 로그인 버튼 클릭시 이벤트
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
+//                val enterLogin : HashMap<String, Any> = HashMap<String, Any>()
+//                enterLogin.put("ID", binding.userid!!.text.toString())
+//                enterLogin.put("PASSWORD", binding.password.text.toString())
 
-                val enterLogin: JsonObject = JsonObject()
-                enterLogin.addProperty("id", binding.userid!!.text.toString())
-                enterLogin.addProperty("pw", binding.password.text.toString())
+                val enterLogin : JsonObject = JsonObject()
+                enterLogin.addProperty("ID", binding.userid!!.text.toString())
+                enterLogin.addProperty("PASSWORD", binding.password.text.toString())
                 NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
                     NetworkConnect.connectNetwork("login.do",
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
-                            loginViewModel.login(binding.userid!!.text.toString(),binding.password.text.toString())
+//                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
                             if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
                                 editor.putBoolean(getString(R.string.login_information), true)
                                 editor.putString(
@@ -142,7 +147,7 @@ class LoginActivity : AppCompatActivity() {
                                 editor.commit()
                             }
 
-                            openMainActivity()
+//                            openMainActivity()
 
                         }
                     )
