@@ -11,6 +11,9 @@ object YoungsFunction {
 
         val resultJson : JSONArray = jsonObject.get("RESULT_LIST") as JSONArray
 
+        if(jsonObject.get("RESULT_LIST").toString() == "[]")
+            resultJson.put("")
+
         return resultJson
     }
 }

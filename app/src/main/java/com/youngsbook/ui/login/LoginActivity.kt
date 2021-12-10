@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -135,6 +136,11 @@ class LoginActivity : AppCompatActivity() {
 //                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
                             val jsonArray : JSONArray
                             jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+
+                            if(jsonArray[0].toString().isBlank()) {
+                                Toast.makeText(applicationContext,"아이디, 비밀번호를 확인해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
+                                return@connectNetwork
+                            }
                             if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
                                 editor.putBoolean(getString(R.string.login_information), true)
                                 editor.putString(
