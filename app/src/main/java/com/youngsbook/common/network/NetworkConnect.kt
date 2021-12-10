@@ -2,6 +2,7 @@ package com.youngsbook.common.network
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
@@ -12,6 +13,7 @@ import retrofit2.Response
 
 object NetworkConnect {
     private var progressDialog: ProgressDialog? = null
+    var resultString : String = ""
 
     suspend fun connectNetwork(path : String, param : JsonObject
                                , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
@@ -24,14 +26,17 @@ object NetworkConnect {
 
                 Log.d("Retrofit", "$path 요청성공")
 
-                NetworkConnect.endProgress()
-
                 if(response!!.isSuccessful) {
+                    resultString = response.body()?.returnValue.toString()
                     onSuccess()
+
                 }
                 else {
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
+
+                NetworkConnect.endProgress()
+
             }
             override fun onFailure(call: Call<ResponseDTO>?, t: Throwable?) {
                 NetworkConnect.endProgress()

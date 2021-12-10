@@ -1,6 +1,6 @@
 package com.youngsbook.common.network
 
-import com.Define
+import com.youngsbook.common.Define
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
