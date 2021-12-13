@@ -44,10 +44,11 @@ dependencies {
 //    implementation platform('com.google.firebase:firebase-bom:29.0.0')
 //    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.code.gson:gson:2.8.6' // gson 사용을 위한 라이브러리
-    
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     // 인터넷 연결을 쉽게 하기위한 라이브러리
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'

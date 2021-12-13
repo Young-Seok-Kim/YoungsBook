@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:id="@+id/list"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_bookName"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/customlayout_textview"
+            android:text="책이름"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textview_bookName"
+            android:layout_toEndOf="@+id/textview_bookName"
+            android:background="@drawable/customlayout_textview"
+            android:text="이곳에 책의 이름이 표시됩니다." />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/textview_bookReview"
+            android:layout_alignStart="@+id/textview_bookName"
+            android:layout_below="@+id/textview_bookName"
+            android:background="@drawable/customlayout_textview"
+            android:layout_marginTop="10dp"
+            android:text="이곳에 책의 후기가 들어갑니다."/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/textview_bookReview"
+            android:layout_marginTop="10dp"
+            android:background="@color/graysboro" />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

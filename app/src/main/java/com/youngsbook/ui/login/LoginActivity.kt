@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -117,9 +118,13 @@ class LoginActivity : AppCompatActivity() {
         initButton()
     }
 
-    private fun initButton()
-    {
-        binding.buttonLogin!!.setOnClickListener { // 로그인 버튼 클릭시 이벤트
+    private fun initButton() {
+//        println("test")
+        binding.buttonLogin!!.setOnClickListener {
+            // 로그인 버튼 클릭시 이벤트
+//            println(binding.userid)
+//            Log.d("WTF", binding?.userid?.text?.toString() ?: "wtfwtf")
+//            binding.userid
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
                 var test : String = ""
@@ -133,7 +138,6 @@ class LoginActivity : AppCompatActivity() {
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
-//                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
                             val jsonArray : JSONArray
                             jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
 
@@ -158,8 +162,9 @@ class LoginActivity : AppCompatActivity() {
                                 editor.putString(getString(R.string.auto_login_password), "")
                                 editor.commit()
                             }
+                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
+                            openMainActivity()
 
-//                            openMainActivity()
 
                         }
                     )
