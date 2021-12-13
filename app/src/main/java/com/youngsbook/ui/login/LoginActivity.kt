@@ -52,9 +52,6 @@ class LoginActivity : AppCompatActivity() {
 
         checkSharedPreference() // 저장된 값을 가져오는 함수
 
-
-
-
         val userid = binding.userid
         val password = binding.password
         val login = binding.buttonLogin

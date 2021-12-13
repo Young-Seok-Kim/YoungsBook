@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:id="@+id/list"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textview_Star"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="평점"
+            android:textSize="25dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar_Star"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/textview_Star"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="0"
+            android:stepSize="0.5" />
+
+
+        <TextView
+            android:id="@+id/textview_bookName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ratingBar_Star"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/customlayout_textview"
+            android:singleLine="true"
+            android:text="책이름"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/editText_bookName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textview_bookName"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/textview_bookName"
+            android:hint="이곳에 책이름을 입력합니다." />
+
+        <EditText
+            android:id="@+id/textview_bookReview"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@+id/textview_bookName"
+            android:layout_alignStart="@+id/textview_bookName"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/customlayout_textview"
+            android:hint="이곳에 책의 후기를 적어주세요" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview_bookReview"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_Save"
+                android:backgroundTint="@color/graysboro"
+                android:text="저장"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

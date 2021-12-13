@@ -1,12 +1,8 @@
 package com.youngsbook.ui.main
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.youngsbook.R
 import com.youngsbook.databinding.RecylerviewBookItemBinding
 
 class MainActivityAdapter: RecyclerView.Adapter<MainActivityAdapter.MyViewHolder>() {
@@ -15,10 +11,15 @@ class MainActivityAdapter: RecyclerView.Adapter<MainActivityAdapter.MyViewHolder
 
     inner class MyViewHolder(private val binding: RecylerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(dogData:MainActivityModel){
+        var textView_BookName = binding.textviewBookName
+        var textView_BookReview = binding.textviewBookReview
+        var ratingBar_Star = binding.ratingBarStar
+        val layout = binding.list
+
+        fun bind(reviewList:MainActivityModel){
             //binding.dogPhotoImg.=dogData.dog_img
-            binding.textviewBookName.text=dogData.name
-            binding.textviewBookReview.text= dogData.age.toString()
+            binding.textviewBookName.text=reviewList.NAME
+            binding.textviewBookReview.text= reviewList.AGE.toString()
         }
     }
 
@@ -26,6 +27,7 @@ class MainActivityAdapter: RecyclerView.Adapter<MainActivityAdapter.MyViewHolder
     //만들어진 뷰홀더 없을때 뷰홀더(레이아웃) 생성하는 함수
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding= RecylerviewBookItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+
         return MyViewHolder(binding)
     }
 
@@ -35,5 +37,17 @@ class MainActivityAdapter: RecyclerView.Adapter<MainActivityAdapter.MyViewHolder
     //적절한 데이터를 가져와서 그 데이터를 사용하여 뷰홀더의 레이아웃 채움
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(datalist[position])
+        holder.textView_BookName.text = datalist[position].NAME
+        holder.textView_BookReview.text = datalist[position].AGE.toString()
+
+        holder.layout.setOnClickListener() // 해당 행 클릭시 이벤트
+        {
+//            WriteBookReview().showNow(FragmentManager,"")
+//            Toast.makeText(holder.itemView.context,"$position",Toast.LENGTH_SHORT).show()
+        }
+
+        if (position.equals(1))
+            holder.ratingBar_Star.rating = 3.3F
+
     }
 }

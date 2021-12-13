@@ -13,4 +13,6 @@
     <string name="login_information">Save login information</string>
     <string name="auto_login_id">LoginID</string>
     <string name="auto_login_password">LoginPassword</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,9 +1,15 @@
 package com.youngsbook.ui.main
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.youngsbook.R
 import com.youngsbook.databinding.ActivityMainBinding
+import com.youngsbook.ui.BookReview.WriteBookReview
 import java.security.AccessController.getContext
 
 class MainActivity : AppCompatActivity() {
@@ -22,19 +28,19 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initFAB()
     {
-//        binding.FAB?.setOnClickListener()
-//        {
-////            initList()
-//        }
+        binding.FAB.setOnClickListener()
+        {
+            WriteBookReview().showNow(supportFragmentManager,"")
+
+        }
     }
 
     private fun initList() {
 
         with(datas){
-            add(MainActivityModel("dog1",20))
-            add(MainActivityModel("dog2",20))
-            add(MainActivityModel("dog3",20))
-
+            add(MainActivityModel(1,"dog1",20))
+            add(MainActivityModel(2,"dog2",20))
+            add(MainActivityModel(3,"dog3",20))
         }
 
         val adapter=MainActivityAdapter() //어댑터 객체 만듦
