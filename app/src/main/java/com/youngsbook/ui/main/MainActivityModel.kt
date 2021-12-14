@@ -1,7 +1,13 @@
 package com.youngsbook.ui.main
 
-data class MainActivityModel (
-    val REVIEW_NO : Int,
-    val NAME : String,
-    val AGE : Int
+import java.time.LocalDate
+
+data class MainActivityModel(
+    val READER_NAME: String,
+    val READ_DATE: String,
+    val REVIEW_NO: Int,
+    val STAR_RATING: Float,
+    val BOOK_NAME: String,
+    val READER_ID: String,
+    val REVIEW: String
 )

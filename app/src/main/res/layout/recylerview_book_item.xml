@@ -8,7 +8,7 @@
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="200dp"
         android:id="@+id/list"
         app:layout_constraintTop_toTopOf="parent"
         android:paddingStart="10dp"
@@ -53,6 +53,7 @@
             android:layout_alignStart="@+id/textview_bookName"
             android:layout_marginTop="10dp"
             android:background="@drawable/customlayout_textview"
+            android:scrollbars="horizontal"
             android:text="이곳에 책의 후기가 들어갑니다." />
 
         <View

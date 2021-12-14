@@ -10,9 +10,12 @@
     <string name="invalid_username">사용자명이 유효하지 않습니다.</string>
     <string name="invalid_password">비밀번호는 6글자 이상이어야합니다.</string>
     <string name="login_failed">Login failed</string>
-    <string name="login_information">Save login information</string>
-    <string name="auto_login_id">LoginID</string>
-    <string name="auto_login_password">LoginPassword</string>
+    <string name="auto_login_boolean">Save login information</string>
+    <string name="auto_login_id">AutoLoginID</string>
+    <string name="auto_login_password">AutoLoginPassword</string>
+    <string name="login_id">LoginID</string>
+    <string name="login_password">LoginPassword</string>
+    <string name="login_name">LoginName</string>
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -61,7 +61,7 @@
             android:hint="이곳에 책이름을 입력합니다." />
 
         <EditText
-            android:id="@+id/textview_bookReview"
+            android:id="@+id/editText_bookReview"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_below="@+id/textview_bookName"
@@ -73,7 +73,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_bookReview"
+            android:layout_below="@+id/editText_bookReview"
             android:layout_marginTop="20dp"
             android:gravity="center">
 
