@@ -186,7 +186,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.buttonSignUp!!.setOnClickListener(){
             NetworkConnect.startProgress(this)
-            NetworkConnect.endProgress()
+//            NetworkConnect.endProgress()
         }
 
     }

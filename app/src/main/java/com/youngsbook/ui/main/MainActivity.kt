@@ -2,11 +2,15 @@ package com.youngsbook.ui.main
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.youngsbook.R
 import com.youngsbook.common.Data
+import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.databinding.ActivityMainBinding
@@ -24,19 +28,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPrefer : SharedPreferences
     val datas = mutableListOf<MainActivityModel>()
 
-    lateinit var dialogDismissListener: DialogDismissListener
+    var pastVisiblesItems: Int = 0
+    var visibleItemCount: Int = 0
+    var totalItemCount: Int = 0
 
-    interface DialogDismissListener{
-        fun whenDismiss()
-    }
-
-    fun setOnDataChangeListener() {
-        this.dialogDismissListener = object : DialogDismissListener {
-            override fun whenDismiss() {
-                updateList()
-            }
-        }
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +40,67 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val dialog = WriteBookReview()
+
         setContentView(binding.root)
+        initList()
         updateList()
         initFAB()
         initListener()
+    }
+    private fun initList()
+    {
+        val recyclerView = binding.listview
+
+        val mLayoutManager: LinearLayoutManager
+        mLayoutManager = LinearLayoutManager(application)
+        recyclerView.setLayoutManager(mLayoutManager)
+
+        MainActivityAdapter.instance.setOnItemTapListener(object : RecyclerViewAdapter.OnItemTapListener{
+            override fun onDoubleTap(position: Int) {
+            }
+
+            override fun onLongTap(position: Int): Boolean {
+                return true
+            }
+
+            override fun onSingleTap(position: Int) {
+                WriteBookReview().let {
+                    it.status = Data.instance.status_update
+                    it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{
+                        override fun whenDismiss() {
+                            updateList()
+                        }
+                    })
+                    it.showNow(supportFragmentManager,"")
+                }
+            }
+        })
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) //check for scroll down
+                {
+                    visibleItemCount = mLayoutManager.childCount
+                    totalItemCount = mLayoutManager.itemCount
+                    pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition()
+
+                        if (visibleItemCount + pastVisiblesItems > totalItemCount) {
+
+                            updateList()
+                        }
+
+                }
+            }
+
+            override fun onScrollStateChanged(view: RecyclerView, scrollState: Int) {
+                //OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤 상태입니다.
+                //즉 스크롤이 바닥에 닿아 멈춘 상태에 처리를 하겠다는
+            }
+        })
+        MainActivityAdapter.instance.listView = recyclerView
     }
     private fun initListener()
     {
@@ -61,8 +113,15 @@ class MainActivity : AppCompatActivity() {
     {
         binding.FAB.setOnClickListener()
         {
-            WriteBookReview().showNow(supportFragmentManager,"")
-
+            WriteBookReview().let {
+                it.status = Data.instance.status_insert
+                it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{
+                    override fun whenDismiss() {
+                        updateList()
+                    }
+                })
+                it.showNow(supportFragmentManager,"")
+            }
         }
     }
 
@@ -78,33 +137,19 @@ class MainActivity : AppCompatActivity() {
                 , onSuccess = { ->
                     val jsonArray : JSONArray
                     jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                    val list = Gson().fromJson(jsonArray.toString(), Array<MainActivityModel>::class.java)
 
-                    datas.clear()
+//                    val adapter=MainActivityAdapter() //어댑터 객체 만듦
+//                    adapter.datalist=datas //데이터 넣어줌
+//                    binding.listview.adapter=adapter //리사이클러뷰에 어댑터 연결
+//                    binding.listview.layoutManager= LinearLayoutManager(this@MainActivity) //레이아웃 매니저 연결
 
-                    for(i in 0 until jsonArray.length())
-                    {
-                        with(datas)
-                        {
-                            if (!(jsonArray.isNull(i) || jsonArray[i] == "")) {
-                                add(
-                                    MainActivityModel(
-                                        (jsonArray[i] as JSONObject).get("READER_NAME").toString(),
-                                        (jsonArray[i] as JSONObject).get("READ_DATE").toString(),
-                                        (jsonArray[i] as JSONObject).get("REVIEW_NO").toString().toInt(),
-                                        (jsonArray[i] as JSONObject).get("STAR_RATING").toString().toFloat(),
-                                        (jsonArray[i] as JSONObject).get("BOOK_NAME").toString(),
-                                        (jsonArray[i] as JSONObject).get("READER_ID").toString(),
-                                        (jsonArray[i] as JSONObject).get("REVIEW").toString()
-                                    )
-                                )
-                            }
-                        }
-                    }
+                    MainActivityAdapter.instance.clear()
 
-                    val adapter=MainActivityAdapter() //어댑터 객체 만듦
-                    adapter.datalist=datas //데이터 넣어줌
-                    binding.listview.adapter=adapter //리사이클러뷰에 어댑터 연결
-                    binding.listview.layoutManager= LinearLayoutManager(this@MainActivity) //레이아웃 매니저 연결
+                    val adapter = MainActivityAdapter //어댑터 객체 만듦
+                    adapter.instance.datalist = list.toMutableList()
+
+
                 }
             )
         }

@@ -1,30 +1,27 @@
 package com.youngsbook.ui.main
 
+import android.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.youngsbook.common.Data
+import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.RecylerviewBookItemBinding
+import com.youngsbook.ui.BookReview.WriteBookReview
 
-class MainActivityAdapter: RecyclerView.Adapter<MainActivityAdapter.MyViewHolder>() {
+class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAdapter.MyViewHolder>() {
 
     var datalist = mutableListOf<MainActivityModel>()//리사이클러뷰에서 사용할 데이터 미리 정의 -> 나중에 MainActivity등에서 datalist에 실제 데이터 추가
-    val YoungsFunction : YoungsFunction = com.youngsbook.common.YoungsFunction
 
     inner class MyViewHolder(private val binding: RecylerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
-
 
         var textView_BookName = binding.textviewBookName
         var textView_BookReview = binding.textviewBookReview
         var ratingBar_Star = binding.ratingBarStar
         var textView_readDate = binding.textviewReadDate
-        val layout = binding.list
 
-//        fun bind(reviewList:MainActivityModel){
-//            //binding.dogPhotoImg.=dogData.dog_img
-//            binding.textviewBookName.text=reviewList.NAME
-//            binding.textviewBookReview.text= reviewList.AGE.toString()
-//        }
     }
 
 
@@ -46,14 +43,17 @@ class MainActivityAdapter: RecyclerView.Adapter<MainActivityAdapter.MyViewHolder
         holder.ratingBar_Star.rating = datalist[position].STAR_RATING
         holder.textView_readDate.text =datalist[position].READ_DATE
 
-        holder.layout.setOnClickListener () // 해당 행 클릭시 이벤트
-        {
-//            WriteBookReview().showNow(FragmentManager,"")
-//            Toast.makeText(holder.itemView.context,"$position",Toast.LENGTH_SHORT).show()
-        }
-
 //                if (position.equals(1))
 //                    holder.ratingBar_Star.rating = 3.3F
 
+    }
+
+    private object SingletonHolder {
+        val INSTANCE = MainActivityAdapter()
+    }
+
+    companion object {
+        val instance: MainActivityAdapter
+            get() = SingletonHolder.INSTANCE
     }
 }

@@ -10,6 +10,8 @@ class Data {
     val login_password : String = "login_password"
     val login_name : String = "login_name"
     val login_Info : String = "login_Info"
+    val status_insert : String = "I"
+    val status_update : String = "I"
 
 
     private object SingletoneHolder {
