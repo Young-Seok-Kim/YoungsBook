@@ -13,7 +13,7 @@ import com.youngsbook.ui.BookReview.WriteBookReview
 
 class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAdapter.MyViewHolder>() {
 
-    var datalist = mutableListOf<MainActivityModel>()//리사이클러뷰에서 사용할 데이터 미리 정의 -> 나중에 MainActivity등에서 datalist에 실제 데이터 추가
+//    var datalist = mutableListOf<MainActivityModel>()//리사이클러뷰에서 사용할 데이터 미리 정의 -> 나중에 MainActivity등에서 datalist에 실제 데이터 추가
 
     inner class MyViewHolder(private val binding: RecylerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -32,19 +32,16 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
         return MyViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = datalist.size
 
     //recyclerview가 viewholder를 가져와 데이터 연결할때 호출
     //적절한 데이터를 가져와서 그 데이터를 사용하여 뷰홀더의 레이아웃 채움
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        holder.textView_BookName.text = datalist[position].BOOK_NAME
-        holder.textView_BookReview.text = datalist[position].REVIEW
-        holder.ratingBar_Star.rating = datalist[position].STAR_RATING
-        holder.textView_readDate.text =datalist[position].READ_DATE
+        holder.textView_BookName.text = MainActivityAdapter.instance._arrayList[position].BOOK_NAME
+        holder.textView_BookReview.text = MainActivityAdapter.instance._arrayList[position].REVIEW
+        holder.ratingBar_Star.rating = MainActivityAdapter.instance._arrayList[position].STAR_RATING
+        holder.textView_readDate.text =MainActivityAdapter.instance._arrayList[position].READ_DATE
 
-//                if (position.equals(1))
-//                    holder.ratingBar_Star.rating = 3.3F
 
     }
 

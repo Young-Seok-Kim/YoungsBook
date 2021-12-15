@@ -139,15 +139,20 @@ class MainActivity : AppCompatActivity() {
                     jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
                     val list = Gson().fromJson(jsonArray.toString(), Array<MainActivityModel>::class.java)
 
-//                    val adapter=MainActivityAdapter() //어댑터 객체 만듦
+                    MainActivityAdapter.instance.clear()
 //                    adapter.datalist=datas //데이터 넣어줌
-//                    binding.listview.adapter=adapter //리사이클러뷰에 어댑터 연결
+//                    binding.listview.adapter=MainActivityAdapter //리사이클러뷰에 어댑터 연결
 //                    binding.listview.layoutManager= LinearLayoutManager(this@MainActivity) //레이아웃 매니저 연결
 
-                    MainActivityAdapter.instance.clear()
+                    for (item in list)
+                    {
+                        MainActivityAdapter.instance.addItem(item)
+                    }
+
+
 
                     val adapter = MainActivityAdapter //어댑터 객체 만듦
-                    adapter.instance.datalist = list.toMutableList()
+//                    adapter.instance.datalist = list.toMutableList()
 
 
                 }
