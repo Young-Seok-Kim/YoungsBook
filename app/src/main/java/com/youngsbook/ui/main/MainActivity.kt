@@ -1,30 +1,23 @@
 package com.youngsbook.ui.main
 
-import android.app.Dialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.databinding.ActivityMainBinding
-import com.youngsbook.ui.BookReview.WriteBookReview
+import com.youngsbook.ui.bookreview.WriteBookReview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONObject
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -38,10 +31,6 @@ class MainActivity : AppCompatActivity() {
     var totalItemCount: Int = 0
 
     private var backKeyPressedTime: Long = 0
-
-    private var toast: Toast? = null // 첫 번째 뒤로가기 버튼을 누를때 표시
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

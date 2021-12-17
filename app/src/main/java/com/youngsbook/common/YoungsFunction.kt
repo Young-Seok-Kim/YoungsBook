@@ -1,5 +1,9 @@
 package com.youngsbook.common
 
+import android.content.Context
+import android.content.DialogInterface
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import org.json.JSONArray
 import org.json.JSONObject
 import com.google.gson.Gson
@@ -35,5 +39,15 @@ object YoungsFunction {
         val afterFormat = simple.format(date)
 
         return afterFormat
+    }
+
+    fun messageBoxOK(context: Context, title : String, Message : String){
+        val messageBox = AlertDialog.Builder(context)
+        messageBox.setTitle(title)
+        messageBox.setMessage(Message)
+        messageBox.setPositiveButton("확인") {
+                dialogInterface : DialogInterface, i : Int ->
+        }
+        messageBox.show()
     }
 }

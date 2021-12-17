@@ -1,4 +1,4 @@
-package com.youngsbook.ui.BookReview
+package com.youngsbook.ui.bookreview
 
 import android.content.SharedPreferences
 import android.graphics.Color

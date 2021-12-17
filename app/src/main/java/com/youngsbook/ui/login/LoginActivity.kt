@@ -22,7 +22,9 @@ import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.common.YoungsFunction
 
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.ui.bookreview.WriteBookReview
 import com.youngsbook.ui.main.MainActivity
+import com.youngsbook.ui.signup.SignUp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -114,7 +116,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initButton() {
-//        println("test")
         binding.buttonLogin!!.setOnClickListener {
             // 로그인 버튼 클릭시 이벤트
 
@@ -183,10 +184,11 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
         }
-
         binding.buttonSignUp!!.setOnClickListener(){
-            NetworkConnect.startProgress(this)
-//            NetworkConnect.endProgress()
+            SignUp().let{
+                it.showNow(supportFragmentManager,"")
+                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+            }
         }
 
     }
