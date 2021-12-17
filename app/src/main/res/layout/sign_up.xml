@@ -52,10 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="24dp"
-                app:inputType=""
                 android:ems="10"
-                android:hint="아이디"
-                android:inputType="textEmailAddress" />
+                android:hint="아이디" />
 
             <EditText
                 android:id="@+id/editText_Email"
