@@ -24,6 +24,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:fontFamily="@font/s_core_dream7"
             android:text="평점"
             android:textSize="25dp" />
 
@@ -36,6 +37,7 @@
             android:layout_toRightOf="@+id/textview_Star"
             android:isIndicator="false"
             android:numStars="5"
+            android:progressTint="@color/light_purple"
             android:rating="0"
             android:stepSize="0.5" />
 
@@ -47,6 +49,7 @@
             android:layout_below="@+id/ratingBar_Star"
             android:layout_marginTop="10dp"
             android:background="@drawable/customlayout_textview"
+            android:fontFamily="@font/s_core_dream4"
             android:singleLine="true"
             android:text="책이름"
             android:textSize="20dp" />
@@ -56,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/textview_bookName"
+            android:fontFamily="@font/s_core_dream4"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/textview_bookName"
             android:hint="이곳에 책이름을 입력합니다." />
@@ -68,6 +72,7 @@
             android:layout_alignStart="@+id/textview_bookName"
             android:layout_marginTop="10dp"
             android:background="@drawable/customlayout_textview"
+            android:fontFamily="@font/s_core_dream4"
             android:hint="이곳에 책의 후기를 적어주세요" />
 
         <LinearLayout
@@ -82,20 +87,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button_Delete"
-                android:backgroundTint="@color/graysboro"
+                android:backgroundTint="@color/royal_blue"
                 android:layout_weight="2"
+                android:fontFamily="@font/s_core_dream4"
                 android:text="@string/Delete"
                 android:layout_marginEnd="50dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button_Save"
-                android:backgroundTint="@color/graysboro"
+                android:backgroundTint="@color/royal_blue"
+                android:fontFamily="@font/s_core_dream4"
                 android:text="@string/Save"
                 android:layout_weight="2"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

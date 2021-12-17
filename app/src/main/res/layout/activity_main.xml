@@ -50,7 +50,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/customlayout_floating_button"
-        android:src="@drawable/add"
+        android:src="@drawable/add_white"
+        app:backgroundTint="@android:color/white"
         app:borderWidth="0dp"
         android:layout_margin="16dp" />
 

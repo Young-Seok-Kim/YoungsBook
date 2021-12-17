@@ -76,6 +76,7 @@ class WriteBookReview : DialogFragment() {
         else if (status == Data.instance.status_update)
         {
             binding.editTextBookName.setText(MainActivityAdapter.instance.currentItem?.BOOK_NAME)
+            binding.editTextBookName.isEnabled = false
             binding.editTextBookReview.setText(MainActivityAdapter.instance.currentItem?.REVIEW)
             binding.ratingBarStar.rating = MainActivityAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
 
@@ -147,7 +148,7 @@ class WriteBookReview : DialogFragment() {
                         , onSuccess = { ->
                             Toast.makeText(
                                 context,
-                                "${binding.ratingBarStar.rating}점으로 리뷰를 등록했습니다.",
+                                "${binding.editTextBookName.text} 리뷰를 수정했습니다.",
                                 Toast.LENGTH_SHORT
                             ).show()
                             this@WriteBookReview.dismiss()

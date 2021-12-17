@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity() {
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
 
+    private var backKeyPressedTime: Long = 0
+
+    private var toast: Toast? = null // 첫 번째 뒤로가기 버튼을 누를때 표시
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,10 +48,8 @@ class MainActivity : AppCompatActivity() {
         sharedPrefer = getSharedPreferences(Data.instance.login_Info,AppCompatActivity.MODE_PRIVATE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
-        val dialog = WriteBookReview()
-
         setContentView(binding.root)
+
         initList()
         updateList()
         initFAB()
@@ -142,20 +145,38 @@ class MainActivity : AppCompatActivity() {
                 jsonObject,
                 applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                 , onSuccess = { ->
+                    MainActivityAdapter.instance.clear()
                     val jsonArray : JSONArray
                     jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
-                    val list = Gson().fromJson(jsonArray.toString(), Array<MainActivityModel>::class.java)
+                    if (jsonArray.toString() != "[\"\"]") {
+                        val list = Gson().fromJson(
+                            jsonArray.toString(),
+                            Array<MainActivityModel>::class.java
+                        )
 
-                    MainActivityAdapter.instance.clear()
 
-                    for (item in list)
-                    {
-                        MainActivityAdapter.instance.addItem(item)
+
+                        for (item in list) {
+                            MainActivityAdapter.instance.addItem(item)
+                        }
                     }
+                    binding.title.text = "현재 책을 ${MainActivityAdapter.instance.itemCount}권 읽었어요"
+
 
 
                 }
             )
+        }
+    }
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            super.onBackPressed()
         }
     }
 }
