@@ -14,11 +14,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.youngsbook.R
+import com.youngsbook.common.Data
 import com.youngsbook.databinding.ActivityLoginBinding
 
-import com.youngsbook.R
 import com.youngsbook.common.YoungsFunction
 
 import com.youngsbook.common.network.NetworkConnect
@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class LoginActivity : AppCompatActivity() {
@@ -46,13 +45,10 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sharedPreferences = getSharedPreferences("loginInfo", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("login_Info", MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
         checkSharedPreference() // 저장된 값을 가져오는 함수
-
-
-
 
         val userid = binding.userid
         val password = binding.password
@@ -117,13 +113,12 @@ class LoginActivity : AppCompatActivity() {
         initButton()
     }
 
-    private fun initButton()
-    {
-        binding.buttonLogin!!.setOnClickListener { // 로그인 버튼 클릭시 이벤트
+    private fun initButton() {
+//        println("test")
+        binding.buttonLogin!!.setOnClickListener {
+            // 로그인 버튼 클릭시 이벤트
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
-                var test : String = ""
-
                 val enterLogin : JsonObject = JsonObject()
                 enterLogin.addProperty("ID", binding.userid!!.text.toString())
                 enterLogin.addProperty("PASSWORD", binding.password.text.toString())
@@ -133,7 +128,6 @@ class LoginActivity : AppCompatActivity() {
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
-//                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
                             val jsonArray : JSONArray
                             jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
 
@@ -141,25 +135,40 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.makeText(applicationContext,"아이디, 비밀번호를 확인해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
                                 return@connectNetwork
                             }
+                            editor.putString( // 로그인한 아이디 저장
+                                Data.instance.login_id,
+                                (jsonArray.get(0) as JSONObject).getString("ID")
+                            )
+                            editor.putString( // 로그인한 비밀번호
+                                // 저장
+                                Data.instance.login_password,
+                                (jsonArray.get(0) as JSONObject).getString("PASSWORD")
+                            )
+                            editor.putString( // 로그인한 이름 저장
+                                Data.instance.login_name,
+                                (jsonArray.get(0) as JSONObject).getString("NAME")
+                            )
                             if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
-                                editor.putBoolean(getString(R.string.login_information), true)
+                                editor.putBoolean(Data.instance.auto_login_boolean, true)
                                 editor.putString(
-                                    getString(R.string.auto_login_id),
-                                    binding.userid!!.text.toString()
+                                    Data.instance.auto_login_id,
+                                    (jsonArray.get(0) as JSONObject).getString("ID")
                                 )
                                 editor.putString(
-                                    getString(R.string.auto_login_password),
-                                    binding.password.text.toString()
+                                    Data.instance.auto_login_password,
+                                    (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                                 )
-                                editor.commit()
                             } else {
-                                editor.putBoolean(getString(R.string.login_information), false)
-                                editor.putString(getString(R.string.auto_login_id), "")
-                                editor.putString(getString(R.string.auto_login_password), "")
-                                editor.commit()
+                                editor.putBoolean(Data.instance.auto_login_boolean, false)
+                                editor.putString(Data.instance.auto_login_id, "")
+                                editor.putString(Data.instance.auto_login_password, "")
+
                             }
 
-//                            openMainActivity()
+                            editor.commit()
+                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
+                            openMainActivity()
+
 
                         }
                     )
@@ -177,7 +186,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.buttonSignUp!!.setOnClickListener(){
             NetworkConnect.startProgress(this)
-            NetworkConnect.endProgress()
+//            NetworkConnect.endProgress()
         }
 
     }
@@ -192,9 +201,9 @@ class LoginActivity : AppCompatActivity() {
 
     fun checkSharedPreference()
     {
-        binding.checkboxSaveLoginInfo!!.isChecked = sharedPreferences.getBoolean(getString(R.string.login_information),false)
-        binding.userid!!.setText(sharedPreferences.getString(getString(R.string.auto_login_id),""))
-        binding.password.setText(sharedPreferences.getString(getString(R.string.auto_login_password),""))
+        binding.checkboxSaveLoginInfo!!.isChecked = sharedPreferences.getBoolean(Data.instance.auto_login_boolean,false)
+        binding.userid!!.setText(sharedPreferences.getString(Data.instance.auto_login_id,""))
+        binding.password.setText(sharedPreferences.getString(Data.instance.auto_login_password,""))
     }
 
     private fun openMainActivity() {

@@ -48,23 +48,24 @@ object NetworkConnect {
 
     fun startProgress(context: Context) // 서버와 통신하는동안 터치할수 없도록 하는 코드
     {
-        progressDialog = ProgressDialog(context)
+        if(!(progressDialog?.isShowing == false)) {
+            progressDialog = ProgressDialog(context)
 
 
-        progressDialog!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-        progressDialog!!.setMessage("서버와 연결중")
+            progressDialog!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            progressDialog!!.setMessage("서버와 연결중")
 
-        progressDialog!!.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-
-        progressDialog!!.show()
+            progressDialog?.window?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            progressDialog!!.show()
+        }
 
     }
 
     fun endProgress()
     {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
-            progressDialog = null
-        }
+        progressDialog?.dismiss()
     }
 }

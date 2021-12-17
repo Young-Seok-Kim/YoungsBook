@@ -3,12 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/custom_ratingbar.xml" value="0.23541666666666666" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_floating_button.xml" value="0.403125" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_textview.xml" value="0.403125" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/ic_launcher_background_books.xml" value="0.403125" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout-v21/activity_main.xml" value="0.38697916666666665" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.24866131191432397" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout-w936dp/activity_login.xml" value="0.290234375" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/activity_main.xml" value="0.38697916666666665" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/recylerview_book_item.xml" value="0.38697916666666665" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/recylerview_book_list.xml" value="0.38697916666666665" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/write_book_review.xml" value="0.1" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.23489583333333333" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.23489583333333333" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/xml/customlayout_textview.xml" value="0.38697916666666665" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/xml/network_security_config.xml" value="0.21875" />
       </map>
     </option>
