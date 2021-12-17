@@ -11,7 +11,7 @@ class Data {
     val login_name : String = "login_name"
     val login_Info : String = "login_Info"
     val status_insert : String = "I"
-    val status_update : String = "I"
+    val status_update : String = "U"
 
 
     private object SingletoneHolder {

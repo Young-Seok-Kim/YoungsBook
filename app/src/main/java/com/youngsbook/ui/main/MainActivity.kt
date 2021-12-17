@@ -1,9 +1,13 @@
 package com.youngsbook.ui.main
 
+import android.app.Dialog
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -67,12 +71,13 @@ class MainActivity : AppCompatActivity() {
             override fun onSingleTap(position: Int) {
                 WriteBookReview().let {
                     it.status = Data.instance.status_update
+                    it.showNow(supportFragmentManager,"")
+                    it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
                     it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{
                         override fun whenDismiss() {
                             updateList()
                         }
                     })
-                    it.showNow(supportFragmentManager,"")
                 }
             }
         })
@@ -113,14 +118,16 @@ class MainActivity : AppCompatActivity() {
     {
         binding.FAB.setOnClickListener()
         {
+            supportFragmentManager.executePendingTransactions()
             WriteBookReview().let {
                 it.status = Data.instance.status_insert
-                it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{
+                it.showNow(supportFragmentManager,"")
+                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+                it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{ // 다이얼로그를 띄워준 후에 리스너를 등록해야한다.
                     override fun whenDismiss() {
                         updateList()
                     }
                 })
-                it.showNow(supportFragmentManager,"")
             }
         }
     }
@@ -140,19 +147,11 @@ class MainActivity : AppCompatActivity() {
                     val list = Gson().fromJson(jsonArray.toString(), Array<MainActivityModel>::class.java)
 
                     MainActivityAdapter.instance.clear()
-//                    adapter.datalist=datas //데이터 넣어줌
-//                    binding.listview.adapter=MainActivityAdapter //리사이클러뷰에 어댑터 연결
-//                    binding.listview.layoutManager= LinearLayoutManager(this@MainActivity) //레이아웃 매니저 연결
 
                     for (item in list)
                     {
                         MainActivityAdapter.instance.addItem(item)
                     }
-
-
-
-                    val adapter = MainActivityAdapter //어댑터 객체 만듦
-//                    adapter.instance.datalist = list.toMutableList()
 
 
                 }
