@@ -7,9 +7,17 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import com.google.gson.JsonObject
+import com.youngsbook.common.YoungsFunction
+import com.youngsbook.ui.main.MainActivity
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 object NetworkConnect {
     private var progressDialog: ProgressDialog? = null
@@ -26,8 +34,8 @@ object NetworkConnect {
 
                 Log.d("Retrofit", "$path 요청성공")
 
-                if(response!!.isSuccessful) {
-                    resultString = response.body()?.returnValue.toString()
+                if(response?.isSuccessful ?: false) {
+                    resultString = response?.body()?.returnValue.toString()
                     onSuccess()
 
                 }
@@ -68,4 +76,32 @@ object NetworkConnect {
     {
         progressDialog?.dismiss()
     }
+    // HTTP 통신
+    ///////////////////////////////////////////////
+    // HTTPS 통신
+
+    fun loadBaeminNotice(page: Int) {
+        val call = BaeminClient.service.loadNotice(page.toString())
+
+        call.enqueue(object : Callback<Baemin> {
+            override fun onResponse( // 통신에 성공한 경우
+                call: Call<Baemin>,
+                response: Response<Baemin>
+            ) {
+                if(response.isSuccessful()){ // 응답을 잘 받은 경우
+                    Log.d("배민",response.code().toString())
+                } else {
+                    Log.d("배민",response.code().toString())
+                    // 통신은 성공했지만 응답에 문제가 있는 경우
+                }
+            }
+
+            override fun onFailure(call: Call<Baemin>, t: Throwable) {
+                Log.d("배민",t.message.toString())
+                // 통신에 실패한 경우
+            }
+        })
+    }
+
+
 }

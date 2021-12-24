@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -18,10 +19,11 @@ import com.google.gson.JsonObject
 import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.databinding.ActivityLoginBinding
-
+import retrofit2.Call
 import com.youngsbook.common.YoungsFunction
 
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.common.network.ResponseDTO
 import com.youngsbook.ui.bookreview.WriteBookReview
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
@@ -31,6 +33,9 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import com.youngsbook.common.network.RetrofitClient
+import retrofit2.Retrofit
+import java.io.IOException
 
 
 class LoginActivity : AppCompatActivity() {
@@ -185,10 +190,20 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.buttonSignUp!!.setOnClickListener(){
-            SignUp().let{
-                it.showNow(supportFragmentManager,"")
-                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+//            SignUp().let{
+//                it.showNow(supportFragmentManager,"")
+//                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+//            }
+            CoroutineScope(Dispatchers.Default).launch {
+                try {
+                    NetworkConnect.loadBaeminNotice(1)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
             }
+//                RetrofitClient().getApiService()?.getTest()
+//                .getApiService().getTest()
+
         }
 
     }

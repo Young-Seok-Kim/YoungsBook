@@ -3,6 +3,9 @@ package com.youngsbook.common.network
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
+import retrofit2.http.GET
+import java.util.*
+
 
 interface RetrofitService {
     //post1
@@ -21,4 +24,11 @@ interface RetrofitService {
         @Path("path") retrofitPath: String,
         @Body parameters: JsonObject
     ): Call<ResponseDTO>
+
+//    @GET("/api/users?page=2")
+//    fun getTest(): Call<Any>
+
+    @GET("server/status/json?__ts=1640318537873") //
+    fun loadNotice(@Query("page") page: String): Call<Baemin>
+
 }
