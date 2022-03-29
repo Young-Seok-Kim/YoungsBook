@@ -10,21 +10,17 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.JsonObject
-import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.databinding.ActivityLoginBinding
-import retrofit2.Call
+
 import com.youngsbook.common.YoungsFunction
 
 import com.youngsbook.common.network.NetworkConnect
-import com.youngsbook.common.network.ResponseDTO
-import com.youngsbook.ui.bookreview.WriteBookReview
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
 import kotlinx.coroutines.CoroutineScope
@@ -32,10 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
-import com.youngsbook.common.network.RetrofitClient
-import retrofit2.Retrofit
-import java.io.IOException
 
 
 class LoginActivity : AppCompatActivity() {
@@ -130,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                 enterLogin.addProperty("PASSWORD", binding.password.text.toString())
                 NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
-                    NetworkConnect.connectNetwork("login.do",
+                    NetworkConnect.connectHTTP("login.do",
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
@@ -139,7 +131,7 @@ class LoginActivity : AppCompatActivity() {
 
                             if(jsonArray[0].toString().isBlank()) {
                                 Toast.makeText(applicationContext,"아이디, 비밀번호를 확인해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
-                                return@connectNetwork
+                                return@connectHTTP
                             }
                             editor.putString( // 로그인한 아이디 저장
                                 Data.instance.login_id,
@@ -190,20 +182,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.buttonSignUp!!.setOnClickListener(){
-//            SignUp().let{
-//                it.showNow(supportFragmentManager,"")
-//                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
-//            }
-            CoroutineScope(Dispatchers.Default).launch {
-                try {
-                    NetworkConnect.loadBaeminNotice(1)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
+            SignUp().let{
+                it.showNow(supportFragmentManager,"")
+                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
             }
-//                RetrofitClient().getApiService()?.getTest()
-//                .getApiService().getTest()
-
         }
 
     }
