@@ -96,7 +96,7 @@ class SignUp : DialogFragment() {
             jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
             NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
             CoroutineScope(Dispatchers.Default).launch {
-                NetworkConnect.connectHTTP("SignUp.do",
+                NetworkConnect.connectHTTPS("SignUp.do",
                     jsonObject,
                     requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                     , onSuccess = { ->

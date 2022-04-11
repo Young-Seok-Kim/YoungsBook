@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.login_id," "))
         NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
         CoroutineScope(Dispatchers.Default).launch {
-            NetworkConnect.connectHTTP("SelectMyBookReview.do",
+            NetworkConnect.connectHTTPS("SelectMyBookReview.do",
                 jsonObject,
                 applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                 , onSuccess = { ->
