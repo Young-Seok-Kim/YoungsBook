@@ -4,7 +4,8 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
-interface RetrofitService {
+
+public interface RetrofitService {
     //post1
     // 매개변수를 미리 정해두는 방식
     @FormUrlEncoded
@@ -21,4 +22,8 @@ interface RetrofitService {
         @Path("path") retrofitPath: String,
         @Body parameters: JsonObject
     ): Call<ResponseDTO>
+
+    // @GET( EndPoint-자원위치(URI) )
+    @GET("{path}")
+    fun getPosts(@Path("path") post: String?): Call<ResponseDTO>
 }

@@ -3,6 +3,7 @@ package com.youngsbook.ui.login
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -10,18 +11,23 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.gson.JsonObject
 import com.youngsbook.R
 import com.youngsbook.common.Data
+import com.youngsbook.common.Define
 import com.youngsbook.databinding.ActivityLoginBinding
 
 import com.youngsbook.common.YoungsFunction
 
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.common.network.SelfSigningHelper
+import com.youngsbook.common.network.SslConnect.postHttps
 import com.youngsbook.ui.bookreview.WriteBookReview
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
@@ -115,9 +121,14 @@ class LoginActivity : AppCompatActivity() {
         initButton()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initButton() {
         binding.buttonLogin!!.setOnClickListener {
             // 로그인 버튼 클릭시 이벤트
+//            Log.d("raw Test", applicationContext.resources.openRawResource(R.raw.test).read().toString())
+
+            postHttps(Define.BASE_URL_HTTPS, 5, 5)
+
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
                 val enterLogin : JsonObject = JsonObject()
@@ -125,7 +136,9 @@ class LoginActivity : AppCompatActivity() {
                 enterLogin.addProperty("PASSWORD", binding.password.text.toString())
                 NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
-                    NetworkConnect.connectNetwork("login.do",
+                    SelfSigningHelper(context = applicationContext)
+
+                    NetworkConnect.connectHTTPS("login.do",
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
@@ -134,7 +147,7 @@ class LoginActivity : AppCompatActivity() {
 
                             if(jsonArray[0].toString().isBlank()) {
                                 Toast.makeText(applicationContext,"아이디, 비밀번호를 확인해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
-                                return@connectNetwork
+//                                return@connectHTTPS
                             }
                             editor.putString( // 로그인한 아이디 저장
                                 Data.instance.login_id,
