@@ -110,7 +110,7 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
                 NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
-                    NetworkConnect.connectNetwork("InsertBookReview.do",
+                    NetworkConnect.connectHTTP("InsertBookReview.do",
                         jsonObject,
                         requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
@@ -142,7 +142,7 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
                 NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
-                    NetworkConnect.connectNetwork("UpdateBookReview.do",
+                    NetworkConnect.connectHTTP("UpdateBookReview.do",
                         jsonObject,
                         requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
@@ -165,7 +165,7 @@ class WriteBookReview : DialogFragment() {
             jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
             NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
             CoroutineScope(Dispatchers.Default).launch {
-                NetworkConnect.connectNetwork("DeleteBookReview.do",
+                NetworkConnect.connectHTTP("DeleteBookReview.do",
                     jsonObject,
                     requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                     , onSuccess = { ->

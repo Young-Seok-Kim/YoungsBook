@@ -1,19 +1,14 @@
 package com.youngsbook.ui.signup
 
-import android.content.DialogInterface
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
@@ -21,9 +16,6 @@ import com.youngsbook.common.Data
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.databinding.SignUpBinding
-import com.youngsbook.databinding.WriteBookReviewBinding
-import com.youngsbook.ui.main.MainActivity
-import com.youngsbook.ui.main.MainActivityAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -104,7 +96,7 @@ class SignUp : DialogFragment() {
             jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
             NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
             CoroutineScope(Dispatchers.Default).launch {
-                NetworkConnect.connectNetwork("SignUp.do",
+                NetworkConnect.connectHTTP("SignUp.do",
                     jsonObject,
                     requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                     , onSuccess = { ->
