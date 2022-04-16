@@ -36,7 +36,7 @@ class SelfSigningHelper constructor(context: Context
         try {
             cf = CertificateFactory.getInstance("X.509")
 
-            caInput = context.resources.openRawResource(R.raw.youngsbook)
+            caInput = context.resources.openRawResource(R.raw.youngsbook_chain)
 //            val caInput: InputStream = BufferedInputStream(FileInputStream("youngsbook.crt"))
 
             ca = cf.generateCertificate(caInput)
