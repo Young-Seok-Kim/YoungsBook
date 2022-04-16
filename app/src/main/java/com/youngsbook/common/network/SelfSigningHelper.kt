@@ -5,8 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.youngsbook.R
 import okhttp3.OkHttpClient
-import java.io.BufferedInputStream
-import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.security.KeyManagementException
@@ -36,7 +34,7 @@ class SelfSigningHelper constructor(context: Context
         try {
             cf = CertificateFactory.getInstance("X.509")
 
-            caInput = context.resources.openRawResource(R.raw.youngsbook)
+            caInput = context.resources.openRawResource(R.raw.youngsbook_chain)
 //            val caInput: InputStream = BufferedInputStream(FileInputStream("youngsbook.crt"))
 
             ca = cf.generateCertificate(caInput)
