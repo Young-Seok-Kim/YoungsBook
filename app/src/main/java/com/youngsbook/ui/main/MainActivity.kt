@@ -1,30 +1,23 @@
 package com.youngsbook.ui.main
 
-import android.app.Dialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.databinding.ActivityMainBinding
-import com.youngsbook.ui.BookReview.WriteBookReview
+import com.youngsbook.ui.bookreview.WriteBookReview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONObject
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -38,10 +31,6 @@ class MainActivity : AppCompatActivity() {
     var totalItemCount: Int = 0
 
     private var backKeyPressedTime: Long = 0
-
-    private var toast: Toast? = null // 첫 번째 뒤로가기 버튼을 누를때 표시
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.login_id," "))
         NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
         CoroutineScope(Dispatchers.Default).launch {
-            NetworkConnect.connectNetwork("SelectMyBookReview.do",
+            NetworkConnect.connectHTTPS("SelectMyBookReview.do",
                 jsonObject,
                 applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                 , onSuccess = { ->

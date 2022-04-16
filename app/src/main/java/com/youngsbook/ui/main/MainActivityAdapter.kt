@@ -1,15 +1,10 @@
 package com.youngsbook.ui.main
 
-import android.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.youngsbook.common.Data
 import com.youngsbook.common.RecyclerViewAdapter
-import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.RecylerviewBookItemBinding
-import com.youngsbook.ui.BookReview.WriteBookReview
 
 class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAdapter.MyViewHolder>() {
 
