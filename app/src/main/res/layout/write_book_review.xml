@@ -23,8 +23,8 @@
             android:id="@+id/textview_Star"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:singleLine="true"
             android:fontFamily="@font/s_core_dream7"
+            android:singleLine="true"
             android:text="평점"
             android:textSize="25dp" />
 
@@ -59,9 +59,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/textview_bookName"
-            android:fontFamily="@font/s_core_dream4"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/textview_bookName"
+            android:fontFamily="@font/s_core_dream4"
             android:hint="이곳에 책이름을 입력합니다." />
 
         <EditText

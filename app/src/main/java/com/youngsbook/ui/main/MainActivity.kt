@@ -4,10 +4,12 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
@@ -63,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSingleTap(position: Int) {
                 WriteBookReview().let {
                     it.status = Data.instance.status_update
+                    it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                     it.showNow(supportFragmentManager,"")
                     it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
                     it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{

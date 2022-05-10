@@ -55,7 +55,7 @@ class WriteBookReview : DialogFragment() {
         super.onResume()
         // 전체화면으로 만드는 코드
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+//        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // 터치 불가능 코드 회수
 
     }
@@ -64,7 +64,9 @@ class WriteBookReview : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         whenOpen()
-        initButton()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            initButton()
+        }
 
         return binding.root
     }

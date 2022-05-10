@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme">
+        <!-- Customize your theme here. -->
+        <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--        <item name="colorAccent">@color/colorAccent</item>-->
+        <!--        <item name="actionMenuTextColor">@android:color/white</item>-->
+        <!-- CHECK  edittext 밑줄-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+<!--        &lt;!&ndash; 타이틀바  밑 기본 버튼 &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/colorMain</item>-->
+<!--        &lt;!&ndash; 최상단 시계및 각종 정보 색깔 &ndash;&gt;-->
+<!--        <item name="colorPrimaryDark">@color/colorTitleBackgroud</item>-->
+    </style>
+
+    <style name="FullDialogTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+</resources>

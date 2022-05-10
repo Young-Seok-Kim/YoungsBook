@@ -17,19 +17,19 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/textview_ReadDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textview_ReadDate"
             android:background="@drawable/customlayout_textview"
-            android:text="yyyy-mm-dd"/>
+            android:text="yyyy-mm-dd" />
 
         <TextView
             android:id="@+id/textview_bookName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/customlayout_textview"
             android:layout_below="@+id/textview_ReadDate"
             android:layout_marginTop="10dp"
+            android:background="@drawable/customlayout_textview"
             android:singleLine="true"
             android:text="이곳에 책의 이름이 표시됩니다." />
 
