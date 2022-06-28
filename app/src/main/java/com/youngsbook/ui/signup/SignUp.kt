@@ -1,8 +1,6 @@
 package com.youngsbook.ui.signup
 
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +41,7 @@ class SignUp : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignUpBinding.inflate(layoutInflater)
-        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.login_Info,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
         initButton()
 

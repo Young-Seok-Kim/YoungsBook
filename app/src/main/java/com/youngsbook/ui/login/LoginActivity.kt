@@ -11,14 +11,12 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.gson.JsonObject
-import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.common.Define
 import com.youngsbook.databinding.ActivityLoginBinding
@@ -28,7 +26,6 @@ import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.common.network.SslConnect.postHttps
-import com.youngsbook.ui.bookreview.WriteBookReview
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -127,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
             // 로그인 버튼 클릭시 이벤트
 //            Log.d("raw Test", applicationContext.resources.openRawResource(R.raw.test).read().toString())
 
-            postHttps(Define.BASE_URL_HTTPS, 5, 5)
+            postHttps(Define.BASE_URL_HTTPS_DEBUG, 5, 5)
 
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
@@ -150,32 +146,32 @@ class LoginActivity : AppCompatActivity() {
 //                                return@connectHTTPS
                             }
                             editor.putString( // 로그인한 아이디 저장
-                                Data.instance.login_id,
+                                Data.instance.LOGIN_ID,
                                 (jsonArray.get(0) as JSONObject).getString("ID")
                             )
                             editor.putString( // 로그인한 비밀번호
                                 // 저장
-                                Data.instance.login_password,
+                                Data.instance.LOGIN_PASSWORD,
                                 (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                             )
                             editor.putString( // 로그인한 이름 저장
-                                Data.instance.login_name,
+                                Data.instance.LOGIN_NAME,
                                 (jsonArray.get(0) as JSONObject).getString("NAME")
                             )
                             if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
-                                editor.putBoolean(Data.instance.auto_login_boolean, true)
+                                editor.putBoolean(Data.instance.AUTO_LOGIN_BOOLEAN, true)
                                 editor.putString(
-                                    Data.instance.auto_login_id,
+                                    Data.instance.AUTO_LOGIN_ID,
                                     (jsonArray.get(0) as JSONObject).getString("ID")
                                 )
                                 editor.putString(
-                                    Data.instance.auto_login_password,
+                                    Data.instance.AUTO_LOGIN_PASSWORD,
                                     (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                                 )
                             } else {
-                                editor.putBoolean(Data.instance.auto_login_boolean, false)
-                                editor.putString(Data.instance.auto_login_id, "")
-                                editor.putString(Data.instance.auto_login_password, "")
+                                editor.putBoolean(Data.instance.AUTO_LOGIN_BOOLEAN, false)
+                                editor.putString(Data.instance.AUTO_LOGIN_ID, "")
+                                editor.putString(Data.instance.AUTO_LOGIN_PASSWORD, "")
 
                             }
 
@@ -216,9 +212,9 @@ class LoginActivity : AppCompatActivity() {
 
     fun checkSharedPreference()
     {
-        binding.checkboxSaveLoginInfo!!.isChecked = sharedPreferences.getBoolean(Data.instance.auto_login_boolean,false)
-        binding.userid!!.setText(sharedPreferences.getString(Data.instance.auto_login_id,""))
-        binding.password.setText(sharedPreferences.getString(Data.instance.auto_login_password,""))
+        binding.checkboxSaveLoginInfo!!.isChecked = sharedPreferences.getBoolean(Data.instance.AUTO_LOGIN_BOOLEAN,false)
+        binding.userid!!.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_ID,""))
+        binding.password.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_PASSWORD,""))
     }
 
     private fun openMainActivity() {

@@ -8,6 +8,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.gson.JsonObject
+import com.youngsbook.BuildConfig
 import com.youngsbook.common.Define
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -20,15 +21,26 @@ import java.util.concurrent.TimeUnit
 object NetworkConnect {
     private var progressDialog: ProgressDialog? = null
     var resultString : String = ""
+    var connectURL : String = Define.BASE_URL_HTTPS_DEBUG
 
     @RequiresApi(Build.VERSION_CODES.N)
     suspend fun connectHTTPS(path : String, param : JsonObject
                              , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
                              , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
     ){
+        /*
+            디버그 모드일때는 로컬에 연결되도록 youngsbook.duckdns.org에 연결하고,
+            릴리즈 모드일때는 AWS에 연결되도록 awsyoungsbook.duckdns.org에 연결하도록 한다.
+            해당 코드를 수정하고 싶다면 SelfSigningHelper.kt 코드에있는 동일한 부분또한 수정해야한다.
+         */
+        if (BuildConfig.DEBUG)
+            connectURL = Define.BASE_URL_HTTPS_DEBUG
+        else
+            connectURL = Define.BASE_URL_HTTPS_RELEASE
+
         val okHttpClient = OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build() // n초동안 기다리도록 만드는 변수
         val selfSign = SelfSigningHelper(context).setSSLOkHttp(okHttpClient.newBuilder()).build()
-        val RETROFIT = Retrofit.Builder().baseUrl(Define.BASE_URL_HTTPS).client(selfSign).addConverterFactory(GsonConverterFactory.create()).build()
+        val RETROFIT = Retrofit.Builder().baseUrl(connectURL).client(selfSign).addConverterFactory(GsonConverterFactory.create()).build()
         val SERVER : RetrofitService = RETROFIT.create(RetrofitService::class.java) // RetrofitService에 만든 서비스를 사용하기 위한 변수
 
         SERVER.connectRequest(path, param).enqueue(object : Callback<ResponseDTO>{

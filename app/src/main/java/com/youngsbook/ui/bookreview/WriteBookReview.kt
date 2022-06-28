@@ -1,8 +1,6 @@
 package com.youngsbook.ui.bookreview
 
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,7 +45,7 @@ class WriteBookReview : DialogFragment() {
         super.onCreate(savedInstanceState)
         binding = WriteBookReviewBinding.inflate(layoutInflater)
 
-        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.login_Info,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
     }
 
@@ -73,11 +71,11 @@ class WriteBookReview : DialogFragment() {
 
     private fun whenOpen()
     {
-        if (status == Data.instance.status_insert)
+        if (status == Data.instance.STATUS_INSERT)
         {
             binding.buttonDelete.visibility = View.GONE
         }
-        else if (status == Data.instance.status_update)
+        else if (status == Data.instance.STATUS_UPDATE)
         {
             binding.editTextBookName.setText(MainActivityAdapter.instance.currentItem?.BOOK_NAME)
             binding.editTextBookName.isEnabled = false
@@ -105,11 +103,11 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("read_date", YoungsFunction.getNowDate())
                 jsonObject.addProperty(
                     "reader_id",
-                    sharedPrefer.getString(Data.instance.login_id, " ")
+                    sharedPrefer.getString(Data.instance.LOGIN_ID, " ")
                 )
                 jsonObject.addProperty(
                     "reader_name",
-                    sharedPrefer.getString(Data.instance.login_name, " ")
+                    sharedPrefer.getString(Data.instance.LOGIN_NAME, " ")
                 )
                 jsonObject.addProperty("review", binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)

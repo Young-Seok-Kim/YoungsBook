@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPrefer = getSharedPreferences(Data.instance.login_Info,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSingleTap(position: Int) {
                 WriteBookReview().let {
-                    it.status = Data.instance.status_update
+                    it.status = Data.instance.STATUS_UPDATE
                     it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                     it.showNow(supportFragmentManager,"")
                     it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
@@ -115,7 +115,8 @@ class MainActivity : AppCompatActivity() {
         {
             supportFragmentManager.executePendingTransactions()
             WriteBookReview().let {
-                it.status = Data.instance.status_insert
+                it.status = Data.instance.STATUS_INSERT
+                it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                 it.showNow(supportFragmentManager,"")
                 it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
                 it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{ // 다이얼로그를 띄워준 후에 리스너를 등록해야한다.
@@ -130,7 +131,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateList() {
 
         val jsonObject : JsonObject = JsonObject()
-        jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.login_id," "))
+        jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.LOGIN_ID," "))
         NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",
