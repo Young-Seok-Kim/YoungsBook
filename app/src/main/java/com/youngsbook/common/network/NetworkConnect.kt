@@ -23,7 +23,11 @@ object NetworkConnect {
     var resultString : String = ""
     var connectURL : String = Define.BASE_URL_HTTPS_DEBUG
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    /*
+        값을 가져올때는 returnValue를 한번 가져오고, 그후에 RESULT_LIST안에 있는 값을 가져온다
+        이렇게 만든 이유는 레트로핏으로 값을 별도의 변환 없이 가져오고, RESULT_LIST안에 있는 select한 값을 사용하기 위함이다.
+     */
+
     suspend fun connectHTTPS(path : String, param : JsonObject
                              , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
                              , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
@@ -46,7 +50,7 @@ object NetworkConnect {
         SERVER.connectRequest(path, param).enqueue(object : Callback<ResponseDTO>{
             override fun onResponse(call: Call<ResponseDTO>?, response: Response<ResponseDTO>?) {
 
-                Log.d("HTTPS", response?.code().toString())
+                Log.d("HTTPS 성공", response?.code().toString())
 
                 if(response?.isSuccessful ?: false) {
                     resultString = response?.body()?.returnValue.toString()
@@ -61,13 +65,53 @@ object NetworkConnect {
 
             }
             override fun onFailure(call: Call<ResponseDTO>?, t: Throwable?) {
-                NetworkConnect.endProgress()
                 Toast.makeText(context, "인터넷 연결을 확인하여주십시오.", Toast.LENGTH_SHORT).show()
                 Log.d("HTTPS", t?.message.toString())
+                NetworkConnect.endProgress()
 
             }
         })
     }
+
+//    suspend fun VersionCheckHTTPS(path : String, param : JsonObject
+//                             , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
+//                             , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
+//    ){
+//        if (BuildConfig.DEBUG)
+//            connectURL = Define.BASE_URL_HTTPS_DEBUG
+//        else
+//            connectURL = Define.BASE_URL_HTTPS_RELEASE
+////"https://play.google.com/store/apps/details?id=com.youngsbook/"
+//        val okHttpClient = OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build() // n초동안 기다리도록 만드는 변수
+//        val selfSign = SelfSigningHelper(context).setSSLOkHttp(okHttpClient.newBuilder()).build()
+//        val RETROFIT = Retrofit.Builder().baseUrl(connectURL).client(selfSign).addConverterFactory(GsonConverterFactory.create()).build()
+//        val SERVER : RetrofitService = RETROFIT.create(RetrofitService::class.java) // RetrofitService에 만든 서비스를 사용하기 위한 변수
+//
+//        SERVER.connectRequest(path, param).enqueue(object : Callback<ResponseDTO>{
+//            override fun onResponse(call: Call<ResponseDTO>?, response: Response<ResponseDTO>?) {
+//
+//                Log.d("버전체크 HTTPS", response?.code().toString())
+//
+//                if(response?.isSuccessful ?: false) {
+//                    resultString = response?.body()?.returnValue.toString()
+//                    onSuccess()
+//
+//                }
+//                else {
+//                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
+//                }
+//
+//                NetworkConnect.endProgress()
+//
+//            }
+//            override fun onFailure(call: Call<ResponseDTO>?, t: Throwable?) {
+//                NetworkConnect.endProgress()
+//                Toast.makeText(context, "인터넷 연결을 확인하여주십시오.", Toast.LENGTH_SHORT).show()
+//                Log.d("버전체크 HTTPS", t?.message.toString())
+//
+//            }
+//        })
+//    }
 
     fun startProgress(context: Context) // 서버와 통신하는동안 터치할수 없도록 하는 코드
     {
@@ -84,7 +128,6 @@ object NetworkConnect {
             )
             progressDialog!!.show()
         }
-
     }
 
     fun endProgress()

@@ -67,7 +67,7 @@ public class SslConnect {
             https.setConnectTimeout(connTimeout);
             https.setReadTimeout(readTimeout);
 
-            Log.d("생성","ㅇㅇ");
+            Log.d("postHttps","실행");
         }
         catch (MalformedURLException e) {
             e.printStackTrace();

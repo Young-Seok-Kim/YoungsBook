@@ -169,7 +169,8 @@ class MainActivity : AppCompatActivity() {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            super.onBackPressed()
+//            super.onBackPressed()
+            finishAndRemoveTask()
         }
     }
 }

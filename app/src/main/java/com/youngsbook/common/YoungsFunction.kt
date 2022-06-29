@@ -2,6 +2,7 @@ package com.youngsbook.common
 
 import android.content.Context
 import android.content.DialogInterface
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
 import org.json.JSONArray

@@ -85,7 +85,6 @@ class WriteBookReview : DialogFragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun initButton() {
         binding.buttonSave.setOnClickListener {
             if (status == "I") {
@@ -165,7 +164,7 @@ class WriteBookReview : DialogFragment() {
         binding.buttonDelete.setOnClickListener()
         {
             val jsonObject : JsonObject = JsonObject()
-            jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
+            jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
             NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",

@@ -20,7 +20,6 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
-@RequiresApi(Build.VERSION_CODES.N)
 class SelfSigningHelper constructor(context: Context
 ) {
     lateinit var tmf: TrustManagerFactory

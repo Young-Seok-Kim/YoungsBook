@@ -4,28 +4,27 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
+import com.youngsbook.BuildConfig
 import com.youngsbook.common.Data
 import com.youngsbook.common.Define
-import com.youngsbook.databinding.ActivityLoginBinding
-
 import com.youngsbook.common.YoungsFunction
-
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.common.network.SslConnect.postHttps
+import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
 import kotlinx.coroutines.CoroutineScope
@@ -46,8 +45,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater,null,false)
+//        EqMstrDtlBinding.inflate(inflater, container, false)
         setContentView(binding.root)
+        binding.appVersion?.text = "Version : ${BuildConfig.VERSION_NAME}"
 
         sharedPreferences = getSharedPreferences("login_Info", MODE_PRIVATE)
         editor = sharedPreferences.edit()
@@ -114,22 +115,67 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+//        initButton()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if(BuildConfig.DEBUG)
+            binding.buttonTest?.visibility = View.VISIBLE
+        else
+            binding.buttonTest?.visibility = View.GONE
+
         initButton()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onResume() {
+        super.onResume()
+//        versionCheck()
+    }
+
+    private fun versionCheck()
+    {
+            val jsonObject : JsonObject = JsonObject()
+            jsonObject.addProperty("clientAppVersion", BuildConfig.VERSION_NAME)
+            NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+            CoroutineScope(Dispatchers.Default).launch {
+                NetworkConnect.connectHTTPS("versionCheck.do",
+                    jsonObject,
+                    applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                    , onSuccess = { ->
+//                        MainActivityAdapter.instance.clear()
+                        val jsonArray : JSONArray
+                        jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                        Log.d("버전체크 jsonObject.toString()", jsonObject.toString())
+                        Log.d("버전체크 NetworkConnect.resultString", NetworkConnect.resultString)
+                        
+                        if(jsonArray[0].toString().toBoolean() == true)
+                            Log.d("업데이트여부","필요함")
+                        else
+                            Log.d("업데이트여부","필요없음")
+
+                    }
+                )
+            }
+    }
+
+
     private fun initButton() {
-        binding.buttonLogin!!.setOnClickListener {
-            // 로그인 버튼 클릭시 이벤트
-//            Log.d("raw Test", applicationContext.resources.openRawResource(R.raw.test).read().toString())
+        binding.buttonLogin!!.setOnClickListener(View.OnClickListener {
 
             postHttps(Define.BASE_URL_HTTPS_DEBUG, 5, 5)
 
+            if(binding.userid?.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
+            {
+                Toast.makeText(applicationContext,"아이디 혹은 비밀번호를 입력해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
+                return@OnClickListener
+            }
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
                 val enterLogin : JsonObject = JsonObject()
-                enterLogin.addProperty("ID", binding.userid!!.text.toString())
-                enterLogin.addProperty("PASSWORD", binding.password.text.toString())
+                enterLogin.addProperty("ID", this@LoginActivity.binding.userid!!.text.toString())
+                enterLogin.addProperty("PASSWORD", this@LoginActivity.binding.password.text.toString())
                 NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 CoroutineScope(Dispatchers.Default).launch {
                     SelfSigningHelper(context = applicationContext)
@@ -141,9 +187,10 @@ class LoginActivity : AppCompatActivity() {
                             val jsonArray : JSONArray
                             jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
 
-                            if(jsonArray[0].toString().isBlank()) {
-                                Toast.makeText(applicationContext,"아이디, 비밀번호를 확인해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
-//                                return@connectHTTPS
+                            if(jsonArray.get(0).toString().isBlank())
+                            {
+                                Toast.makeText(applicationContext,"아이디, 비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
+                                return@connectHTTPS
                             }
                             editor.putString( // 로그인한 아이디 저장
                                 Data.instance.LOGIN_ID,
@@ -168,11 +215,10 @@ class LoginActivity : AppCompatActivity() {
                                     Data.instance.AUTO_LOGIN_PASSWORD,
                                     (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                                 )
-                            } else {
+                            } else { // 자동로그인이 클리되어있지 않을때
                                 editor.putBoolean(Data.instance.AUTO_LOGIN_BOOLEAN, false)
                                 editor.putString(Data.instance.AUTO_LOGIN_ID, "")
                                 editor.putString(Data.instance.AUTO_LOGIN_PASSWORD, "")
-
                             }
 
                             editor.commit()
@@ -189,15 +235,20 @@ class LoginActivity : AppCompatActivity() {
             else
             {
                 Toast.makeText(applicationContext, "아이디, 비밀번호를 규칙에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show()
-                binding.userid?.text
-                return@setOnClickListener
+//                binding.userid?.text
+                return@OnClickListener
             }
-        }
+
+        })
         binding.buttonSignUp!!.setOnClickListener(){
             SignUp().let{
                 it.showNow(supportFragmentManager,"")
                 it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
             }
+        }
+
+        binding.buttonTest?.setOnClickListener(){
+            versionCheck()
         }
 
     }
@@ -220,6 +271,7 @@ class LoginActivity : AppCompatActivity() {
     private fun openMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
