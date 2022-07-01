@@ -61,6 +61,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/linearLayout_Button"
         android:layout_marginTop="30dp"
         android:weightSum="5"
         app:layout_constraintTop_toBottomOf="@+id/linearlayout_checkbox">
@@ -94,20 +95,23 @@
             android:layout_weight="2"
             app:layout_constraintVertical_bias="0.2" />
 
-        <Button
-            android:id="@+id/button_Test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/royal_blue"
-            android:layout_gravity="start"
-            android:layout_marginTop="16dp"
-            android:enabled="true"
-            android:text="테스트"
-            android:layout_weight="2"
-            app:layout_constraintVertical_bias="0.2" />
-
-
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_Button">
+    <Button
+        android:id="@+id/button_Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/royal_blue"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:text="테스트"/>
+    </RelativeLayout >
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,7 +122,7 @@
         tools:text="ver 1.0.0"/>
 
     <ProgressBar
-        android:id="@+id/loading"
+        android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

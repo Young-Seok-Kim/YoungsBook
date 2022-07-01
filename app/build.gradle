@@ -10,11 +10,11 @@ android {
 
     defaultConfig {
         applicationId "com.youngsbook"
-        minSdk 25
+        minSdk 26
         multiDexEnabled true
         targetSdk 30
-        versionCode 5
-        versionName "1.0.1"
+        versionCode 7
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

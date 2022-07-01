@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 object YoungsFunction {
     fun stringToJson( jsonString : String ) : JSONArray
     {
@@ -50,5 +51,15 @@ object YoungsFunction {
                 dialogInterface : DialogInterface, i : Int ->
         }
         messageBox.show()
+    }
+    fun messageBoxOKAction(context: Context, title : String, Message : String, OKAction : () -> Unit){
+        val messageBox = AlertDialog.Builder(context)
+        messageBox.setTitle(title)
+        .setMessage(Message)
+        .setPositiveButton("확인") {
+                dialogInterface : DialogInterface, i : Int ->
+            OKAction()
+        }
+        .show()
     }
 }

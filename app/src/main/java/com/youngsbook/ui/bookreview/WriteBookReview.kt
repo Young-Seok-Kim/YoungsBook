@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.youngsbook.common.Data
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.WriteBookReviewBinding
 import com.youngsbook.ui.main.MainActivityAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +25,8 @@ class WriteBookReview : DialogFragment() {
 
     lateinit var binding: WriteBookReviewBinding
     private lateinit var sharedPrefer : SharedPreferences
+
+    val youngsProgress = NetworkProgress()
 //    lateinit var mainActivityModel : MainActivityModel
 
     lateinit var status : String
@@ -51,8 +53,6 @@ class WriteBookReview : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        // 전체화면으로 만드는 코드
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 //        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // 터치 불가능 코드 회수
 
@@ -110,7 +110,9 @@ class WriteBookReview : DialogFragment() {
                 )
                 jsonObject.addProperty("review", binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
-                NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.startProgress(requireContext(),binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.notTouchable(this.dialog?.window!!)
+
                 CoroutineScope(Dispatchers.Default).launch {
                     NetworkConnect.connectHTTPS("InsertBookReview.do",
                         jsonObject,
@@ -121,11 +123,20 @@ class WriteBookReview : DialogFragment() {
                                 "${binding.ratingBarStar.rating}점으로 리뷰를 등록했습니다.",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            youngsProgress.endProgressBar(binding.progressbar)
+                            youngsProgress.touchable(dialog?.window!!)
+
                             dismiss()
+                        }
+                    , onFailure = {
+                            youngsProgress.endProgressBar(binding.progressbar)
+                            youngsProgress.touchable(dialog?.window!!)
                         }
                     )
 
                 }
+
             }
             else if (status == "U")
             {
@@ -142,7 +153,9 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
                 jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
-                NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.startProgress(requireContext(),binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.notTouchable(dialog?.window!!)
+
                 CoroutineScope(Dispatchers.Default).launch {
                     NetworkConnect.connectHTTPS("UpdateBookReview.do",
                         jsonObject,
@@ -155,6 +168,13 @@ class WriteBookReview : DialogFragment() {
                             ).show()
                             this@WriteBookReview.dismiss()
 
+                            youngsProgress.endProgressBar(binding.progressbar)
+                            youngsProgress.touchable(dialog?.window!!)
+
+                        }
+                    , onFailure = {
+                            youngsProgress.endProgressBar(binding.progressbar)
+                            youngsProgress.touchable(dialog?.window!!)
                         }
                     )
                 }
@@ -165,7 +185,8 @@ class WriteBookReview : DialogFragment() {
         {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
-            NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+            youngsProgress.startProgress(requireContext(),binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+//                youngsProgress.notTouchable(window)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",
                     jsonObject,
@@ -176,7 +197,15 @@ class WriteBookReview : DialogFragment() {
                             "${binding.editTextBookName.text}를 삭제했습니다.",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        youngsProgress.endProgressBar(binding.progressbar)
+                        youngsProgress.touchable(dialog?.window!!)
+
                         this@WriteBookReview.dismiss()
+                    }
+                , onFailure = {
+                        youngsProgress.endProgressBar(binding.progressbar)
+                        youngsProgress.touchable(dialog?.window!!)
                     }
                 )
             }

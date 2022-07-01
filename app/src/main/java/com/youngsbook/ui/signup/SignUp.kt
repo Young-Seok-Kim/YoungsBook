@@ -1,30 +1,32 @@
 package com.youngsbook.ui.signup
 
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.youngsbook.common.Data
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.SignUpBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 class SignUp : DialogFragment() {
 
     lateinit var binding: SignUpBinding
     private lateinit var sharedPrefer : SharedPreferences
-//    lateinit var mainActivityModel : MainActivityModel
+
+    val youngsProgress = NetworkProgress()
 
     lateinit var status : String
 
@@ -43,6 +45,7 @@ class SignUp : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignUpBinding.inflate(layoutInflater)
+
         sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
         initButton()
@@ -51,11 +54,8 @@ class SignUp : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        // 전체화면으로 만드는 코드
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 //        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // 터치 불가능 코드 회수
-
     }
 
 
@@ -94,21 +94,44 @@ class SignUp : DialogFragment() {
             jsonObject.addProperty("ID", binding.editTextID.text.toString())
             jsonObject.addProperty("PASSWORD", binding.editTextPassword.text.toString())
             jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
-            NetworkConnect.startProgress(requireContext()) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+            youngsProgress.startProgress(context = requireContext(),binding.progressbar)
+            youngsProgress.notTouchable(window = dialog?.window!!)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("SignUp.do",
                     jsonObject,
                     requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                     , onSuccess = { ->
-                        Toast.makeText(
-                            context,
-                            "${binding.editTextID.text}님 가입을 환영합니다!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        this@SignUp.dismiss()
+                        val jsonArray : JSONArray
+                        jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+
+                        if ((jsonArray.get(0) as JSONObject)?.get("countID").toString().toInt() > 1)
+                        {
+                            Toast.makeText(
+                                context,
+                                "동일한 아이디가 존재합니다",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.editTextID.requestFocus()
+                        }
+                        else {
+                            Toast.makeText(
+                                context,
+                                "${binding.editTextID.text}님 가입을 환영합니다!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            this@SignUp.dismiss()
+                        }
+
+                        youngsProgress.endProgressBar(binding.progressbar)
+                        youngsProgress.touchable(dialog?.window!!)
+                    }
+                , onFailure = {
+                        youngsProgress.endProgressBar(binding.progressbar)
+                        youngsProgress.touchable(dialog?.window!!)
                     }
                 )
             }
+
         }
     }
 

@@ -14,6 +14,7 @@ import com.youngsbook.common.Data
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.ActivityMainBinding
 import com.youngsbook.ui.bookreview.WriteBookReview
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainActivityAdapter: MainActivityAdapter
     private lateinit var sharedPrefer : SharedPreferences
     val datas = mutableListOf<MainActivityModel>()
+    val youngsProgress = NetworkProgress()
 
     var pastVisiblesItems: Int = 0
     var visibleItemCount: Int = 0
@@ -66,8 +68,8 @@ class MainActivity : AppCompatActivity() {
                 WriteBookReview().let {
                     it.status = Data.instance.STATUS_UPDATE
                     it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
-                    it.showNow(supportFragmentManager,"")
                     it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+                    it.showNow(supportFragmentManager,"")
                     it.setOnDismissListener(object : WriteBookReview.OnDialogDismissListener{
                         override fun whenDismiss() {
                             updateList()
@@ -132,7 +134,8 @@ class MainActivity : AppCompatActivity() {
 
         val jsonObject : JsonObject = JsonObject()
         jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.LOGIN_ID," "))
-        NetworkConnect.startProgress(this) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+        youngsProgress.startProgress(context = applicationContext,binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+        youngsProgress.notTouchable(window)
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",
                 jsonObject,
@@ -155,11 +158,16 @@ class MainActivity : AppCompatActivity() {
                     }
                     binding.title.text = "현재 책을 ${MainActivityAdapter.instance.itemCount}권 읽었어요"
 
-
-
+                    youngsProgress.endProgressBar(binding.progressbar)
+                    youngsProgress.touchable(window)
+                }
+            , onFailure = {
+                    youngsProgress.endProgressBar(binding.progressbar)
+                    youngsProgress.touchable(window)
                 }
             )
         }
+
     }
 
     override fun onBackPressed() {

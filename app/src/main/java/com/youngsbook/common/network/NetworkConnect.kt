@@ -4,7 +4,10 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.view.View
+import android.view.Window
 import android.view.WindowManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.gson.JsonObject
@@ -19,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object NetworkConnect {
-    private var progressDialog: ProgressDialog? = null
     var resultString : String = ""
     var connectURL : String = Define.BASE_URL_HTTPS_DEBUG
 
@@ -31,6 +33,7 @@ object NetworkConnect {
     suspend fun connectHTTPS(path : String, param : JsonObject
                              , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
                              , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
+                             , onFailure : () -> Unit // 실패했을때 실행할 함수(이벤트)
     ){
         /*
             디버그 모드일때는 로컬에 연결되도록 youngsbook.duckdns.org에 연결하고,
@@ -61,14 +64,13 @@ object NetworkConnect {
                     Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
 
-                NetworkConnect.endProgress()
+
 
             }
             override fun onFailure(call: Call<ResponseDTO>?, t: Throwable?) {
+                onFailure()
                 Toast.makeText(context, "인터넷 연결을 확인하여주십시오.", Toast.LENGTH_SHORT).show()
                 Log.d("HTTPS", t?.message.toString())
-                NetworkConnect.endProgress()
-
             }
         })
     }
@@ -113,27 +115,6 @@ object NetworkConnect {
 //        })
 //    }
 
-    fun startProgress(context: Context) // 서버와 통신하는동안 터치할수 없도록 하는 코드
-    {
-        if(!(progressDialog?.isShowing == false)) {
-            progressDialog = ProgressDialog(context)
-
-
-            progressDialog!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            progressDialog!!.setMessage("서버와 연결중")
-
-            progressDialog?.window?.setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-            )
-            progressDialog!!.show()
-        }
-    }
-
-    fun endProgress()
-    {
-        progressDialog?.dismiss()
-    }
 
 
 
