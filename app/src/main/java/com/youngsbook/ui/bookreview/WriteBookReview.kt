@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.youngsbook.common.Data
+import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -53,9 +53,7 @@ class WriteBookReview : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-//        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // 터치 불가능 코드 회수
-
+        YoungsContextFunction().loadAD(requireContext(),binding.adBanner)
     }
 
 

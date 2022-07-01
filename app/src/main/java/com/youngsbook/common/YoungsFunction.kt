@@ -5,9 +5,13 @@ import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import org.json.JSONArray
 import org.json.JSONObject
 import com.google.gson.Gson
+import com.youngsbook.R
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -21,6 +21,7 @@ import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Data
+import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var sharedPreferences : SharedPreferences
     private lateinit var editor : SharedPreferences.Editor
     val youngsProgress = NetworkProgress()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,16 +118,17 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
-//        initButton()
     }
 
     override fun onStart() {
         super.onStart()
 
-        if(BuildConfig.DEBUG)
-            binding.buttonTest?.visibility = View.VISIBLE
+        if(BuildConfig.DEBUG) {
+            binding.buttonTest.visibility = View.VISIBLE
+
+        }
         else
-            binding.buttonTest?.visibility = View.GONE
+            binding.buttonTest.visibility = View.GONE
 
     }
 
@@ -135,6 +138,7 @@ class LoginActivity : AppCompatActivity() {
 
         initButton()
         versionCheck()
+        YoungsContextFunction().loadAD(this,binding.adBanner)
     }
 
     private fun versionCheck()
@@ -153,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
                         jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
                         Log.d("버전체크 jsonObject.toString()", jsonObject.toString())
                         Log.d("버전체크 NetworkConnect.resultString", NetworkConnect.resultString)
-                        
+
                         if(jsonArray[0].toString().toBoolean() == true) {
                             Log.d("업데이트여부", "필요함")
                             YoungsFunction.messageBoxOKAction(context = this@LoginActivity, "오류!", "새로운 업데이트가 있습니다. 업데이트를 진행해주세요",

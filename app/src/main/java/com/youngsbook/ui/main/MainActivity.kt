@@ -12,6 +12,7 @@ import com.google.gson.JsonObject
 import com.youngsbook.R
 import com.youngsbook.common.Data
 import com.youngsbook.common.RecyclerViewAdapter
+import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -47,6 +48,11 @@ class MainActivity : AppCompatActivity() {
         updateList()
         initFAB()
         initListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        YoungsContextFunction().loadAD(context = applicationContext, binding.adBanner)
     }
     private fun initList()
     {
