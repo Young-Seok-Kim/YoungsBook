@@ -1,6 +1,8 @@
 # YoungsBook
 자신이 읽었던 책들을 기록하는 앱
 
+설치경로 -> https://play.google.com/store/apps/details?id=com.youngsbook
+
 ## 사용기술
 MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS)
 클라이언트 사용언어 : Koltin, 서버 사용언어 : Java
@@ -16,3 +18,5 @@ MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS)
 네트워크 연결시도중 ProgressBar를 띄워주며, ProgressBar가 나와있는동안 사용자는 클릭이 불가능합니다.
 
 로그인후 메인화면 우측 하단의 (+) 버튼을 눌러서 자신이 읽었던 책을 추가할수있습니다.
+
+
