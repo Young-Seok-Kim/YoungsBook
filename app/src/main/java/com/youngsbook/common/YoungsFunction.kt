@@ -66,4 +66,25 @@ object YoungsFunction {
         }
         .show()
     }
+
+    /*
+     01012345678과 같은 형식으로 파라미터를 넣으면 국제번호로 값을 return 해준다.
+     */
+    fun phoneNumber82(msg : String) : String{
+
+        val firstNumber : String = msg.substring(0,3)
+        var phoneEdit = msg.substring(3)
+
+        when(firstNumber){
+            "010" -> phoneEdit = "+8210$phoneEdit"
+            "011" -> phoneEdit = "+8211$phoneEdit"
+            "016" -> phoneEdit = "+8216$phoneEdit"
+            "017" -> phoneEdit = "+8217$phoneEdit"
+            "018" -> phoneEdit = "+8218$phoneEdit"
+            "019" -> phoneEdit = "+8219$phoneEdit"
+            "106" -> phoneEdit = "+82106$phoneEdit"
+        }
+        Log.d("국가코드로 변경된 번호 ",phoneEdit)
+        return phoneEdit
+    }
 }

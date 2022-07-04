@@ -26,9 +26,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    lateinit var mainActivityAdapter: MainActivityAdapter
     private lateinit var sharedPrefer : SharedPreferences
-    val datas = mutableListOf<MainActivityModel>()
     val youngsProgress = NetworkProgress()
 
     var pastVisiblesItems: Int = 0
@@ -140,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
         val jsonObject : JsonObject = JsonObject()
         jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.LOGIN_ID," "))
-        youngsProgress.startProgress(context = applicationContext,binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+        youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
         youngsProgress.notTouchable(window)
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",

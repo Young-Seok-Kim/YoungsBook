@@ -57,12 +57,10 @@ class WriteBookReview : DialogFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         whenOpen()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            initButton()
-        }
+        initButton()
 
         return binding.root
     }
@@ -108,7 +106,7 @@ class WriteBookReview : DialogFragment() {
                 )
                 jsonObject.addProperty("review", binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
-                youngsProgress.startProgress(requireContext(),binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 youngsProgress.notTouchable(this.dialog?.window!!)
 
                 CoroutineScope(Dispatchers.Default).launch {
@@ -151,7 +149,7 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
                 jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
-                youngsProgress.startProgress(requireContext(),binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
                 youngsProgress.notTouchable(dialog?.window!!)
 
                 CoroutineScope(Dispatchers.Default).launch {
@@ -183,7 +181,7 @@ class WriteBookReview : DialogFragment() {
         {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
-            youngsProgress.startProgress(requireContext(),binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+            youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
 //                youngsProgress.notTouchable(window)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",

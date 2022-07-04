@@ -2,6 +2,7 @@ package com.youngsbook.ui.signup
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,13 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.gson.JsonObject
 import com.youngsbook.common.Data
 import com.youngsbook.common.YoungsFunction
@@ -20,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 class SignUp : DialogFragment() {
 
@@ -28,34 +37,22 @@ class SignUp : DialogFragment() {
 
     val youngsProgress = NetworkProgress()
 
-    lateinit var status : String
+    private var auth : FirebaseAuth = Firebase.auth
+    var verificationId = "" // 인증번호 저장을 위한 변수
 
-    private lateinit var onClickListener: OnDialogDismissListener
-
-    interface OnDialogDismissListener
-    {
-        fun whenDismiss()
-    }
-
-    fun setOnDismissListener(listener: OnDialogDismissListener)
-    {
-        this@SignUp.onClickListener = listener
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignUpBinding.inflate(layoutInflater)
 
         sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
+        auth = Firebase.auth
 
         initButton()
-
     }
 
     override fun onResume() {
         super.onResume()
-//        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // 터치 불가능 코드 회수
     }
 
 
@@ -68,6 +65,13 @@ class SignUp : DialogFragment() {
 
 
         binding.joinButton.setOnClickListener() {
+//            createAccount(binding.editTextEmail.text.toString(),binding.editTextPassword.text.toString()) // Firebase를 이용한 이메일가입
+//        }
+            if(!binding.checkboxCertifyValue.isChecked){
+                Toast.makeText(requireContext(),"인증번호 확인을 진행해주세요",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (binding.editTextPassword.text.toString() != binding.editTextPasswordCheck.text.toString()) {
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호와 비밀번호 확인이 일치하지 않습니다." )
                 return@setOnClickListener
@@ -94,7 +98,9 @@ class SignUp : DialogFragment() {
             jsonObject.addProperty("ID", binding.editTextID.text.toString())
             jsonObject.addProperty("PASSWORD", binding.editTextPassword.text.toString())
             jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
-            youngsProgress.startProgress(context = requireContext(),binding.progressbar)
+            jsonObject.addProperty("PHONE_NUMBER", binding.editTextPhoneNumber.text.toString())
+
+            youngsProgress.startProgress(binding.progressbar)
             youngsProgress.notTouchable(window = dialog?.window!!)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("SignUp.do",
@@ -104,7 +110,7 @@ class SignUp : DialogFragment() {
                         val jsonArray : JSONArray
                         jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
 
-                        if ((jsonArray.get(0) as JSONObject)?.get("countID").toString().toInt() > 1)
+                        if ((jsonArray.get(0) as JSONObject).get("countID").toString().toInt() > 1)
                         {
                             Toast.makeText(
                                 context,
@@ -132,6 +138,78 @@ class SignUp : DialogFragment() {
                 )
             }
 
+        }
+
+        binding.buttonSendCertifyNumber.setOnClickListener(){
+            if(binding.editTextPhoneNumber.text.toString().length < 4) {
+                Toast.makeText(requireContext(),"휴대폰번호를 입력해주세요",Toast.LENGTH_SHORT).show()
+                Log.d("휴대폰번호",binding.editTextInputCertifyNumber.text.toString())
+                return@setOnClickListener
+            }
+
+            binding.linearLayoutCertifyNumber.visibility = View.VISIBLE
+
+            val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) { }
+                override fun onVerificationFailed(e: FirebaseException) {
+                }
+                override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+                    this@SignUp.verificationId = verificationId
+                }
+            }
+
+            val optionsCompat =  PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(YoungsFunction.phoneNumber82(binding.editTextPhoneNumber.text.toString()))
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(requireActivity())
+                .setCallbacks(callbacks)
+                .build()
+            PhoneAuthProvider.verifyPhoneNumber(optionsCompat)
+            auth.setLanguageCode("kr")
+        }
+
+        binding.buttonCertifyNumber.setOnClickListener(){
+            if(binding.editTextInputCertifyNumber.text.toString().isBlank())
+                return@setOnClickListener
+
+            val credential = PhoneAuthProvider.getCredential(verificationId, binding.editTextInputCertifyNumber.text.toString())
+            signInWithPhoneAuthCredential(credential)
+        }
+    }
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    //인증성공
+                    Toast.makeText(requireContext(),"휴대폰 인증성공",Toast.LENGTH_SHORT).show()
+                    binding.checkboxCertifyValue.isChecked = true
+                }
+                else {
+                    //인증실패
+                    Toast.makeText(requireContext(),"인증번호를 확인해주세요",Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun createAccount(email: String, password: String) { // Firebase 이메일로 가입하기
+
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            auth?.createUserWithEmailAndPassword(email, password)
+                ?.addOnCompleteListener(requireActivity()) { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            requireContext(), "계정 생성 완료.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+//                        finish() // 가입창 종료
+                    } else {
+                        Toast.makeText(
+                            requireContext(), "계정 생성 실패",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
         }
     }
 

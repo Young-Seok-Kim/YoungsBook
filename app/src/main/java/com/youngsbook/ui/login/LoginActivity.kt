@@ -17,6 +17,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
@@ -47,13 +53,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editor : SharedPreferences.Editor
     val youngsProgress = NetworkProgress()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater,null,false)
 //        EqMstrDtlBinding.inflate(inflater, container, false)
 
-//        postHttps(Define.BASE_URL_HTTPS_DEBUG, 5, 5)
 
         setContentView(binding.root)
         binding.appVersion.text = "Version : ${BuildConfig.VERSION_NAME}${if(BuildConfig.DEBUG) ", Debug" else ""}"
@@ -75,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
             val loginState = it ?: return@Observer
 
             if (loginState.usernameError != null) {
-                userid?.error = getString(loginState.usernameError)
+                userid.error = getString(loginState.usernameError)
             }
             if (loginState.passwordError != null) {
                 password.error = getString(loginState.passwordError)
@@ -149,7 +153,7 @@ class LoginActivity : AppCompatActivity() {
     {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("clientAppVersion", BuildConfig.VERSION_CODE.toString())
-            youngsProgress.startProgress(this,binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+            youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
             youngsProgress.notTouchable(window)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("versionCheck.do",
@@ -190,12 +194,16 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun initButton() {
-        binding.buttonLogin!!.setOnClickListener() {
-            youngsProgress.startProgress(this,this@LoginActivity.binding.progressbar)
+        binding.forgotLoginInfo.setOnClickListener(){
+            Toast.makeText(this,"아이디, 비밀번호찾기",Toast.LENGTH_SHORT).show()
+            TODO("ID, password찾기 구현") // 비밀번호 찾기는 비밀번호 변경으로, 이메일 인증을 먼저하고 만들어야하나..
+        }
+        binding.buttonLogin.setOnClickListener() {
+            youngsProgress.startProgress(this@LoginActivity.binding.progressbar)
             youngsProgress.notTouchable(window)
 
 
-            if(binding.userid?.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
+            if(binding.userid.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
             {
                 Toast.makeText(applicationContext,"아이디 혹은 비밀번호를 입력해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
                 youngsProgress.endProgressBar(binding.progressbar)
@@ -205,7 +213,7 @@ class LoginActivity : AppCompatActivity() {
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
                 val enterLogin : JsonObject = JsonObject()
-                enterLogin.addProperty("ID", this@LoginActivity.binding.userid!!.text.toString().replace(" ",""))
+                enterLogin.addProperty("ID", this@LoginActivity.binding.userid.text.toString().replace(" ",""))
                 enterLogin.addProperty("PASSWORD", this@LoginActivity.binding.password.text.toString().replace(" ",""))
 
                 CoroutineScope(Dispatchers.Default).launch {
@@ -293,10 +301,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonTest.setOnClickListener(){
-            versionCheck()
-    //            youngsProgress.startProgress(this,this@LoginActivity.binding.progressbar)
-    //            youngsProgress.notTouchable(window)
-
+//            versionCheck()
         }
 
     }
@@ -311,7 +316,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun checkSharedPreference()
     {
-        binding.checkboxSaveLoginInfo!!.isChecked = sharedPreferences.getBoolean(Data.instance.AUTO_LOGIN_BOOLEAN,false)
+        binding.checkboxSaveLoginInfo.isChecked = sharedPreferences.getBoolean(Data.instance.AUTO_LOGIN_BOOLEAN,false)
         binding.userid!!.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_ID,""))
         binding.password.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_PASSWORD,""))
     }
