@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        YoungsContextFunction().loadAD(context = applicationContext, binding.adBanner)
+           YoungsContextFunction().loadAD(context = applicationContext, binding.adBanner)
     }
     private fun initList()
     {

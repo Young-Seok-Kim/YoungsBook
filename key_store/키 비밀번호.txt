@@ -1,1 +1,4 @@
+YoungsBookKey.jks
 비밀번호 : tester
+
+앱을 Release로 만들때 필요

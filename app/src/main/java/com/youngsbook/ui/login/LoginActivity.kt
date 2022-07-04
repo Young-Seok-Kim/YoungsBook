@@ -21,11 +21,13 @@ import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Data
+import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.common.network.SelfSigningHelper
+import com.youngsbook.common.network.SslConnect.postHttps
 import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
@@ -50,8 +52,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater,null,false)
 //        EqMstrDtlBinding.inflate(inflater, container, false)
+
+//        postHttps(Define.BASE_URL_HTTPS_DEBUG, 5, 5)
+
         setContentView(binding.root)
-        binding.appVersion?.text = "Version : ${BuildConfig.VERSION_NAME}"
+        binding.appVersion.text = "Version : ${BuildConfig.VERSION_NAME}${if(BuildConfig.DEBUG) ", Debug" else ""}"
 
         sharedPreferences = getSharedPreferences("login_Info", MODE_PRIVATE)
         editor = sharedPreferences.edit()
@@ -125,7 +130,6 @@ class LoginActivity : AppCompatActivity() {
 
         if(BuildConfig.DEBUG) {
             binding.buttonTest.visibility = View.VISIBLE
-
         }
         else
             binding.buttonTest.visibility = View.GONE
@@ -191,11 +195,11 @@ class LoginActivity : AppCompatActivity() {
             youngsProgress.notTouchable(window)
 
 
-//            postHttps(Define.BASE_URL_HTTPS_DEBUG, 5, 5)
-
             if(binding.userid?.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
             {
                 Toast.makeText(applicationContext,"아이디 혹은 비밀번호를 입력해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
+                youngsProgress.endProgressBar(binding.progressbar)
+                youngsProgress.touchable(window)
                 return@setOnClickListener
             }
 
@@ -217,6 +221,8 @@ class LoginActivity : AppCompatActivity() {
                             if(jsonArray.get(0).toString().isBlank())
                             {
                                 Toast.makeText(applicationContext,"아이디, 비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
+                                youngsProgress.endProgressBar(binding.progressbar)
+                                youngsProgress.touchable(window)
                                 return@connectHTTPS
                             }
                             editor.putString( // 로그인한 아이디 저장
@@ -270,13 +276,14 @@ class LoginActivity : AppCompatActivity() {
             else
             {
                 Toast.makeText(applicationContext, "아이디, 비밀번호를 규칙에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show()
-//                binding.userid?.text
+                youngsProgress.endProgressBar(binding.progressbar)
+                youngsProgress.touchable(window)
                 return@setOnClickListener
             }
 
 
         }
-        binding.buttonSignUp!!.setOnClickListener(){
+        binding.buttonSignUp.setOnClickListener(){
             SignUp().let{
                 it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                 it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
@@ -285,10 +292,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.buttonTest?.setOnClickListener(){
-//            versionCheck()
-//            youngsProgress.startProgress(this,this@LoginActivity.binding.progressbar)
-//            youngsProgress.notTouchable(window)
+        binding.buttonTest.setOnClickListener(){
+            versionCheck()
+    //            youngsProgress.startProgress(this,this@LoginActivity.binding.progressbar)
+    //            youngsProgress.notTouchable(window)
 
         }
 

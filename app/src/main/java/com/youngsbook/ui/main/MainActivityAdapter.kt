@@ -4,11 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.youngsbook.common.RecyclerViewAdapter
+import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.RecylerviewBookItemBinding
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAdapter.MyViewHolder>() {
 
 //    var datalist = mutableListOf<MainActivityModel>()//리사이클러뷰에서 사용할 데이터 미리 정의 -> 나중에 MainActivity등에서 datalist에 실제 데이터 추가
+
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     inner class MyViewHolder(private val binding: RecylerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -35,9 +42,7 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
         holder.textView_BookName.text = MainActivityAdapter.instance._arrayList[position].BOOK_NAME
         holder.textView_BookReview.text = MainActivityAdapter.instance._arrayList[position].REVIEW
         holder.ratingBar_Star.rating = MainActivityAdapter.instance._arrayList[position].STAR_RATING
-        holder.textView_readDate.text =MainActivityAdapter.instance._arrayList[position].READ_DATE
-
-
+        holder.textView_readDate.text = MainActivityAdapter.instance._arrayList[position].READ_DATE
     }
 
     private object SingletonHolder {
