@@ -7,6 +7,8 @@
 MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS)
 클라이언트 사용언어 : Koltin, 서버 사용언어 : Java
 
+Let's Encrypt와 DuckDNS를 이용해 SSL 인증서를 받은뒤 적용하였습니다.
+
 ## 설명 
 
 네트워크는 Retrofit 라이브러리를 이용해 연결하였습니다.
