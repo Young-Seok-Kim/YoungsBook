@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -16,19 +15,26 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.youngsbook.common.Data
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.SignUpBinding
+import com.youngsbook.ui.main.MainActivityAdapter
+import com.youngsbook.ui.main.MainActivityModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
+
 
 class SignUp : DialogFragment() {
 
@@ -37,7 +43,7 @@ class SignUp : DialogFragment() {
 
     val youngsProgress = NetworkProgress()
 
-    private var auth : FirebaseAuth = Firebase.auth
+    private var auth : FirebaseAuth = Firebase.auth // 전화번호 인증을 위한 변수
     var verificationId = "" // 인증번호 저장을 위한 변수
 
 
@@ -51,36 +57,17 @@ class SignUp : DialogFragment() {
         initButton()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
 
     private fun initButton() {
 
-
         binding.joinButton.setOnClickListener() {
 //            createAccount(binding.editTextEmail.text.toString(),binding.editTextPassword.text.toString()) // Firebase를 이용한 이메일가입
 //        }
-            if(!binding.checkboxCertifyValue.isChecked){
-                Toast.makeText(requireContext(),"인증번호 확인을 진행해주세요",Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (binding.editTextPassword.text.toString() != binding.editTextPasswordCheck.text.toString()) {
-                YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호와 비밀번호 확인이 일치하지 않습니다." )
-                return@setOnClickListener
-            }
-            else if(binding.editTextPasswordCheck.text.length < 7){
-                YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호는 7자리 이상 입력해주세요" )
-                return@setOnClickListener
-            }
-            else if(binding.editTextName.text.isNullOrBlank()){
+            if(binding.editTextName.text.isNullOrBlank()){
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "이름을 입력해주세요" )
                 return@setOnClickListener
             }
@@ -88,8 +75,20 @@ class SignUp : DialogFragment() {
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "아이디를 입력해주세요" )
                 return@setOnClickListener
             }
+            else if (binding.editTextPassword.text.toString() != binding.editTextPasswordCheck.text.toString()) {
+                YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호와 비밀번호 확인이 일치하지 않습니다." )
+                return@setOnClickListener
+            }
+            else if(binding.editTextPasswordCheck.text.length < 6){
+                YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호는 6자리 이상 입력해주세요" )
+                return@setOnClickListener
+            }
             else if(binding.editTextEmail.text.isNullOrBlank()){
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "이메일을 입력해주세요" )
+                return@setOnClickListener
+            }
+            else if(!binding.checkboxCertifyValue.isChecked){
+                Toast.makeText(requireContext(),"인증번호 확인을 진행해주세요",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -99,6 +98,7 @@ class SignUp : DialogFragment() {
             jsonObject.addProperty("PASSWORD", binding.editTextPassword.text.toString())
             jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
             jsonObject.addProperty("PHONE_NUMBER", binding.editTextPhoneNumber.text.toString())
+            jsonObject.addProperty("SIGNUP_DATE", YoungsFunction.getNowDate())
 
             youngsProgress.startProgress(binding.progressbar)
             youngsProgress.notTouchable(window = dialog?.window!!)
@@ -147,7 +147,6 @@ class SignUp : DialogFragment() {
                 return@setOnClickListener
             }
 
-            binding.linearLayoutCertifyNumber.visibility = View.VISIBLE
 
             val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) { }
@@ -164,8 +163,19 @@ class SignUp : DialogFragment() {
                 .setActivity(requireActivity())
                 .setCallbacks(callbacks)
                 .build()
+
             PhoneAuthProvider.verifyPhoneNumber(optionsCompat)
             auth.setLanguageCode("kr")
+
+            binding.linearLayoutCertifyNumber.visibility = View.VISIBLE
+
+            Toast.makeText(context,"20초간 인증번호 발송 버튼을 비활성화합니다.",Toast.LENGTH_SHORT).show()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.buttonSendCertifyNumber.isEnabled = false
+                delay(20000) // 10초간 비활성화
+                binding.buttonSendCertifyNumber.isEnabled = true
+            }
         }
 
         binding.buttonCertifyNumber.setOnClickListener(){

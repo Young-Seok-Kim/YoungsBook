@@ -196,7 +196,7 @@ class LoginActivity : AppCompatActivity() {
     private fun initButton() {
         binding.forgotLoginInfo.setOnClickListener(){
             Toast.makeText(this,"아이디, 비밀번호찾기",Toast.LENGTH_SHORT).show()
-            TODO("ID, password찾기 구현") // 비밀번호 찾기는 비밀번호 변경으로, 이메일 인증을 먼저하고 만들어야하나..
+//            TODO("ID, password찾기 구현") // 비밀번호 찾기는 비밀번호 변경으로, 이메일 인증을 먼저하고 만들어야하나..
         }
         binding.buttonLogin.setOnClickListener() {
             youngsProgress.startProgress(this@LoginActivity.binding.progressbar)
@@ -301,14 +301,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonTest.setOnClickListener(){
-//            versionCheck()
+            versionCheck()
         }
 
     }
 
     private fun checkBeforeLogin() : Boolean // 아이디와 비밀번호를 자리수에 맞게 입력하는지 확인
     {
-        if((binding.userid?.text?.length ?: 0) >= 1 && binding.password.text.length >= 6)
+        if((binding.userid.text?.length ?: 0) >= 1 && binding.password.text.length >= 6)
             return true
         
         return false
@@ -317,7 +317,7 @@ class LoginActivity : AppCompatActivity() {
     fun checkSharedPreference()
     {
         binding.checkboxSaveLoginInfo.isChecked = sharedPreferences.getBoolean(Data.instance.AUTO_LOGIN_BOOLEAN,false)
-        binding.userid!!.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_ID,""))
+        binding.userid.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_ID,""))
         binding.password.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_PASSWORD,""))
     }
 
