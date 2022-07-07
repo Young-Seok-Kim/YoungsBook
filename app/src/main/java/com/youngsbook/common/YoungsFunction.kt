@@ -64,6 +64,7 @@ object YoungsFunction {
                 dialogInterface : DialogInterface, i : Int ->
             OKAction()
         }
+        .setCancelable(false)
         .show()
     }
 

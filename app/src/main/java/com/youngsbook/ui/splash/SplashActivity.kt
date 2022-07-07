@@ -1,17 +1,84 @@
 package com.youngsbook.ui.splash
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.app.AlertDialog;
+import com.google.gson.JsonObject
+import com.youngsbook.BuildConfig
+import com.youngsbook.R
+import com.youngsbook.common.YoungsFunction
+import com.youngsbook.common.network.NetworkConnect
+import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.ui.login.LoginActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONArray
 
 
 class SplashActivity : Activity(){
 
+    val youngsProgress = NetworkProgress()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
+
+        versionCheck()
+
+    }
+    private fun versionCheck()
+    {
+        val jsonObject : JsonObject = JsonObject()
+        jsonObject.addProperty("clientAppVersion", BuildConfig.VERSION_CODE.toString())
+        youngsProgress.notTouchable(window)
+        CoroutineScope(Dispatchers.Default).launch {
+            NetworkConnect.connectHTTPS("versionCheck.do",
+                jsonObject,
+                applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                , onSuccess = { ->
+//                        MainActivityAdapter.instance.clear()
+                    val jsonArray : JSONArray
+                    jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                    Log.d("버전체크 jsonObject.toString()", jsonObject.toString())
+                    Log.d("버전체크 NetworkConnect.resultString", NetworkConnect.resultString)
+
+                    if(jsonArray[0].toString().toBoolean() == true) {
+                        setTheme(R.style.Theme_AppCompat)
+                        Log.d("업데이트여부", "필요함")
+                        val messageBox = AlertDialog.Builder(this@SplashActivity)
+                        messageBox.setTitle("업데이트 필요")
+                            .setMessage("업데이트를 하지않을경우 사용중 앱이 팅길수도 있습니다.")
+                            .setPositiveButton("확인") {
+                                    dialogInterface : DialogInterface, i : Int ->
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.youngsbook"))
+                                startActivity(intent)
+                                finish()
+                            }
+                            .setNegativeButton("취소"){
+                                    dialogInterface : DialogInterface, i : Int ->
+                                val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            .setCancelable(false)
+                            .show()
+                    }
+                    else {
+                        val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    youngsProgress.touchable(window)
+                }
+                , onFailure = {
+                    youngsProgress.touchable(window)
+                }
+            )
+        }
     }
 }

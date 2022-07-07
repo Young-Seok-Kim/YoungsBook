@@ -17,23 +17,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Data
-import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.common.network.SelfSigningHelper
-import com.youngsbook.common.network.SslConnect.postHttps
 import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.signup.SignUp
@@ -145,47 +137,9 @@ class LoginActivity : AppCompatActivity() {
         super.onResume()
 
         initButton()
-        versionCheck()
         YoungsContextFunction().loadAD(this,binding.adBanner)
     }
 
-    private fun versionCheck()
-    {
-            val jsonObject : JsonObject = JsonObject()
-            jsonObject.addProperty("clientAppVersion", BuildConfig.VERSION_CODE.toString())
-            youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
-            youngsProgress.notTouchable(window)
-            CoroutineScope(Dispatchers.Default).launch {
-                NetworkConnect.connectHTTPS("versionCheck.do",
-                    jsonObject,
-                    applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
-                    , onSuccess = { ->
-//                        MainActivityAdapter.instance.clear()
-                        val jsonArray : JSONArray
-                        jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
-                        Log.d("버전체크 jsonObject.toString()", jsonObject.toString())
-                        Log.d("버전체크 NetworkConnect.resultString", NetworkConnect.resultString)
-
-                        if(jsonArray[0].toString().toBoolean() == true) {
-                            Log.d("업데이트여부", "필요함")
-                            YoungsFunction.messageBoxOKAction(context = this@LoginActivity, "오류!", "새로운 업데이트가 있습니다. 업데이트를 진행해주세요",
-                                OKAction = { openPlayStore() }
-                            )
-                        }
-                        else
-                            Log.d("업데이트여부","필요없음")
-
-                        youngsProgress.endProgressBar(binding.progressbar)
-                        youngsProgress.touchable(window)
-                    }
-                , onFailure = {
-                        youngsProgress.endProgressBar(binding.progressbar)
-                        youngsProgress.touchable(window)
-                    }
-                )
-            }
-
-    }
 
     private fun openPlayStore(){
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.youngsbook"))
@@ -301,7 +255,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonTest.setOnClickListener(){
-            versionCheck()
+
         }
 
     }
