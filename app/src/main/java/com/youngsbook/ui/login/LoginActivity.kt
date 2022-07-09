@@ -148,6 +148,15 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun initButton() {
+
+        binding.buttonSignUp.setOnClickListener(){
+            SignUp().let{
+                it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
+                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+                it.showNow(supportFragmentManager,"")
+            }
+        }
+
         binding.forgotLoginInfo.setOnClickListener(){
             FindUserInformation().let{
                 it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
@@ -248,14 +257,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
 
-        }
-        binding.buttonSignUp.setOnClickListener(){
-            SignUp().let{
-                it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
-                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
-
-                it.showNow(supportFragmentManager,"")
-            }
         }
 
         binding.buttonTest.setOnClickListener(){

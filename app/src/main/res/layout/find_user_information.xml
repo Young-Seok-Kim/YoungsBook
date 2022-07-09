@@ -9,6 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
+
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
@@ -37,60 +38,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radiobutton_FindID"
-                android:checked="true"
-                android:text="아이디 찾기"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radiobutton_FindPassword"
-                android:text="비밀번호 찾기"
-                android:layout_marginStart="20dp"/>
-
-        </RadioGroup>
-
     <RadioGroup
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/radioGroup_find"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <RadioButton
+            android:id="@+id/radiobutton_FindID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="아이디 찾기" />
         <RadioButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-            <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/radiobutton_FindPassword"
+            android:text="비밀번호 찾기"
+            android:layout_marginStart="20dp"/>
 
     </RadioGroup>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_find"
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="150dp"
-            android:layout_marginEnd="10dp"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/textView_title">
 
-
-        <LinearLayout
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/linearLayout_EveryCertifyLayout"
@@ -125,7 +110,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/linearLayout_CertifyNumber"
-                android:visibility="gone"
                 tools:visibility="visible">
                 <TextView
                     android:layout_width="80dp"
@@ -157,37 +141,35 @@
             </LinearLayout>
         </LinearLayout>
 
-
-
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout_ResetPassword"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 재설정"
+                android:layout_gravity="center"
+                android:textSize="20dp"/>
             <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="비밀번호"
+                android:gravity="center"/>
+            <EditText
+                android:id="@+id/editText_Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearLayout_ResetPassword"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="비밀번호 재설정"
-                    android:layout_gravity="center"
-                    android:textSize="15dp"/>
-                <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:text="비밀번호"
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/editText_Password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="비밀번호"
-                    android:inputType="textPassword"/>
-          </LinearLayout>
+                android:hint="비밀번호"
+                android:inputType="textPassword"/>
+      </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -225,4 +207,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

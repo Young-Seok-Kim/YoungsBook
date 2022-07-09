@@ -23,13 +23,11 @@ import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.databinding.FindUserInformationBinding
-import com.youngsbook.databinding.SignUpBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 
@@ -118,13 +116,14 @@ class FindUserInformation : DialogFragment() {
 
         binding.buttonFindUserInformation.setOnClickListener(object :  View.OnClickListener{
             override fun onClick(p0: View?) {
-                if( ! binding.radiobuttonFindPassword.isChecked && ! binding.radiobuttonFindID.isChecked){
-                    Toast.makeText(context,"찾을 정보를 선택해주세요", Toast.LENGTH_LONG).show()
+                if( ! binding.checkboxCertifyValue.isChecked)
+                {
+                    Toast.makeText(context, "휴대폰인증을 진행해주세요",Toast.LENGTH_SHORT).show()
                     return
                 }
 
 
-                if(binding.radiobuttonFindID.isChecked){
+                if(binding.radiobuttonFindID.isChecked){ // 아이디 찾기
                     val enterLogin : JsonObject = JsonObject()
 //                    enterLogin.addProperty("ID", this@FindUserInformation.binding.userid.text.toString().replace(" ",""))
 //                    enterLogin.addProperty("PASSWORD", this@FindUserInformation.binding.password.text.toString().replace(" ",""))
@@ -136,11 +135,6 @@ class FindUserInformation : DialogFragment() {
                             enterLogin,
                             requireContext() // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                             , onSuccess = { ->
-                                if( ! binding.checkboxCertifyValue.isChecked) {
-                                    Toast.makeText(context, "휴대폰 인증을 진행해주세요.", Toast.LENGTH_LONG).show()
-                                    return@connectHTTPS
-                                }
-
                                 val jsonArray : JSONArray
                                 jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
 
@@ -151,6 +145,8 @@ class FindUserInformation : DialogFragment() {
                                     youngsProgress.touchable(dialog?.window!! )
                                     return@connectHTTPS
                                 }
+
+                                // 여기에 아이디를 MessageBox로 띄워준다.
 
 
                                 youngsProgress.endProgressBar(binding.progressbar)
@@ -165,18 +161,23 @@ class FindUserInformation : DialogFragment() {
 
                     }
                 }
-                else if(binding.radiobuttonFindPassword.isChecked){
-                    val enterLogin : JsonObject = JsonObject()
-//                    enterLogin.addProperty("ID", this@FindUserInformation.binding.userid.text.toString().replace(" ",""))
-//                    enterLogin.addProperty("PASSWORD", this@FindUserInformation.binding.password.text.toString().replace(" ",""))
+                else if(binding.radiobuttonFindPassword.isChecked){ // 비밀번호 찾기
+                    val sendJson : JsonObject = JsonObject()
+//                    sendJson.addProperty("ID", this@FindUserInformation.binding.userid.text.toString().replace(" ",""))
+//                    sendJson.addProperty("PASSWORD", this@FindUserInformation.binding.password.text.toString().replace(" ",""))
 
                     CoroutineScope(Dispatchers.Default).launch {
                         SelfSigningHelper(context = requireContext())
 
                         NetworkConnect.connectHTTPS("findUserPassword.do",
-                            enterLogin,
+                            sendJson,
                             requireContext() // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                             , onSuccess = { ->
+
+                                Toast.makeText(context,"재설정할 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show()
+
+                                binding.linearLayoutResetPassword.visibility = View.VISIBLE
+
                                 val jsonArray : JSONArray
                                 jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
 
@@ -188,12 +189,14 @@ class FindUserInformation : DialogFragment() {
                                     return@connectHTTPS
                                 }
 
+                                binding.linearLayoutResetPassword.visibility = View.VISIBLE
 
                                 youngsProgress.endProgressBar(binding.progressbar)
                                 youngsProgress.touchable(window = dialog?.window!!)
 
                             }
                             , onFailure = {
+                                binding.linearLayoutResetPassword.visibility = View.VISIBLE
                                 youngsProgress.endProgressBar(binding.progressbar)
                                 youngsProgress.touchable(dialog?.window!!)
                             }
@@ -205,19 +208,17 @@ class FindUserInformation : DialogFragment() {
             }
         })
 
-        binding.radiobuttonFindPassword.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                binding.radiobuttonFindPassword.isChecked = true
-//                binding.radiobuttonFindID.isChecked = false
-            }
-        })
-
-        binding.radiobuttonFindID.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                binding.radiobuttonFindID.isChecked = true
-//                binding.radiobuttonFindID.isChecked = false
-            }
-        })
+//        binding.radiobuttonFindPassword.setOnClickListener(object : View.OnClickListener{
+//            override fun onClick(p0: View?) {
+//                binding.linearLayoutResetPassword.visibility = View.VISIBLE
+//            }
+//        })
+//
+//        binding.radiobuttonFindID.setOnClickListener(object : View.OnClickListener{
+//            override fun onClick(p0: View?) {
+//                binding.linearLayoutResetPassword.visibility = View.GONE
+//            }
+//        })
 //
 //        binding.radiobuttonFindID.setOnClickListener(){
 //            binding.linearLayoutResetPassword.visibility = View.GONE
