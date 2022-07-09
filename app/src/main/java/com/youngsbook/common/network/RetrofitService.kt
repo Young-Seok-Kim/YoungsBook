@@ -25,5 +25,7 @@ public interface RetrofitService {
 
     // @GET( EndPoint-자원위치(URI) )
     @GET("{path}")
-    fun getPosts(@Path("path") post: String?): Call<ResponseDTO>
+    fun getPosts(
+        @Path("path") post: String?
+    ): Call<ResponseDTO>
 }

@@ -60,8 +60,7 @@ class SignUp : DialogFragment() {
     private fun initButton() {
 
         binding.joinButton.setOnClickListener() {
-//            createAccount(binding.editTextEmail.text.toString(),binding.editTextPassword.text.toString()) // Firebase를 이용한 이메일가입
-//        }
+
             if(binding.editTextName.text.isNullOrBlank()){
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "이름을 입력해주세요" )
                 return@setOnClickListener
@@ -82,8 +81,10 @@ class SignUp : DialogFragment() {
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "이메일을 입력해주세요" )
                 return@setOnClickListener
             }
-            else if(!binding.checkboxCertifyValue.isChecked){
-                Toast.makeText(requireContext(),"인증번호 확인을 진행해주세요",Toast.LENGTH_SHORT).show()
+
+
+            if( ! binding.checkboxCertifyValue.isChecked)
+            {
                 return@setOnClickListener
             }
 
@@ -164,25 +165,26 @@ class SignUp : DialogFragment() {
 
             binding.linearLayoutCertifyNumber.visibility = View.VISIBLE
 
-            Toast.makeText(context,"20초간 인증번호 발송 버튼을 비활성화합니다.",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"60초이내에 인증번호를 입력해주세요.",Toast.LENGTH_SHORT).show()
 
             CoroutineScope(Dispatchers.Main).launch {
                 binding.buttonSendCertifyNumber.isEnabled = false
-                delay(20000) // 10초간 비활성화
+                delay(60000) // 60초간 비활성화
                 binding.buttonSendCertifyNumber.isEnabled = true
             }
         }
 
         binding.buttonCertifyNumber.setOnClickListener(){
-            if(binding.editTextInputCertifyNumber.text.toString().isBlank())
+            if(binding.editTextInputCertifyNumber.text.toString().length < 6) {
+                Toast.makeText(requireContext(),"인증번호 6자리를 입력해주세요",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-
+            }
             val credential = PhoneAuthProvider.getCredential(verificationId, binding.editTextInputCertifyNumber.text.toString())
             signInWithPhoneAuthCredential(credential)
         }
     }
 
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential){
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
@@ -200,14 +202,14 @@ class SignUp : DialogFragment() {
     private fun createAccount(email: String, password: String) { // Firebase 이메일로 가입하기
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(requireActivity()) { task ->
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(
                             requireContext(), "계정 생성 완료.",
                             Toast.LENGTH_SHORT
                         ).show()
-//                        finish() // 가입창 종료
+        //                        finish() // 가입창 종료
                     } else {
                         Toast.makeText(
                             requireContext(), "계정 생성 실패",

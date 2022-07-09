@@ -49,12 +49,13 @@ object YoungsFunction {
 
     fun messageBoxOK(context: Context, title : String, Message : String){
         val messageBox = AlertDialog.Builder(context)
-        messageBox.setTitle(title)
-        messageBox.setMessage(Message)
-        messageBox.setPositiveButton("확인") {
+        .setTitle(title)
+        .setMessage(Message)
+        .setPositiveButton("확인") {
                 dialogInterface : DialogInterface, i : Int ->
         }
-        messageBox.show()
+        .setCancelable(false)
+        .show()
     }
     fun messageBoxOKAction(context: Context, title : String, Message : String, OKAction : () -> Unit){
         val messageBox = AlertDialog.Builder(context)

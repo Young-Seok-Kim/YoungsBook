@@ -1,20 +1,11 @@
 package com.youngsbook.common.network
 
-import android.app.ProgressDialog
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.common.Define
-import com.youngsbook.common.network.SslConnect.postHttps
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,7 +23,7 @@ object NetworkConnect {
         이렇게 만든 이유는 레트로핏으로 값을 별도의 변환 없이 가져오고, RESULT_LIST안에 있는 select한 값을 사용하기 위함이다.
      */
 
-    suspend fun connectHTTPS(path : String, param : JsonObject
+    fun connectHTTPS(path : String, param : JsonObject
                              , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
                              , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
                              , onFailure : () -> Unit // 실패했을때 실행할 함수(이벤트)
@@ -84,36 +75,4 @@ object NetworkConnect {
             }
         })
     }
-
-//    suspend fun connectHTTP(path : String, param : JsonObject
-//                            , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
-//                            , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
-//    ){
-//        // 호출하는 곳에서 매개변수를 HashMap 형태로 보내는 방식
-//        // 서버에서 보낸 JSON의 Key값을 가져옴
-//        RetrofitInstance.SERVER_HTTP.connectRequest(path, param).enqueue(object : Callback<ResponseDTO>{
-//            override fun onResponse(call: Call<ResponseDTO>?, response: Response<ResponseDTO>?) {
-//
-//                Log.d("Retrofit", "$path 요청성공")
-//
-//                if(response!!.isSuccessful) {
-//                    resultString = response.body()?.returnValue.toString()
-//                    onSuccess()
-//
-//                }
-//                else {
-//                    Toast.makeText(context, "서버와 연결을 시도했으나 실패했습니다.", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                NetworkConnect.endProgress()
-//
-//            }
-//            override fun onFailure(call: Call<ResponseDTO>?, t: Throwable?) {
-//                NetworkConnect.endProgress()
-//                Toast.makeText(context, "인터넷 연결을 확인하여주십시오.", Toast.LENGTH_SHORT).show()
-//                Log.d("Retrofit", "$path 요청실패")
-//            }
-//        })
-//    }
-
 }

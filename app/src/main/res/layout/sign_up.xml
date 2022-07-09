@@ -131,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:hint="인증번호 입력"
                 android:layout_weight="1"
+                android:maxLength="6"
                 android:inputType="number"/>
             <CheckBox
                 android:layout_width="wrap_content"

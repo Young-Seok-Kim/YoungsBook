@@ -217,7 +217,7 @@ class LoginActivity : AppCompatActivity() {
                             }
 
                             editor.commit()
-                            loginViewModel.login(binding.userid!!.text.toString(), binding.password.text.toString())
+                            loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
                             openMainActivity()
 
 
