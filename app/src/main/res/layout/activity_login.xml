@@ -110,8 +110,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/forgotLoginInfo"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_weight="2"
             android:text="아이디, 비밀번호를 잊어버리셨나요?"/>
 

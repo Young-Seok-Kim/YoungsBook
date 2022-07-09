@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -28,7 +27,8 @@ import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.ui.main.MainActivity
-import com.youngsbook.ui.signup.SignUp
+import com.youngsbook.ui.signUp.FindUserInformation
+import com.youngsbook.ui.signUp.SignUp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         setContentView(binding.root)
-        binding.appVersion.text = "Version : ${BuildConfig.VERSION_NAME}${if(BuildConfig.DEBUG) ", Debug" else ""}"
+        binding.appVersion.text = "Version : ${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})${if(BuildConfig.DEBUG) ", Debug" else ""}"
 
         sharedPreferences = getSharedPreferences("login_Info", MODE_PRIVATE)
         editor = sharedPreferences.edit()
@@ -149,8 +149,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initButton() {
         binding.forgotLoginInfo.setOnClickListener(){
-            Toast.makeText(this,"아이디, 비밀번호찾기",Toast.LENGTH_SHORT).show()
-//            TODO("ID, password찾기 구현") // 비밀번호 찾기는 비밀번호 변경으로, 이메일 인증을 먼저하고 만들어야하나..
+            FindUserInformation().let{
+                it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
+                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+
+                it.showNow(supportFragmentManager,"")
+            }
         }
         binding.buttonLogin.setOnClickListener() {
             youngsProgress.startProgress(this@LoginActivity.binding.progressbar)

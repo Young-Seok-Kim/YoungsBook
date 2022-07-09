@@ -1,4 +1,4 @@
-package com.youngsbook.ui.signup
+package com.youngsbook.ui.signUp
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -171,6 +171,12 @@ class SignUp : DialogFragment() {
                 binding.buttonSendCertifyNumber.isEnabled = false
                 delay(60000) // 60초간 비활성화
                 binding.buttonSendCertifyNumber.isEnabled = true
+            }
+
+            CoroutineScope(Dispatchers.Main).launch { // 너무 빨리 인증번호를 확인하면 앱이 팅기기때문에 2초동안 기다리는 코드 추가
+                binding.buttonCertifyNumber.isEnabled = false
+                delay(2000)
+                binding.buttonCertifyNumber.isEnabled = true
             }
         }
 
