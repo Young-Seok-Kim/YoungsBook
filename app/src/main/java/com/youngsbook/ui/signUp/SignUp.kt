@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -51,6 +52,7 @@ class SignUp : DialogFragment() {
 
         initButton()
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -104,13 +106,13 @@ class SignUp : DialogFragment() {
                     requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
                     , onSuccess = { ->
                         val jsonArray : JSONArray
-                        jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                        jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
 
                         if ((jsonArray.get(0) as JSONObject).get("countID").toString().toInt() > 1)
                         {
                             Toast.makeText(
                                 context,
-                                "동일한 아이디가 존재합니다",
+                                "동일한 아이디 혹은 전화번호로 가입되어있습니다.",
                                 Toast.LENGTH_SHORT
                             ).show()
                             binding.editTextID.requestFocus()
@@ -169,7 +171,7 @@ class SignUp : DialogFragment() {
 
             CoroutineScope(Dispatchers.Main).launch {
                 binding.buttonSendCertifyNumber.isEnabled = false
-                delay(60000) // 60초간 비활성화
+                delay(20000) // 20초간 비활성화
                 binding.buttonSendCertifyNumber.isEnabled = true
             }
 
@@ -187,6 +189,7 @@ class SignUp : DialogFragment() {
             }
             val credential = PhoneAuthProvider.getCredential(verificationId, binding.editTextInputCertifyNumber.text.toString())
             signInWithPhoneAuthCredential(credential)
+            binding.editTextPhoneNumber.isEnabled = false
         }
     }
 

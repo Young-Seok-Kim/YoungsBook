@@ -4,20 +4,16 @@ import android.content.Context
 import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
+import com.google.gson.JsonObject
+
 import org.json.JSONArray
 import org.json.JSONObject
-import com.google.gson.Gson
-import com.youngsbook.R
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 object YoungsFunction {
-    fun stringToJson( jsonString : String ) : JSONArray
+    fun stringArrayToJson(jsonString : String ) : JSONArray
     {
         val jsonObject = JSONObject(jsonString)
 
@@ -25,6 +21,15 @@ object YoungsFunction {
 
         if(jsonObject.get("RESULT_LIST").toString() == "[]")
             resultJson.put("")
+
+        return resultJson
+    }
+
+    fun stringIntToJson(jsonString : String ) : Int
+    {
+        val jsonObject = JSONObject(jsonString)
+
+        val resultJson : Int = jsonObject.get("RESULT_LIST").toString().toInt()
 
         return resultJson
     }

@@ -5,11 +5,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.app.AlertDialog;
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
-import com.youngsbook.R
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -41,7 +39,7 @@ class SplashActivity : Activity(){
                 applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                 , onSuccess = {
                     val jsonArray : JSONArray
-                    jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                    jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
 
                     if(jsonArray[0].toString().toBoolean() == true) {
 //                        setTheme(R.style.Theme_AppCompat)

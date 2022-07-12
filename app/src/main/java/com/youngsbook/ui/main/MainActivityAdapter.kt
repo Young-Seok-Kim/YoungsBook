@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
-import com.youngsbook.databinding.RecylerviewBookItemBinding
+import com.youngsbook.databinding.RecyclerviewBookItemBinding
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -17,7 +17,7 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-    inner class MyViewHolder(private val binding: RecylerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(private val binding: RecyclerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         var textView_BookName = binding.textviewBookName
         var textView_BookReview = binding.textviewBookReview
@@ -29,7 +29,7 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
 
     //만들어진 뷰홀더 없을때 뷰홀더(레이아웃) 생성하는 함수
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding= RecylerviewBookItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding= RecyclerviewBookItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
         return MyViewHolder(binding)
     }

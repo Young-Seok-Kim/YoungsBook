@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.PhoneAuthProvider
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
@@ -191,7 +192,7 @@ class LoginActivity : AppCompatActivity() {
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
                             val jsonArray : JSONArray
-                            jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                            jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
 
                             if(jsonArray.get(0).toString().isBlank())
                             {
@@ -213,7 +214,7 @@ class LoginActivity : AppCompatActivity() {
                                 Data.instance.LOGIN_NAME,
                                 (jsonArray.get(0) as JSONObject).getString("NAME")
                             )
-                            if (binding.checkboxSaveLoginInfo!!.isChecked) { // 자동로그인이 클릭되었을때
+                            if (binding.checkboxSaveLoginInfo.isChecked) { // 자동로그인이 클릭되었을때
                                 editor.putBoolean(Data.instance.AUTO_LOGIN_BOOLEAN, true)
                                 editor.putString(
                                     Data.instance.AUTO_LOGIN_ID,
@@ -231,6 +232,7 @@ class LoginActivity : AppCompatActivity() {
 
                             editor.commit()
                             loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
+
                             openMainActivity()
 
 

@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                 , onSuccess = { ->
                     MainActivityAdapter.instance.clear()
                     val jsonArray : JSONArray
-                    jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
+                    jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
                     if (jsonArray.toString() != "[\"\"]") {
                         val list = Gson().fromJson(
                             jsonArray.toString(),

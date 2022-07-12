@@ -7,14 +7,14 @@ import android.widget.ProgressBar
 
 class NetworkProgress {
 
-    fun startProgress(bindingProgressBar: ProgressBar?) // 서버와 통신하는동안 터치할수 없도록 하는 코드
+    fun startProgress(bindingProgressBar: ProgressBar?)
     {
         bindingProgressBar?.visibility = View.VISIBLE
     }
     fun endProgressBar(bindingProgressBar: ProgressBar?){
         bindingProgressBar?.visibility = View.GONE
     }
-    fun notTouchable(window: Window){
+    fun notTouchable(window: Window){ // 터치할수 없도록 하는 코드
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

@@ -95,6 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:maxLength="11"
                     android:hint="휴대폰 번호"
                     android:inputType="phone" />
 
@@ -168,6 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="비밀번호"
+                android:enabled="false"
                 android:inputType="textPassword"/>
       </LinearLayout>
 
@@ -184,6 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="비밀번호 확인"
+                    android:enabled="false"
                     android:inputType="textPassword"
                     app:layout_constraintStart_toStartOf="@+id/join_password" />
             </LinearLayout>
@@ -203,7 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/royal_blue"
-                    android:text="회원정보 찾기" />
+                    android:text="확인" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

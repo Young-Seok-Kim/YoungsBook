@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.util.concurrent.TimeUnit
+import org.json.JSONObject
 
 
 class FindUserInformation : DialogFragment() {
@@ -58,9 +59,6 @@ class FindUserInformation : DialogFragment() {
 
 
     private fun initButton() {
-
-
-
         binding.buttonSendCertifyNumber.setOnClickListener(){
             if(binding.editTextPhoneNumber.text.toString().length < 4) {
                 Toast.makeText(requireContext(),"휴대폰번호를 입력해주세요",Toast.LENGTH_SHORT).show()
@@ -94,7 +92,7 @@ class FindUserInformation : DialogFragment() {
 
             CoroutineScope(Dispatchers.Main).launch {
                 binding.buttonSendCertifyNumber.isEnabled = false
-                delay(60000) // 60초간 비활성화
+                delay(20000) // 20초간 비활성화
                 binding.buttonSendCertifyNumber.isEnabled = true
             }
 
@@ -122,32 +120,30 @@ class FindUserInformation : DialogFragment() {
                     return
                 }
 
+                youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.notTouchable(dialog?.window!!)
 
                 if(binding.radiobuttonFindID.isChecked){ // 아이디 찾기
-                    val enterLogin : JsonObject = JsonObject()
-//                    enterLogin.addProperty("ID", this@FindUserInformation.binding.userid.text.toString().replace(" ",""))
-//                    enterLogin.addProperty("PASSWORD", this@FindUserInformation.binding.password.text.toString().replace(" ",""))
+                    val jsonToServer : JsonObject = JsonObject()
+                    jsonToServer.addProperty("PHONE_NUMBER", this@FindUserInformation.binding.editTextPhoneNumber.text.toString())
 
                     CoroutineScope(Dispatchers.Default).launch {
                         SelfSigningHelper(context = requireContext())
 
                         NetworkConnect.connectHTTPS("findUserID.do",
-                            enterLogin,
+                            jsonToServer,
                             requireContext() // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                             , onSuccess = { ->
-                                val jsonArray : JSONArray
-                                jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
-
-                                if(jsonArray.get(0).toString().isBlank())
-                                {
-                                    Toast.makeText(requireContext(),"아이디, 비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
+                                val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+                                if (jsonArray.get(0).toString().isBlank()) {
+                                    Toast.makeText(requireContext(),"해당정보로 가입된 회원이 없습니다.",Toast.LENGTH_LONG).show()
                                     youngsProgress.endProgressBar(binding.progressbar)
-                                    youngsProgress.touchable(dialog?.window!! )
+                                    youngsProgress.touchable(dialog?.window!!)
                                     return@connectHTTPS
                                 }
 
-                                // 여기에 아이디를 MessageBox로 띄워준다.
 
+                                YoungsFunction.messageBoxOK(requireContext(),"정보","회원님의 아이디는 ${jsonArray.getJSONObject(0).get("ID")}입니다.")
 
                                 youngsProgress.endProgressBar(binding.progressbar)
                                 youngsProgress.touchable(window = dialog?.window!!)
@@ -162,37 +158,49 @@ class FindUserInformation : DialogFragment() {
                     }
                 }
                 else if(binding.radiobuttonFindPassword.isChecked){ // 비밀번호 찾기
+
+                    if(binding.editTextPasswordCheck.text.length < 6){
+                        YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호는 6자리 이상 입력해주세요" )
+                        youngsProgress.endProgressBar(binding.progressbar)
+                        youngsProgress.touchable(dialog?.window!! )
+                        return
+                    }
+
+                    if((binding.editTextPasswordCheck.text.toString() != binding.editTextPassword.text.toString()) == true)
+                    {
+                        YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호와 비밀번호 확인이 같지않습니다." )
+                        youngsProgress.endProgressBar(binding.progressbar)
+                        youngsProgress.touchable(dialog?.window!! )
+                        return
+                    }
+
                     val sendJson : JsonObject = JsonObject()
-//                    sendJson.addProperty("ID", this@FindUserInformation.binding.userid.text.toString().replace(" ",""))
-//                    sendJson.addProperty("PASSWORD", this@FindUserInformation.binding.password.text.toString().replace(" ",""))
+                    sendJson.addProperty("UPDATE_PASSWORD", this@FindUserInformation.binding.editTextPasswordCheck.text.toString())
+                    sendJson.addProperty("PHONE_NUMBER", this@FindUserInformation.binding.editTextPhoneNumber.text.toString())
 
                     CoroutineScope(Dispatchers.Default).launch {
                         SelfSigningHelper(context = requireContext())
 
-                        NetworkConnect.connectHTTPS("findUserPassword.do",
+                        NetworkConnect.connectHTTPS("updateUserPassword.do",
                             sendJson,
                             requireContext() // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                             , onSuccess = { ->
+                                val userCount : Int = YoungsFunction.stringIntToJson(NetworkConnect.resultString)
 
-                                Toast.makeText(context,"재설정할 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show()
-
-                                binding.linearLayoutResetPassword.visibility = View.VISIBLE
-
-                                val jsonArray : JSONArray
-                                jsonArray = YoungsFunction.stringToJson(NetworkConnect.resultString)
-
-                                if(jsonArray.get(0).toString().isBlank())
+                                if (userCount == 0)
                                 {
-                                    Toast.makeText(requireContext(),"아이디, 비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
-                                    youngsProgress.endProgressBar(binding.progressbar)
-                                    youngsProgress.touchable(dialog?.window!! )
-                                    return@connectHTTPS
+                                    YoungsFunction.messageBoxOK(requireContext(),"정보","해당번호로 가입된 회원이 없습니다.")
+                                }
+                                else{
+                                    Toast.makeText(context,"비밀번호가 재설정 되었습니다.", Toast.LENGTH_LONG).show()
                                 }
 
-                                binding.linearLayoutResetPassword.visibility = View.VISIBLE
+
 
                                 youngsProgress.endProgressBar(binding.progressbar)
                                 youngsProgress.touchable(window = dialog?.window!!)
+
+                                dismiss()
 
                             }
                             , onFailure = {
@@ -208,25 +216,18 @@ class FindUserInformation : DialogFragment() {
             }
         })
 
-//        binding.radiobuttonFindPassword.setOnClickListener(object : View.OnClickListener{
-//            override fun onClick(p0: View?) {
-//                binding.linearLayoutResetPassword.visibility = View.VISIBLE
-//            }
-//        })
-//
-//        binding.radiobuttonFindID.setOnClickListener(object : View.OnClickListener{
-//            override fun onClick(p0: View?) {
-//                binding.linearLayoutResetPassword.visibility = View.GONE
-//            }
-//        })
-//
-//        binding.radiobuttonFindID.setOnClickListener(){
-//            binding.linearLayoutResetPassword.visibility = View.GONE
-//        }
-//
-//        binding.radiobuttonFindPassword.setOnClickListener(){
-//            binding.linearLayoutResetPassword.visibility = View.VISIBLE
-//        }
+        binding.radiobuttonFindPassword.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                binding.linearLayoutResetPassword.visibility = View.VISIBLE
+            }
+        })
+
+        binding.radiobuttonFindID.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                binding.linearLayoutResetPassword.visibility = View.GONE
+            }
+        })
+
     }
 
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential){
@@ -235,7 +236,10 @@ class FindUserInformation : DialogFragment() {
                 if (task.isSuccessful) {
                     //인증성공
                     Toast.makeText(requireContext(),"휴대폰 인증성공",Toast.LENGTH_SHORT).show()
+                    binding.editTextPhoneNumber.isEnabled = false
                     binding.checkboxCertifyValue.isChecked = true
+                    binding.editTextPassword.isEnabled = true
+                    binding.editTextPasswordCheck.isEnabled = true
                 }
                 else {
                     //인증실패

@@ -103,6 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLength="11"
                 android:hint="휴대폰 번호"
                 android:inputType="phone" />
 
@@ -206,6 +207,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/radioGroup_find"
         android:layout_gravity="center"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/textView_title"
