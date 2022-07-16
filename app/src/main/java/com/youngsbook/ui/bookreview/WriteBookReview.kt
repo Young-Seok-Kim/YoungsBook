@@ -180,8 +180,8 @@ class WriteBookReview : DialogFragment() {
         {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
-            youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
-//                youngsProgress.notTouchable(window)
+            youngsProgress.startProgress(binding.progressbar)
+            youngsProgress.notTouchable(dialog?.window!!)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",
                     jsonObject,

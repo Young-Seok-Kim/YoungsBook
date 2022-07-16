@@ -77,7 +77,6 @@ class SplashActivity : Activity(){
                             startActivity(intent)
                             finish()
                         }
-
                     )
 
                     youngsProgress.touchable(window)

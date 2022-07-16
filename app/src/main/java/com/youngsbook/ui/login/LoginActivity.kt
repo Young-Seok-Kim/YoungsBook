@@ -62,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
 
         val userid = binding.userid
         val password = binding.password
-        val login = binding.buttonLogin
         val loading = binding.progressbar
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
@@ -82,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loading?.visibility = View.GONE
+            loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
             }
@@ -92,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         })
 
-        userid?.afterTextChanged {
+        userid.afterTextChanged {
             loginViewModel.loginDataChanged(
                 userid.text.toString(),
                 password.text.toString()
@@ -102,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
         password.apply {
             afterTextChanged {
                 loginViewModel.loginDataChanged(
-                    userid?.text.toString(),
+                    userid.text.toString(),
                     password.text.toString()
                 )
             }
@@ -111,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
                         loginViewModel.login(
-                            userid?.text.toString(),
+                            userid.text.toString(),
                             password.text.toString()
                         )
                 }
@@ -125,11 +124,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        if(BuildConfig.DEBUG) {
-            binding.buttonTest.visibility = View.VISIBLE
-        }
-        else
-            binding.buttonTest.visibility = View.GONE
+//        if(BuildConfig.DEBUG) {
+//            binding.buttonTest.visibility = View.VISIBLE
+//        }
+//        else
+//            binding.buttonTest.visibility = View.GONE
 
     }
 

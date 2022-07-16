@@ -23,7 +23,7 @@ object NetworkConnect {
         이렇게 만든 이유는 레트로핏으로 값을 별도의 변환 없이 가져오고, RESULT_LIST안에 있는 select한 값을 사용하기 위함이다.
      */
 
-    suspend fun connectHTTPS(path : String, param : JsonObject
+    fun connectHTTPS(path : String, param : JsonObject
                              , context : Context // 실패했을때 토스트메시지를 띄워주기 위한 컨텍스트
                              , onSuccess : () -> Unit // 성공했을때 실행할 함수(이벤트)
                              , onFailure : () -> Unit // 실패했을때 실행할 함수(이벤트)

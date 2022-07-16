@@ -79,63 +79,28 @@ class SignUp : DialogFragment() {
                 YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호는 6자리 이상 입력해주세요" )
                 return@setOnClickListener
             }
-            else if(binding.editTextEmail.text.isNullOrBlank()){
-                YoungsFunction.messageBoxOK(requireContext(), "오류!", "이메일을 입력해주세요" )
-                return@setOnClickListener
-            }
+//            else if(binding.editTextEmail.text.isNullOrBlank()){
+//                YoungsFunction.messageBoxOK(requireContext(), "오류!", "이메일을 입력해주세요" )
+//                return@setOnClickListener
+//            }
 
 
             if( ! binding.checkboxCertifyValue.isChecked)
             {
-                return@setOnClickListener
-            }
-
-            val jsonObject: JsonObject = JsonObject()
-            jsonObject.addProperty("NAME", binding.editTextName.text.toString())
-            jsonObject.addProperty("ID", binding.editTextID.text.toString())
-            jsonObject.addProperty("PASSWORD", binding.editTextPassword.text.toString())
-            jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
-            jsonObject.addProperty("PHONE_NUMBER", binding.editTextPhoneNumber.text.toString())
-            jsonObject.addProperty("SIGNUP_DATE", YoungsFunction.getNowDate())
-
-            youngsProgress.startProgress(binding.progressbar)
-            youngsProgress.notTouchable(window = dialog?.window!!)
-            CoroutineScope(Dispatchers.Default).launch {
-                NetworkConnect.connectHTTPS("SignUp.do",
-                    jsonObject,
-                    requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
-                    , onSuccess = { ->
-                        val jsonArray : JSONArray
-                        jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
-
-                        if ((jsonArray.get(0) as JSONObject).get("countID").toString().toInt() > 1)
-                        {
-                            Toast.makeText(
-                                context,
-                                "동일한 아이디 혹은 전화번호로 가입되어있습니다.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            binding.editTextID.requestFocus()
-                        }
-                        else {
-                            Toast.makeText(
-                                context,
-                                "${binding.editTextID.text}님 가입을 환영합니다!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            this@SignUp.dismiss()
-                        }
-
-                        youngsProgress.endProgressBar(binding.progressbar)
-                        youngsProgress.touchable(dialog?.window!!)
-                    }
-                , onFailure = {
-                        youngsProgress.endProgressBar(binding.progressbar)
-                        youngsProgress.touchable(dialog?.window!!)
+                YoungsFunction.messageBoxOKCancelAction(requireContext(), "주의!!", "휴대폰인증을 하지 않을경우 아이디, 비밀번호를 찾을수 없습니다.\n계속 진행하시겠습니까?",
+                    OKAction = {
+                        signUp()
+                    },
+                    cancelAction = {
+                        return@messageBoxOKCancelAction
                     }
                 )
-            }
 
+//                return@setOnClickListener
+            }
+            else {
+                    signUp()
+            }
         }
 
         binding.buttonSendCertifyNumber.setOnClickListener(){
@@ -177,7 +142,7 @@ class SignUp : DialogFragment() {
 
             CoroutineScope(Dispatchers.Main).launch { // 너무 빨리 인증번호를 확인하면 앱이 팅기기때문에 2초동안 기다리는 코드 추가
                 binding.buttonCertifyNumber.isEnabled = false
-                delay(2000)
+                delay(5000)
                 binding.buttonCertifyNumber.isEnabled = true
             }
         }
@@ -190,6 +155,52 @@ class SignUp : DialogFragment() {
             val credential = PhoneAuthProvider.getCredential(verificationId, binding.editTextInputCertifyNumber.text.toString())
             signInWithPhoneAuthCredential(credential)
             binding.editTextPhoneNumber.isEnabled = false
+        }
+    }
+
+    private fun signUp() {
+        val jsonObject: JsonObject = JsonObject()
+        jsonObject.addProperty("NAME", binding.editTextName.text.toString())
+        jsonObject.addProperty("ID", binding.editTextID.text.toString())
+        jsonObject.addProperty("PASSWORD", binding.editTextPassword.text.toString())
+        jsonObject.addProperty("EMAIL", binding.editTextEmail.text.toString())
+        if(binding.editTextPhoneNumber.text.toString().isNotBlank()) {
+            jsonObject.addProperty("PHONE_NUMBER", binding.editTextPhoneNumber.text.toString())
+        }
+        jsonObject.addProperty("SIGNUP_DATE", YoungsFunction.getNowDate())
+
+        youngsProgress.startProgress(binding.progressbar)
+        youngsProgress.notTouchable(window = dialog?.window!!)
+        CoroutineScope(Dispatchers.Default).launch {
+            NetworkConnect.connectHTTPS("SignUp.do",
+                jsonObject,
+                requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                , onSuccess = { ->
+                    val sameIDCheck : Int = YoungsFunction.stringIntToJson(NetworkConnect.resultString)
+
+                    if (sameIDCheck >= 1) { // 해당 아이디로 검색했을때 한개라도 있으면 가입안되도록
+                        Toast.makeText(
+                            context,
+                            "동일한 아이디 혹은 전화번호로 가입되어있습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.editTextID.requestFocus()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "${binding.editTextID.text}님 가입을 환영합니다!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        this@SignUp.dismiss()
+                    }
+
+                    youngsProgress.endProgressBar(binding.progressbar)
+                    youngsProgress.touchable(dialog?.window!!)
+                }, onFailure = {
+                    youngsProgress.endProgressBar(binding.progressbar)
+                    youngsProgress.touchable(dialog?.window!!)
+                }
+            )
         }
     }
 

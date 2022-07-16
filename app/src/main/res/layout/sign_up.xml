@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:text="이름 "
+                    android:text="이름 *"
                     android:gravity="center"/>
                 <EditText
                     android:id="@+id/editText_Name"
@@ -65,7 +65,7 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:text="아이디 "
+                android:text="아이디 *"
                 android:gravity="center"/>
             <EditText
                 android:id="@+id/editText_ID"
@@ -159,7 +159,7 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:text="비밀번호"
+                android:text="비밀번호 *"
                 android:gravity="center"/>
             <EditText
                 android:id="@+id/editText_Password"
@@ -175,7 +175,7 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:text="비밀번호 \n확인"
+                android:text="비밀번호 \n확인 *"
                 android:gravity="center"/>
             <EditText
                 android:id="@+id/editText_PasswordCheck"
@@ -204,32 +204,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/radioGroup_find"
-        android:layout_gravity="center"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/textView_title"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radiobutton_FindID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:focusable="true"
-            android:clickable="true"
-            android:text="아이디 찾기" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radiobutton_FindPassword"
-            android:text="비밀번호 찾기"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_marginStart="20dp"/>
-
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,6 +73,21 @@ object YoungsFunction {
         .setCancelable(false)
         .show()
     }
+    fun messageBoxOKCancelAction(context: Context, title : String, Message : String, OKAction : () -> Unit, cancelAction : () -> Unit){
+        val messageBox = AlertDialog.Builder(context)
+        messageBox.setTitle(title)
+        .setMessage(Message)
+        .setPositiveButton("확인") {
+                dialogInterface : DialogInterface, i : Int ->
+            OKAction()
+        }
+        .setNegativeButton("취소"){
+                dialogInterface : DialogInterface, i : Int ->
+            cancelAction()
+        }
+        .setCancelable(false)
+        .show()
+    }
 
     /*
      01012345678과 같은 형식으로 파라미터를 넣으면 국제번호로 값을 return 해준다.

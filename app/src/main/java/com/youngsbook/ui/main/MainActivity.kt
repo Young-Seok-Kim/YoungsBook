@@ -1,7 +1,9 @@
 package com.youngsbook.ui.main
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -18,6 +20,7 @@ import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.ActivityMainBinding
 import com.youngsbook.ui.bookreview.WriteBookReview
+import com.youngsbook.ui.login.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,8 +69,40 @@ class MainActivity : AppCompatActivity() {
             override fun onDoubleTap(position: Int) {
             }
 
-            override fun onLongTap(position: Int): Boolean {
-                return true
+            override fun onLongTap(position: Int){
+                YoungsFunction.messageBoxOKCancelAction(this@MainActivity, "삭제", "${MainActivityAdapter.instance.currentItem?.BOOK_NAME} 리뷰를 삭제하시겠습니까?",
+                    OKAction = {
+                        val jsonObject : JsonObject = JsonObject()
+                        jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
+                        youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                        youngsProgress.notTouchable(window)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            NetworkConnect.connectHTTPS("DeleteBookReview.do",
+                                jsonObject,
+                                context = applicationContext// 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                                , onSuccess = { ->
+                                    updateList()
+                                }
+                                , onFailure = {
+                                    youngsProgress.endProgressBar(binding.progressbar)
+                                    youngsProgress.touchable(window)
+                                }
+                            )
+
+                            val toast = Toast.makeText(
+                                applicationContext,
+                                "${MainActivityAdapter.instance.currentItem?.BOOK_NAME}를 삭제했습니다.",
+                                Toast.LENGTH_SHORT
+                                )
+
+                                toast.setGravity(Gravity.CENTER_VERTICAL,0,700)
+                                toast.show()
+                        }
+                    },
+                    cancelAction = {
+                        return@messageBoxOKCancelAction
+                    }
+                )
             }
 
             override fun onSingleTap(position: Int) {

@@ -110,7 +110,7 @@ open class RecyclerViewAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.A
     interface OnItemTapListener {
         fun onDoubleTap(position: Int)
         fun onSingleTap(position: Int)
-        fun onLongTap(position: Int): Boolean
+        fun onLongTap(position: Int)
     }
 
     interface OnGetViewListener<T> {
