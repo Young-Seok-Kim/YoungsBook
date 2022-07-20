@@ -2,12 +2,22 @@ package com.youngsbook.common
 
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -108,5 +118,52 @@ object YoungsFunction {
         }
         Log.d("국가코드로 변경된 번호 ",phoneEdit)
         return phoneEdit
+    }
+
+    fun bookSearch(searchWord : String) : JSONObject{
+        val clientId = Define.NAVER_CLIENT_ID
+
+        val clientSecret = Define.NAVER_CLIENT_SECRETE
+        var bookJsonObject : JSONObject = JSONObject()
+
+        try {
+            runBlocking {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val text: String = URLEncoder.encode(searchWord, "UTF-8")
+                    val apiURL = "https://openapi.naver.com/v1/search/book.json" + "?query=" + text + "&display=20" // json 결과
+                    val url = URL(apiURL)
+                    val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+                    con.setRequestMethod("GET")
+                    con.setRequestProperty("X-Naver-Client-Id", clientId)
+                    con.setRequestProperty("X-Naver-Client-Secret", clientSecret)
+                    Log.d("네이버 url", apiURL)
+                    Log.d("con.responseCode", con.responseCode.toString())
+                    val responseCode: Int = con.getResponseCode()
+                    val br: BufferedReader
+                    if (responseCode == 200) { // 정상 호출
+                        br = BufferedReader(InputStreamReader(con.getInputStream(), "UTF-8"))
+                    } else {  // 에러 발생
+                        br = BufferedReader(InputStreamReader(con.getErrorStream()))
+                    }
+                    var inputLine: String?
+                    val response = StringBuffer()
+                    while (br.readLine().also { inputLine = it } != null) {
+                        response.append(inputLine)
+                        response.append("\n")
+                    }
+                    br.close()
+                    val naverHtml: String = response.toString()
+                    val bun = Bundle()
+                    bun.putString("NAVER_HTML", naverHtml)
+
+
+                    bookJsonObject = JSONObject(response.toString())
+
+                }.join()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return bookJsonObject
     }
 }

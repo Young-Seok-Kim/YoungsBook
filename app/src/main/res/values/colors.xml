@@ -10,4 +10,8 @@
     <color name="graysboro">#FFDCDCDC</color>
     <color name="light_purple">#fe33af</color>
     <color name="royal_blue">#4169E1</color>
+    <color name="sky_blue">#8FCEFF</color>
+    <color name="light_blue">#748BFF</color>
+    <color name="deep_blue">#00008B</color>
+    <color name="little_deep_blue">#33408D</color>
 </resources>

@@ -12,6 +12,10 @@ object Define {
     val HTTPS_TEST : String = "https://jsonplaceholder.typicode.com/posts/1/"
     val KYOBO_SEARCH_URL : String = "https://search.kyobobook.co.kr/web/search?vPstrKeyWord="
 
+    val NAVER_CLIENT_ID : String = "iUyBdHAwybdSHw37QhVo"
+    val NAVER_CLIENT_SECRETE : String = "jtbUv8SooO"
+
+
 //    val cantInputSpecialText =
 //        /*
 //        한글만 입력되도록 하는 변수, 사용법 : binding.userid?.filters = cantInputSpecialText

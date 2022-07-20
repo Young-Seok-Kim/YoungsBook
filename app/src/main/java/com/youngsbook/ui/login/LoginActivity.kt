@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -16,11 +17,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.PhoneAuthProvider
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Data
+import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
@@ -33,8 +34,14 @@ import com.youngsbook.ui.signUp.SignUp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
 
 class LoginActivity : AppCompatActivity() {
@@ -124,11 +131,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-//        if(BuildConfig.DEBUG) {
-//            binding.buttonTest.visibility = View.VISIBLE
-//        }
-//        else
-//            binding.buttonTest.visibility = View.GONE
+        if(BuildConfig.DEBUG) {
+            binding.buttonTest.visibility = View.VISIBLE
+        }
+        else
+            binding.buttonTest.visibility = View.GONE
 
     }
 
@@ -261,7 +268,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonTest.setOnClickListener(){
-
+            val value = YoungsFunction.bookSearch("9788979149920")
         }
 
     }
@@ -290,6 +297,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
+
 }
 
 

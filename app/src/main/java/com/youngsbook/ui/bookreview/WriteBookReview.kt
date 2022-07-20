@@ -2,6 +2,7 @@ package com.youngsbook.ui.bookreview
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.youngsbook.common.Data
+import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
@@ -19,6 +21,11 @@ import com.youngsbook.ui.main.MainActivityAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
 class WriteBookReview : DialogFragment() {
 
@@ -76,9 +83,9 @@ class WriteBookReview : DialogFragment() {
             binding.editTextBookName.isEnabled = false
             binding.editTextBookReview.setText(MainActivityAdapter.instance.currentItem?.REVIEW)
             binding.ratingBarStar.rating = MainActivityAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
-
         }
     }
+
 
     private fun initButton() {
         binding.buttonSave.setOnClickListener {

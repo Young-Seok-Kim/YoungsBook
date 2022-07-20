@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.app.AlertDialog;
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
+import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -25,7 +26,13 @@ class SplashActivity : Activity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        versionCheck()
+        if(false) // 업데이트를 반드시 해야한다면 해당값을 true로 변경
+            versionCheck()
+        else {
+            val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
     }
     private fun versionCheck()
