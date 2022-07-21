@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textview_ReadDate"
             android:layout_marginTop="10dp"
-            android:background="@drawable/customlayout_textview"
             android:autoSizeTextType="uniform"
+            android:background="@drawable/customlayout_textview"
             android:singleLine="true"
             android:text="이곳에 책의 이름이 표시됩니다." />
 

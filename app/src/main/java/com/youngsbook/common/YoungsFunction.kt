@@ -2,9 +2,14 @@ package com.youngsbook.common
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -120,6 +125,25 @@ object YoungsFunction {
         return phoneEdit
     }
 
+    fun getStringFromJson(jsonObject: JSONObject, columnName: String, defaultValue: String?): String? {
+        if (jsonObject.has(columnName)) {
+            var string = jsonObject.getString(columnName)
+            if (string.equals("null", ignoreCase = true)) {
+                string = ""
+            }
+            return string
+        } else {
+            return defaultValue
+        }
+    }
+    fun getIntFromJson(jsonObject: JSONObject, columnName: String, defaultValue: Int?): Int? {
+        return if (jsonObject.has(columnName)) {
+            jsonObject.getInt(columnName)
+        } else {
+            defaultValue
+        }
+    }
+
     fun bookSearch(searchWord : String) : JSONObject{
         val clientId = Define.NAVER_CLIENT_ID
 
@@ -138,6 +162,7 @@ object YoungsFunction {
                     con.setRequestProperty("X-Naver-Client-Secret", clientSecret)
                     Log.d("네이버 url", apiURL)
                     Log.d("con.responseCode", con.responseCode.toString())
+
                     val responseCode: Int = con.getResponseCode()
                     val br: BufferedReader
                     if (responseCode == 200) { // 정상 호출
@@ -153,6 +178,7 @@ object YoungsFunction {
                     }
                     br.close()
                     val naverHtml: String = response.toString()
+                    Log.d("con.responseCode", response.toString())
                     val bun = Bundle()
                     bun.putString("NAVER_HTML", naverHtml)
 

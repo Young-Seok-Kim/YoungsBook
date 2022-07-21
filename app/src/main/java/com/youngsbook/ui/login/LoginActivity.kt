@@ -12,16 +12,20 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
+import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.CaptureActivity
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Data
-import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
@@ -34,14 +38,8 @@ import com.youngsbook.ui.signUp.SignUp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 
 
 class LoginActivity : AppCompatActivity() {
@@ -53,11 +51,19 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editor : SharedPreferences.Editor
     val youngsProgress = NetworkProgress()
 
+    private val childForResult : ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> {
+                    Log.d("QR 코드 스캔 성공", YoungsFunction.bookSearch(result.data?.extras?.getString("SCAN_RESULT").toString()).toString())
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater,null,false)
 //        EqMstrDtlBinding.inflate(inflater, container, false)
-
 
         setContentView(binding.root)
         binding.appVersion.text = "Version : ${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})${if(BuildConfig.DEBUG) ", Debug" else ""}"
@@ -156,13 +162,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initButton() {
 
-        binding.buttonSignUp.setOnClickListener(){
-            SignUp().let{
-                it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
-                it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
-                it.showNow(supportFragmentManager,"")
+        binding.buttonSignUp.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                SignUp().let{
+                    it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
+                    it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
+                    it.showNow(supportFragmentManager,"")
+                }
             }
-        }
+        })
 
         binding.forgotLoginInfo.setOnClickListener(){
             FindUserInformation().let{
@@ -268,10 +276,20 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonTest.setOnClickListener(){
-            val value = YoungsFunction.bookSearch("9788979149920")
+//            val value = YoungsFunction.bookSearch("9788979149920")
+
+            val integrator = IntentIntegrator(this) //context를 넣어줍니다
+            integrator.setBarcodeImageEnabled(false) //스캔 된 이미지 가져올 지
+            integrator.setBeepEnabled(true)//스캔 시 비프음 ON/OFF
+            integrator.setPrompt("책의 바코드를 읽어주세요")//QR 스캐너 하단 메세지 셋팅
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+
+            childForResult.launch(integrator.createScanIntent())
+            integrator.initiateScan() //초기화
         }
 
     }
+
 
     private fun checkBeforeLogin() : Boolean // 아이디와 비밀번호를 자리수에 맞게 입력하는지 확인
     {
