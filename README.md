@@ -4,7 +4,8 @@
 설치경로 -> https://play.google.com/store/apps/details?id=com.youngsbook
 
 ## 사용기술
-MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS), Firebase
+MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS), Firebase, Zxing
+
 클라이언트 사용언어 : Koltin, 서버 사용언어 : Java
 
 Let's Encrypt와 DuckDNS를 이용해 SSL 인증서를 받은뒤 적용하였습니다.
@@ -23,4 +24,4 @@ Firebase를 이용해 이용자들에게 푸시알림을 보낼수있습니다.
 
 로그인후 메인화면 우측 하단의 (+) 버튼을 눌러서 자신이 읽었던 책을 추가할수있습니다.
 
-
+바코드를 스캔하면 네이버 API를 이용해 도서의 정보를 자동으로 입력할수있습니다.
