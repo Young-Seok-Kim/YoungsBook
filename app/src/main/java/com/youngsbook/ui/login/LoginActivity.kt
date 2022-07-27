@@ -51,14 +51,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editor : SharedPreferences.Editor
     val youngsProgress = NetworkProgress()
 
-    private val childForResult : ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                RESULT_OK -> {
-                    Log.d("QR 코드 스캔 성공", YoungsFunction.bookSearch(result.data?.extras?.getString("SCAN_RESULT").toString()).toString())
-                }
-            }
-        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -271,21 +264,10 @@ class LoginActivity : AppCompatActivity() {
                 youngsProgress.touchable(window)
                 return@setOnClickListener
             }
-
-
         }
 
         binding.buttonTest.setOnClickListener(){
-//            val value = YoungsFunction.bookSearch("9788979149920")
 
-            val integrator = IntentIntegrator(this) //context를 넣어줍니다
-            integrator.setBarcodeImageEnabled(false) //스캔 된 이미지 가져올 지
-            integrator.setBeepEnabled(true)//스캔 시 비프음 ON/OFF
-            integrator.setPrompt("책의 바코드를 읽어주세요")//QR 스캐너 하단 메세지 셋팅
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-
-            childForResult.launch(integrator.createScanIntent())
-            integrator.initiateScan() //초기화
         }
 
     }

@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/custom_ratingbar.xml" value="0.23541666666666666" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_button.xml" value="0.276" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_button_main.xml" value="0.276" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_floating_button.xml" value="0.403125" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_textview.xml" value="0.403125" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/ic_launcher_background_books.xml" value="0.403125" />

@@ -31,8 +31,10 @@
             android:layout_marginTop="10dp"
             android:autoSizeTextType="uniform"
             android:background="@drawable/customlayout_textview"
+            android:ellipsize="marquee"
+            android:focusable="true"
             android:singleLine="true"
-            android:text="이곳에 책의 이름이 표시됩니다." />
+            tools:text="이곳에 책의 이름이 표시됩니다." />
 
         <RatingBar
             android:id="@+id/ratingBar_Star"
@@ -55,7 +57,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/customlayout_textview"
             android:scrollbars="horizontal"
-            android:text="이곳에 책의 후기가 들어갑니다." />
+            tools:text="이곳에 책의 후기가 들어갑니다." />
 
         <View
             android:id="@+id/line"

@@ -36,8 +36,8 @@ class WriteBookReview : DialogFragment() {
     val youngsProgress = NetworkProgress()
 
     lateinit var status : String
-    var scanBook : JSONObject? = null
-    var scanBookModel : ScanBookModel? = null
+    private var scanBook : JSONObject? = null
+    private var scanBookModel : ScanBookModel? = null
 
     private val childForResult : ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -59,8 +59,14 @@ class WriteBookReview : DialogFragment() {
     }
     fun scanAction(scanBook : JSONObject){
         Log.d("QR 코드 스캔 성공", scanBook.toString())
-        scanBookModel = ScanBookModel((scanBook["items"] as JSONArray).getJSONObject(0))
-        binding.editTextBookName.setText(scanBookModel?.title)
+        if ((scanBook["items"] as JSONArray).isNull(0))
+        {
+            Toast.makeText(context,"책을 찾을수 없습니다.",Toast.LENGTH_LONG).show()
+        }
+        else {
+            scanBookModel = ScanBookModel((scanBook["items"] as JSONArray).getJSONObject(0))
+            binding.editTextBookName.setText(scanBookModel?.title)
+        }
     }
 
     fun setOnDismissListener(listener: OnDialogDismissListener)
@@ -242,7 +248,7 @@ class WriteBookReview : DialogFragment() {
         binding.buttonScanBarCode.setOnClickListener(View.OnClickListener {
             val integrator = IntentIntegrator(requireActivity()) //context를 넣어줍니다
             integrator.setBarcodeImageEnabled(false) //스캔 된 이미지 가져올 지
-            integrator.setBeepEnabled(true)//스캔 시 비프음 ON/OFF
+            integrator.setBeepEnabled(false)//스캔 시 비프음 ON/OFF
             integrator.setPrompt("책의 바코드를 읽어주세요")//QR 스캐너 하단 메세지 셋팅
             integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
 

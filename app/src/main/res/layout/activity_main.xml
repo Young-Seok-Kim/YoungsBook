@@ -58,7 +58,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:background="@drawable/customlayout_floating_button"
-        android:backgroundTint="@color/graysboro"
+        android:backgroundTint="@color/royal_blue"
         android:src="@drawable/add_white"
         app:backgroundTint="@android:color/white"
         app:borderWidth="0dp"
