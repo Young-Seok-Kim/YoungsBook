@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkConnect {
     var resultString : String = ""
-    var connectURL : String = Define.BASE_URL_HTTPS_DEBUG
+    var connectURL : String = Define.BASE_URL_HTTP_DEBUG
 
     /*
         값을 가져올때는 returnValue를 한번 가져오고, 그후에 RESULT_LIST안에 있는 값을 가져온다
@@ -35,7 +35,7 @@ object NetworkConnect {
          */
 
         if (BuildConfig.DEBUG)
-            connectURL = Define.BASE_URL_HTTPS_DEBUG
+            connectURL = Define.BASE_URL_HTTP_DEBUG
         else
             connectURL = Define.BASE_URL_HTTPS_RELEASE
 
