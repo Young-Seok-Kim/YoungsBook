@@ -4,7 +4,7 @@
 설치경로 -> https://play.google.com/store/apps/details?id=com.youngsbook
 
 ## 사용기술
-MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS), Firebase, Zxing
+MyBatis 3.5.7 , MySQL , Spring, AWS(EC2, RDS), Firebase, Zxing, 네이버 API
 
 클라이언트 사용언어 : Koltin, 서버 사용언어 : Java
 
