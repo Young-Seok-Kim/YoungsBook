@@ -20,7 +20,7 @@ class ItemClickSupport(recyclerView: RecyclerView) {
         override fun onSingleClick(v: View?) {
             if (mOnItemClickListener != null) {
                 val holder: RecyclerView.ViewHolder = mRecyclerView!!.getChildViewHolder(v!!)
-                mOnItemClickListener!!.onItemClicked(mRecyclerView, holder.adapterPosition, v)
+                mOnItemClickListener!!.onItemClicked(mRecyclerView, holder.bindingAdapterPosition, v) // holder.adapterPosition
             }
         }
 
@@ -33,7 +33,7 @@ class ItemClickSupport(recyclerView: RecyclerView) {
                     view.setOnClickListener(mOnDoubleClickListener)
                     view.setOnLongClickListener{
                         val holder: RecyclerView.ViewHolder = mRecyclerView!!.getChildViewHolder(it!!)
-                        mOnItemClickListener!!.onItemLongClicked(mRecyclerView, holder.adapterPosition, it)
+                        mOnItemClickListener!!.onItemLongClicked(mRecyclerView, holder.bindingAdapterPosition, it) // holder.adapterPosition
                         return@setOnLongClickListener true
                     }
                 }
