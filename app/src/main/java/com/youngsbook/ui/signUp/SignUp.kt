@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -18,7 +17,8 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.JsonObject
-import com.youngsbook.common.Data
+import com.youngsbook.common.KeyboardVisibilityUtils
+import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -27,15 +27,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 
 class SignUp : DialogFragment() {
 
     lateinit var binding: SignUpBinding
-    private lateinit var sharedPrefer : SharedPreferences
 
     val youngsProgress = NetworkProgress()
 
@@ -47,7 +44,7 @@ class SignUp : DialogFragment() {
         super.onCreate(savedInstanceState)
         binding = SignUpBinding.inflate(layoutInflater)
 
-        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
+
         auth = Firebase.auth
 
         initButton()

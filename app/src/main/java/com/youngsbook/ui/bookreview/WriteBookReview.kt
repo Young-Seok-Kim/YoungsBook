@@ -15,7 +15,8 @@ import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import com.youngsbook.common.Data
+import com.youngsbook.common.Define
+import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
@@ -35,7 +36,7 @@ class WriteBookReview : DialogFragment() {
     private lateinit var sharedPrefer : SharedPreferences
     val youngsProgress = NetworkProgress()
 
-    lateinit var status : String
+    var status : String = "Default"
     private var scanBook : JSONObject? = null
     private var scanBookModel : ScanBookModel? = null
 
@@ -77,7 +78,7 @@ class WriteBookReview : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = WriteBookReviewBinding.inflate(layoutInflater)
-        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
     }
 
@@ -97,11 +98,11 @@ class WriteBookReview : DialogFragment() {
 
     private fun whenOpen()
     {
-        if (status == Data.instance.STATUS_INSERT)
+        if (status == Define.STATUS_INSERT)
         {
             binding.buttonDelete.visibility = View.GONE
         }
-        else if (status == Data.instance.STATUS_UPDATE)
+        else if (status == Define.STATUS_UPDATE)
         {
             binding.editTextBookName.setText(MainActivityAdapter.instance.currentItem?.BOOK_NAME)
             binding.editTextBookName.isEnabled = false
@@ -120,7 +121,7 @@ class WriteBookReview : DialogFragment() {
                     return
                 }
 
-                if (status == "I") {
+                if (status == Define.STATUS_INSERT) {
 
                     if (binding.editTextBookName.text.isNullOrBlank()) {
                         Toast.makeText(context, "책 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
@@ -135,11 +136,11 @@ class WriteBookReview : DialogFragment() {
                     jsonObject.addProperty("read_date", YoungsFunction.getNowDate())
                     jsonObject.addProperty(
                         "reader_id",
-                        sharedPrefer.getString(Data.instance.LOGIN_ID, " ")
+                        sharedPrefer.getString(SharedPreference.LOGIN_ID, " ")
                     )
                     jsonObject.addProperty(
                         "reader_name",
-                        sharedPrefer.getString(Data.instance.LOGIN_NAME, " ")
+                        sharedPrefer.getString(SharedPreference.LOGIN_NAME, " ")
                     )
                     jsonObject.addProperty("review", binding.editTextBookReview.text.toString())
                     jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
@@ -171,7 +172,7 @@ class WriteBookReview : DialogFragment() {
                     }
 
                 }
-                else if (status == "U")
+                else if (status == Define.STATUS_UPDATE)
                 {
                     if (binding.editTextBookName.text.isNullOrBlank()) {
                         Toast.makeText(context, "책 이름을 입력해주세요", Toast.LENGTH_SHORT).show()

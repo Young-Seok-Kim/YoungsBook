@@ -1,6 +1,5 @@
 package com.youngsbook.ui.main
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Gravity
@@ -12,15 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.youngsbook.R
-import com.youngsbook.common.Data
-import com.youngsbook.common.RecyclerViewAdapter
-import com.youngsbook.common.YoungsContextFunction
-import com.youngsbook.common.YoungsFunction
+import com.youngsbook.common.*
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.ActivityMainBinding
 import com.youngsbook.ui.bookreview.WriteBookReview
-import com.youngsbook.ui.login.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPrefer = getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = getSharedPreferences(SharedPreference.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -107,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSingleTap(position: Int) {
                 WriteBookReview().let {
-                    it.status = Data.instance.STATUS_UPDATE
+                    it.status = Define.STATUS_UPDATE
                     it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                     it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
                     it.showNow(supportFragmentManager,"")
@@ -158,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         {
             supportFragmentManager.executePendingTransactions()
             WriteBookReview().let {
-                it.status = Data.instance.STATUS_INSERT
+                it.status = Define.STATUS_INSERT
                 it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                 it.showNow(supportFragmentManager,"")
                 it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
@@ -174,7 +169,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateList() {
 
         val jsonObject : JsonObject = JsonObject()
-        jsonObject.addProperty("ID", sharedPrefer.getString(Data.instance.LOGIN_ID," "))
+        jsonObject.addProperty("ID", sharedPrefer.getString(SharedPreference.LOGIN_ID," "))
         youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
         youngsProgress.notTouchable(window)
         CoroutineScope(Dispatchers.Default).launch {

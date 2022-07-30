@@ -7,25 +7,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
-import com.google.zxing.integration.android.IntentIntegrator
-import com.journeyapps.barcodescanner.CaptureActivity
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
-import com.youngsbook.common.Data
+import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
@@ -209,32 +203,32 @@ class LoginActivity : AppCompatActivity() {
                                 return@connectHTTPS
                             }
                             editor.putString( // 로그인한 아이디 저장
-                                Data.instance.LOGIN_ID,
+                                SharedPreference.LOGIN_ID,
                                 (jsonArray.get(0) as JSONObject).getString("ID")
                             )
                             editor.putString( // 로그인한 비밀번호
                                 // 저장
-                                Data.instance.LOGIN_PASSWORD,
+                                SharedPreference.LOGIN_PASSWORD,
                                 (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                             )
                             editor.putString( // 로그인한 이름 저장
-                                Data.instance.LOGIN_NAME,
+                                SharedPreference.LOGIN_NAME,
                                 (jsonArray.get(0) as JSONObject).getString("NAME")
                             )
                             if (binding.checkboxSaveLoginInfo.isChecked) { // 자동로그인이 클릭되었을때
-                                editor.putBoolean(Data.instance.AUTO_LOGIN_BOOLEAN, true)
+                                editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, true)
                                 editor.putString(
-                                    Data.instance.AUTO_LOGIN_ID,
+                                    SharedPreference.AUTO_LOGIN_ID,
                                     (jsonArray.get(0) as JSONObject).getString("ID")
                                 )
                                 editor.putString(
-                                    Data.instance.AUTO_LOGIN_PASSWORD,
+                                    SharedPreference.AUTO_LOGIN_PASSWORD,
                                     (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                                 )
                             } else { // 자동로그인이 클리되어있지 않을때
-                                editor.putBoolean(Data.instance.AUTO_LOGIN_BOOLEAN, false)
-                                editor.putString(Data.instance.AUTO_LOGIN_ID, "")
-                                editor.putString(Data.instance.AUTO_LOGIN_PASSWORD, "")
+                                editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, false)
+                                editor.putString(SharedPreference.AUTO_LOGIN_ID, "")
+                                editor.putString(SharedPreference.AUTO_LOGIN_PASSWORD, "")
                             }
 
                             editor.commit()
@@ -283,9 +277,9 @@ class LoginActivity : AppCompatActivity() {
 
     fun checkSharedPreference()
     {
-        binding.checkboxSaveLoginInfo.isChecked = sharedPreferences.getBoolean(Data.instance.AUTO_LOGIN_BOOLEAN,false)
-        binding.userid.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_ID,""))
-        binding.password.setText(sharedPreferences.getString(Data.instance.AUTO_LOGIN_PASSWORD,""))
+        binding.checkboxSaveLoginInfo.isChecked = sharedPreferences.getBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN,false)
+        binding.userid.setText(sharedPreferences.getString(SharedPreference.AUTO_LOGIN_ID,""))
+        binding.password.setText(sharedPreferences.getString(SharedPreference.AUTO_LOGIN_PASSWORD,""))
     }
 
     private fun openMainActivity() {

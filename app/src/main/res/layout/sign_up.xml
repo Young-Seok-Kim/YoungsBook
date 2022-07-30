@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
@@ -32,179 +33,203 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title">
+
+        <ScrollView
+            android:id="@+id/scrollView_signUpInformation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="150dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title">
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:text="이름 *"
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/editText_Name"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/textView_title">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="이름 *" />
+
+                    <EditText
+                        android:id="@+id/editText_Name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="이름"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="아이디 *" />
+
+                    <EditText
+                        android:id="@+id/editText_ID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="아이디" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="이메일 " />
+
+                    <EditText
+                        android:id="@+id/editText_Email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="이메일"
+                        android:inputType="textEmailAddress" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="휴대폰 번호" />
+
+                    <EditText
+                        android:id="@+id/editText_PhoneNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="휴대폰 번호"
+                        android:inputType="phone"
+                        android:maxLength="11" />
+
+                    <Button
+                        android:id="@+id/button_SendCertifyNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/customlayout_button_main"
+                        android:text="인증번호 발송"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_CertifyNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="이름"
-                    android:inputType="textPersonName"/>
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="인증번호\n입력" />
+
+                    <EditText
+                        android:id="@+id/editText_InputCertifyNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="인증번호 입력"
+                        android:inputType="number"
+                        android:maxLength="6" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_CertifyValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false" />
+
+                    <Button
+                        android:id="@+id/button_CertifyNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/customlayout_button_sub"
+                        android:text="인증번호 확인" />
+
                 </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="아이디 *"
-                android:gravity="center"/>
-            <EditText
-                android:id="@+id/editText_ID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="아이디" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="이메일 "
-                android:gravity="center"/>
-            <EditText
-                android:id="@+id/editText_Email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="이메일"
-                android:inputType="textEmailAddress" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="휴대폰 번호"
-                android:gravity="center"/>
-            <EditText
-                android:id="@+id/editText_PhoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:maxLength="11"
-                android:hint="휴대폰 번호"
-                android:inputType="phone" />
-
-            <Button
-                android:id="@+id/button_SendCertifyNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/customlayout_button_main"
-                android:textColor="@color/white"
-                android:text="인증번호 발송" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearLayout_CertifyNumber"
-            android:visibility="gone"
-            tools:visibility="visible">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="인증번호\n입력"
-                android:gravity="center"/>
-            <EditText
-                android:id="@+id/editText_InputCertifyNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="인증번호 입력"
-                android:layout_weight="1"
-                android:maxLength="6"
-                android:inputType="number"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkbox_CertifyValue"
-                android:enabled="false"
-                />
-
-            <Button
-                android:id="@+id/button_CertifyNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/customlayout_button_sub"
-                android:text="인증번호 확인" />
-
-        </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="비밀번호 *" />
+
+                    <EditText
+                        android:id="@+id/editText_Password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="비밀번호"
+                        android:inputType="textPassword" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="비밀번호 \n확인 *" />
+
+                    <EditText
+                        android:id="@+id/editText_PasswordCheck"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="비밀번호 확인"
+                        android:inputType="textPassword"
+                        app:layout_constraintStart_toStartOf="@+id/join_password" />
+                </LinearLayout>
 
 
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="비밀번호 *"
-                android:gravity="center"/>
-            <EditText
-                android:id="@+id/editText_Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="비밀번호"
-                android:inputType="textPassword"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="비밀번호 \n확인 *"
-                android:gravity="center"/>
-            <EditText
-                android:id="@+id/editText_PasswordCheck"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="비밀번호 확인"
-                android:inputType="textPassword"
-                app:layout_constraintStart_toStartOf="@+id/join_password" />
-        </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/join_pwck">
-
-                <Button
-                    android:id="@+id/join_button"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/customlayout_button_main"
-                    android:textColor="@color/white"
-                    android:text="@string/action_sign_up" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="200dp"
+                    android:gravity="center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/join_pwck">
+
+                    <Button
+                        android:id="@+id/join_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/customlayout_button_main"
+                        android:text="@string/action_sign_up"
+                        android:textColor="@color/white" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

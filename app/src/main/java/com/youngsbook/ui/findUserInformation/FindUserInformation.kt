@@ -17,7 +17,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.JsonObject
-import com.youngsbook.common.Data
+import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -29,7 +29,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.util.concurrent.TimeUnit
-import org.json.JSONObject
 
 
 class FindUserInformation : DialogFragment() {
@@ -47,7 +46,7 @@ class FindUserInformation : DialogFragment() {
         super.onCreate(savedInstanceState)
         binding = FindUserInformationBinding.inflate(layoutInflater)
 
-        sharedPrefer = requireActivity().getSharedPreferences(Data.instance.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
         auth = Firebase.auth
 
         initButton()
