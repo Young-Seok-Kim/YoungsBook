@@ -108,6 +108,7 @@ class WriteBookReview : DialogFragment() {
             binding.editTextBookName.isEnabled = false
             binding.editTextBookReview.setText(MainActivityAdapter.instance.currentItem?.REVIEW)
             binding.ratingBarStar.rating = MainActivityAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
+            binding.buttonScanBarCode.visibility = View.GONE
         }
     }
 
