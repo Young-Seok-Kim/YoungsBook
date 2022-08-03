@@ -69,7 +69,7 @@ object YoungsFunction {
         .setTitle(title)
         .setMessage(Message)
         .setPositiveButton("확인") {
-                dialogInterface : DialogInterface, i : Int ->
+                _: DialogInterface, _: Int ->
         }
         .setCancelable(false)
         .show()
@@ -79,7 +79,7 @@ object YoungsFunction {
         messageBox.setTitle(title)
         .setMessage(Message)
         .setPositiveButton("확인") {
-                dialogInterface : DialogInterface, i : Int ->
+                _: DialogInterface, _: Int ->
             OKAction()
         }
         .setCancelable(false)
@@ -90,11 +90,11 @@ object YoungsFunction {
         messageBox.setTitle(title)
         .setMessage(Message)
         .setPositiveButton("확인") {
-                dialogInterface : DialogInterface, i : Int ->
+                _: DialogInterface, _: Int ->
             OKAction()
         }
         .setNegativeButton("취소"){
-                dialogInterface : DialogInterface, i : Int ->
+                _: DialogInterface, _: Int ->
             cancelAction()
         }
         .setCancelable(false)
@@ -198,14 +198,11 @@ object YoungsFunction {
 
         DatePickerDialog(
             context,
-            { view, yearSelected, monthOfYear, dayOfMonth ->
+            { _, yearSelected, monthOfYear, dayOfMonth ->
                 val date: String
-                val month: String
-                val day: String
-                month =
-                    if (monthOfYear + 1 < 10) "0" + (monthOfYear + 1) else (monthOfYear + 1).toString() + ""
-                day = if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString() + ""
-                date = yearSelected.toString() + divider + month + divider + day
+                val dialogMonth: String = if (monthOfYear + 1 < 10) "0" + (monthOfYear + 1) else (monthOfYear + 1).toString() + ""
+                val dialogDay: String = if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString() + ""
+                date = yearSelected.toString() + divider + dialogMonth + divider + dialogDay
                 textView.text = date
             },
             year,
@@ -220,13 +217,11 @@ object YoungsFunction {
         val minute = cal[Calendar.MINUTE]
         TimePickerDialog(
             context,
-            { view, hourOfDay, min ->
+            { _, hourOfDay, min ->
                 val time: String
-                val hour: String
-                val minute: String
-                hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString() + ""
-                minute = if (min < 10) "0$min" else min.toString() + ""
-                time = hour + divider + minute + divider + "00"
+                val dialogHour: String = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString() + ""
+                val dialogMinute: String = if (min < 10) "0$min" else min.toString() + ""
+                time = dialogHour + divider + dialogMinute + divider + "00"
                 tv.text = time
             },
             hour,

@@ -99,6 +99,10 @@ class WriteBookReview : DialogFragment() {
     private fun whenOpen()
     {
         binding.textviewGoalReadDate.text = MainActivityAdapter.instance.currentItem?.GOAL_READ_DATE
+
+        if(MainActivityAdapter.instance.currentItem?.READ_COMPLETE == "1")
+            binding.checkboxReadComplete.isChecked = true
+
         if (status == Define.STATUS_INSERT)
         {
             binding.buttonDelete.visibility = View.GONE

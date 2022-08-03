@@ -1,5 +1,6 @@
 package com.youngsbook.ui.main
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,22 +45,24 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
         holder.ratingBar_Star.rating = MainActivityAdapter.instance._arrayList[position].STAR_RATING
         holder.textView_readDate.text = MainActivityAdapter.instance._arrayList[position].READ_DATE
 
-        if((instance._arrayList.get(position).GOAL_READ_DATE?:"").isNotBlank()) {
+        if(MainActivityAdapter.instance._arrayList[position].READ_COMPLETE == "1") {
+            holder.textView_ReadComplete.text = "완독"
+            holder.textView_ReadComplete.visibility = View.VISIBLE
+            holder.textView_ReadComplete.setTextColor(Color.GRAY)
+        }
+        else if((instance._arrayList.get(position).GOAL_READ_DATE?:"").isNotBlank()) {
             val goalReadDate = instance._arrayList.get(position).GOAL_READ_DATE
             val date = SimpleDateFormat("yyyy-MM-dd").parse(goalReadDate)
             val today = Calendar.getInstance()
-            var calculateDate = (date.time - today.time.time) / (1000 * 60 * 60 * 24)
+            val calculateDate = (date.time - today.time.time) / (1000 * 60 * 60 * 24)
 
             if (calculateDate > 0) {
                 holder.textView_ReadComplete.text = "D-${calculateDate}"
                 holder.textView_ReadComplete.visibility = View.VISIBLE
-
             }
         }
-
-        if(MainActivityAdapter.instance._arrayList[position].READ_COMPLETE == "1") {
-            holder.textView_ReadComplete.text = "완독"
-            holder.textView_ReadComplete.visibility = View.VISIBLE
+        else{
+            holder.textView_ReadComplete.visibility = View.GONE
         }
 
     }

@@ -31,7 +31,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toEndOf="@id/textview_ReadDate"
             android:fontFamily="@font/s_core_dream7"
-            android:text="완독"
+            tools:text="완독"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:gravity="center"
