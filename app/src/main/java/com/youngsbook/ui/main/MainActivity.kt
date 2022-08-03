@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     OKAction = {
                         val jsonObject : JsonObject = JsonObject()
                         jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
-                        youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                        youngsProgress.startProgress(binding.progressbar)
                         youngsProgress.notTouchable(window)
                         CoroutineScope(Dispatchers.Main).launch {
                             NetworkConnect.connectHTTPS("DeleteBookReview.do",
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
 
         val jsonObject : JsonObject = JsonObject()
         jsonObject.addProperty("ID", sharedPrefer.getString(SharedPreference.LOGIN_ID," "))
-        youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+        youngsProgress.startProgress(binding.progressbar)
         youngsProgress.notTouchable(window)
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",
@@ -178,15 +178,13 @@ class MainActivity : AppCompatActivity() {
                 applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                 , onSuccess = { ->
                     MainActivityAdapter.instance.clear()
-                    val jsonArray : JSONArray
-                    jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+                    val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+
                     if (jsonArray.toString() != "[\"\"]") {
                         val list = Gson().fromJson(
                             jsonArray.toString(),
                             Array<MainActivityModel>::class.java
                         )
-
-
 
                         for (item in list) {
                             MainActivityAdapter.instance.addItem(item)

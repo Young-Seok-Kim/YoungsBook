@@ -15,4 +15,6 @@
     <color name="light_blue">#748BFF</color>
     <color name="deep_blue">#00008B</color>
     <color name="little_deep_blue">#33408D</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#ff7f00 </color>
 </resources>

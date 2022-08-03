@@ -119,7 +119,7 @@ class FindUserInformation : DialogFragment() {
                     return
                 }
 
-                youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                youngsProgress.startProgress(binding.progressbar)
                 youngsProgress.notTouchable(dialog?.window!!)
 
                 if(binding.radiobuttonFindID.isChecked){ // 아이디 찾기

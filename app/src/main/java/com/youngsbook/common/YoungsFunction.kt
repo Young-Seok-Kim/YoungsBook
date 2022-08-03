@@ -1,16 +1,13 @@
 package com.youngsbook.common
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -191,5 +188,50 @@ object YoungsFunction {
             e.printStackTrace()
         }
         return bookJsonObject
+    }
+
+    fun setDate(context: Context, textView: TextView, divider: String) {
+        val calendar = Calendar.getInstance()
+        val year = calendar[Calendar.YEAR]
+        val month = calendar[Calendar.MONTH]
+        val day = calendar[Calendar.DAY_OF_MONTH]
+
+        DatePickerDialog(
+            context,
+            { view, yearSelected, monthOfYear, dayOfMonth ->
+                val date: String
+                val month: String
+                val day: String
+                month =
+                    if (monthOfYear + 1 < 10) "0" + (monthOfYear + 1) else (monthOfYear + 1).toString() + ""
+                day = if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString() + ""
+                date = yearSelected.toString() + divider + month + divider + day
+                textView.text = date
+            },
+            year,
+            month,
+            day
+        ).show()
+    }
+
+    private fun setTime(context: Context?, tv: TextView, divider: String) {
+        val cal = Calendar.getInstance()
+        val hour = cal[Calendar.HOUR_OF_DAY]
+        val minute = cal[Calendar.MINUTE]
+        TimePickerDialog(
+            context,
+            { view, hourOfDay, min ->
+                val time: String
+                val hour: String
+                val minute: String
+                hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString() + ""
+                minute = if (min < 10) "0$min" else min.toString() + ""
+                time = hour + divider + minute + divider + "00"
+                tv.text = time
+            },
+            hour,
+            minute,
+            true
+        ).show()
     }
 }

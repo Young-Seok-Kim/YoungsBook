@@ -28,7 +28,6 @@
         android:layout_marginEnd="20dp"
         android:id="@+id/list"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingEnd="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -73,21 +72,66 @@
             android:layout_alignTop="@+id/textview_bookName"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/textview_bookName"
-            android:singleLine="true"
             android:ellipsize="end"
             android:fontFamily="@font/s_core_dream4"
-            android:hint="이곳에 책이름을 입력합니다." />
+            android:hint="이곳에 책이름을 입력합니다."
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout_GoalReadDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview_bookName"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/ImageText_WidthWrapContent"
+                android:text="완독 목표일" />
+
+            <ImageButton
+                android:id="@+id/ImageButton_GoalReadDate"
+                android:layout_width="@dimen/image_button_width"
+                android:layout_height="@dimen/image_button_height"
+                android:background="@drawable/b_date" />
+
+            <TextView
+                android:id="@+id/textview_GoalReadDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/s_core_dream4"
+                android:textSize="15dp"
+                tools:text="yyyy-mm-dd" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                style="@style/ImageText_WidthWrapContent"
+                android:layout_marginLeft="10dp"
+                android:text="완독 여부" />
+
+            <CheckBox
+                android:id="@+id/checkbox_ReadComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/editText_bookReview"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_below="@+id/textview_bookName"
-            android:layout_alignStart="@+id/textview_bookName"
             android:layout_marginTop="10dp"
+            android:layout_below="@+id/linearLayout_GoalReadDate"
             android:background="@drawable/customlayout_textview"
             android:fontFamily="@font/s_core_dream4"
-            android:hint="이곳에 책의 후기를 적어주세요" />
+            android:hint="이곳에 책의 후기를 적어주세요"/>
 
         <LinearLayout
             android:layout_width="match_parent"

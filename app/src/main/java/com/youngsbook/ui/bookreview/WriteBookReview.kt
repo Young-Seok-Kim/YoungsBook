@@ -98,6 +98,7 @@ class WriteBookReview : DialogFragment() {
 
     private fun whenOpen()
     {
+        binding.textviewGoalReadDate.text = MainActivityAdapter.instance.currentItem?.GOAL_READ_DATE
         if (status == Define.STATUS_INSERT)
         {
             binding.buttonDelete.visibility = View.GONE
@@ -122,6 +123,14 @@ class WriteBookReview : DialogFragment() {
                     return
                 }
 
+                val jsonObject: JsonObject = JsonObject() // insert와 update에서 동일하게 필요한값은 이곳에서 추가
+                jsonObject.addProperty("book_name", binding.editTextBookName.text.toString())
+                jsonObject.addProperty("read_date", YoungsFunction.getNowDate())
+                jsonObject.addProperty("goal_read_date", binding.textviewGoalReadDate.text.toString())
+                jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
+                jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
+                jsonObject.addProperty("read_complete", binding.checkboxReadComplete.isChecked)
+
                 if (status == Define.STATUS_INSERT) {
 
                     if (binding.editTextBookName.text.isNullOrBlank()) {
@@ -132,9 +141,6 @@ class WriteBookReview : DialogFragment() {
                     }
 
 
-                    val jsonObject: JsonObject = JsonObject()
-                    jsonObject.addProperty("book_name", binding.editTextBookName.text.toString())
-                    jsonObject.addProperty("read_date", YoungsFunction.getNowDate())
                     jsonObject.addProperty(
                         "reader_id",
                         sharedPrefer.getString(SharedPreference.LOGIN_ID, " ")
@@ -143,9 +149,8 @@ class WriteBookReview : DialogFragment() {
                         "reader_name",
                         sharedPrefer.getString(SharedPreference.LOGIN_NAME, " ")
                     )
-                    jsonObject.addProperty("review", binding.editTextBookReview.text.toString())
-                    jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
-                    youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                    
+                    youngsProgress.startProgress(binding.progressbar)
                     youngsProgress.notTouchable(dialog?.window!!)
 
                     CoroutineScope(Dispatchers.Default).launch {
@@ -182,13 +187,9 @@ class WriteBookReview : DialogFragment() {
                         binding.editTextBookReview.setText(" ")
                     }
 
-                    val jsonObject: JsonObject = JsonObject()
-                    jsonObject.addProperty("book_name", binding.editTextBookName.text.toString())
-                    jsonObject.addProperty("read_date", YoungsFunction.getNowDate())
-                    jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
-                    jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
+                    
                     jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
-                    youngsProgress.startProgress(binding.progressbar) // 종료는 connectNetwork 안에서 해주므로 따로 해줄 필요는 없다
+                    youngsProgress.startProgress(binding.progressbar)
                     youngsProgress.notTouchable(dialog?.window!!)
 
                     CoroutineScope(Dispatchers.Default).launch {
@@ -257,20 +258,21 @@ class WriteBookReview : DialogFragment() {
             childForResult.launch(integrator.createScanIntent())
             integrator.initiateScan() //초기화
         })
+
+        binding.ImageButtonGoalReadDate.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                YoungsFunction.setDate(requireContext(),binding.textviewGoalReadDate,"-")
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result: IntentResult =
             IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if(result != null) {
-            if (result.contents == null) {
-                Log.e("this", "잘못된 QR코드입니다.")
-            } else {
-                Log.e("this", result.contents.toString())
-            }
-        }
-        else{
-            super.onActivityResult(requestCode, resultCode, data)
+        if (result.contents == null) {
+            Log.e("this", "잘못된 QR코드입니다.")
+        } else {
+            Log.e("this", result.contents.toString())
         }
     }
 

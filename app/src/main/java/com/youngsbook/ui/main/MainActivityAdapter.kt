@@ -1,13 +1,13 @@
 package com.youngsbook.ui.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.RecyclerviewBookItemBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -23,7 +23,7 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
         var textView_BookReview = binding.textviewBookReview
         var ratingBar_Star = binding.ratingBarStar
         var textView_readDate = binding.textviewReadDate
-
+        var textView_ReadComplete = binding.textviewReadComplete
     }
 
 
@@ -34,7 +34,6 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
         return MyViewHolder(binding)
     }
 
-
     //recyclerview가 viewholder를 가져와 데이터 연결할때 호출
     //적절한 데이터를 가져와서 그 데이터를 사용하여 뷰홀더의 레이아웃 채움
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -44,6 +43,25 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
         holder.textView_BookReview.text = MainActivityAdapter.instance._arrayList[position].REVIEW
         holder.ratingBar_Star.rating = MainActivityAdapter.instance._arrayList[position].STAR_RATING
         holder.textView_readDate.text = MainActivityAdapter.instance._arrayList[position].READ_DATE
+
+        if((instance._arrayList.get(position).GOAL_READ_DATE?:"").isNotBlank()) {
+            val goalReadDate = instance._arrayList.get(position).GOAL_READ_DATE
+            val date = SimpleDateFormat("yyyy-MM-dd").parse(goalReadDate)
+            val today = Calendar.getInstance()
+            var calculateDate = (date.time - today.time.time) / (1000 * 60 * 60 * 24)
+
+            if (calculateDate > 0) {
+                holder.textView_ReadComplete.text = "D-${calculateDate}"
+                holder.textView_ReadComplete.visibility = View.VISIBLE
+
+            }
+        }
+
+        if(MainActivityAdapter.instance._arrayList[position].READ_COMPLETE == "1") {
+            holder.textView_ReadComplete.text = "완독"
+            holder.textView_ReadComplete.visibility = View.VISIBLE
+        }
+
     }
 
     private object SingletonHolder {

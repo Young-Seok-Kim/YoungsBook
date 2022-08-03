@@ -26,4 +26,25 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/youngs_book_splash</item>
     </style>
+
+    <style name="ImageText_WidthMatchParent" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/customlayout_textview</item>
+        <item name="android:fontFamily">@font/s_core_dream4</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="ImageText_WidthWrapContent" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:fontFamily">@font/s_core_dream4</item>
+        <item name="android:background">@drawable/customlayout_textview</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
 </resources>
