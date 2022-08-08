@@ -2,6 +2,7 @@ package com.youngsbook.ui.bookreview
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,8 +22,10 @@ import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
+import com.youngsbook.common.scan.ScanBookActivity
 import com.youngsbook.common.scan.ScanBookModel
 import com.youngsbook.databinding.WriteBookReviewBinding
+import com.youngsbook.ui.login.LoginActivity
 import com.youngsbook.ui.main.MainActivityAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,14 +42,14 @@ class WriteBookReview : DialogFragment() {
     var status : String = "Default"
     private var scanBook : JSONObject? = null
     private var scanBookModel : ScanBookModel? = null
+    val test = ActivityResultContracts.StartActivityForResult()
 
-    private val childForResult : ActivityResultLauncher<Intent> =
+    private val activityResultLauncher : ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
                 AppCompatActivity.RESULT_OK -> {
                     scanBook = YoungsFunction.bookSearch(result.data?.extras?.getString("SCAN_RESULT").toString())
                     scanBook?.let { scanAction(it) }
-//                    binding.editTextBookName.text = scanBook.
                 }
             }
         }
@@ -58,7 +61,8 @@ class WriteBookReview : DialogFragment() {
     {
         fun whenDismiss()
     }
-    fun scanAction(scanBook : JSONObject){
+
+    private fun scanAction(scanBook : JSONObject){
         Log.d("QR 코드 스캔 성공", scanBook.toString())
         if ((scanBook["items"] as JSONArray).isNull(0))
         {
@@ -253,13 +257,19 @@ class WriteBookReview : DialogFragment() {
         }
 
         binding.buttonScanBarCode.setOnClickListener(View.OnClickListener {
-            val integrator = IntentIntegrator(requireActivity()) //context를 넣어줍니다
+
+            val integrator = IntentIntegrator(activity)
+            integrator.captureActivity = ScanBookActivity::class.java
             integrator.setBarcodeImageEnabled(false) //스캔 된 이미지 가져올 지
             integrator.setBeepEnabled(false)//스캔 시 비프음 ON/OFF
+            integrator.setOrientationLocked(false) // flase로 하면 핸드폰 방향에 따라 가로, 세로가 바뀐다.
             integrator.setPrompt("책의 바코드를 읽어주세요")//QR 스캐너 하단 메세지 셋팅
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES) // QR 코드, 바코드 모두 인식하도록 설정
 
-            childForResult.launch(integrator.createScanIntent())
+
+            activityResultLauncher.launch(integrator.createScanIntent())
+
+
             integrator.initiateScan() //초기화
         })
 

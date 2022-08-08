@@ -229,18 +229,19 @@ class FindUserInformation : DialogFragment() {
 
     }
 
-    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential){
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential){
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
+                if (task.isSuccessful && !binding.checkboxCertifyValue.isChecked) {
                     //인증성공
                     Toast.makeText(requireContext(),"휴대폰 인증성공",Toast.LENGTH_SHORT).show()
                     binding.editTextPhoneNumber.isEnabled = false
                     binding.checkboxCertifyValue.isChecked = true
                     binding.editTextPassword.isEnabled = true
                     binding.editTextPasswordCheck.isEnabled = true
+                    binding.buttonCertifyNumber.isEnabled = false
                 }
-                else {
+                else if (!task.isSuccessful){
                     //인증실패
                     Toast.makeText(requireContext(),"인증번호를 확인해주세요",Toast.LENGTH_SHORT).show()
                 }

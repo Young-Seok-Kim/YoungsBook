@@ -132,15 +132,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/checkbox_CertifyValue"
-                    android:enabled="false"
-                    />
+                    android:enabled="false"/>
 
                 <Button
                     android:id="@+id/button_CertifyNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/customlayout_button_main"
-                    android:textColor="@color/white"
+                    android:background="@drawable/customlayout_button_sub"
                     android:text="인증번호 확인" />
 
             </LinearLayout>

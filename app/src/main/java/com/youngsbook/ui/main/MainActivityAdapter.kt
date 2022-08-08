@@ -14,8 +14,6 @@ import java.util.*
 
 class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAdapter.MyViewHolder>() {
 
-//    var datalist = mutableListOf<MainActivityModel>()//리사이클러뷰에서 사용할 데이터 미리 정의 -> 나중에 MainActivity등에서 datalist에 실제 데이터 추가
-
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     inner class MyViewHolder(private val binding: RecyclerviewBookItemBinding): RecyclerView.ViewHolder(binding.root) {
@@ -39,13 +37,12 @@ class MainActivityAdapter: RecyclerViewAdapter<MainActivityModel,MainActivityAda
     //적절한 데이터를 가져와서 그 데이터를 사용하여 뷰홀더의 레이아웃 채움
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-//        holder.textView_BookName.isSelected = true // 텍스트가 흐를수 있도록 처리하는 역할, (xml의 marque)
-        holder.textView_BookName.text = MainActivityAdapter.instance._arrayList[position].BOOK_NAME
-        holder.textView_BookReview.text = MainActivityAdapter.instance._arrayList[position].REVIEW
-        holder.ratingBar_Star.rating = MainActivityAdapter.instance._arrayList[position].STAR_RATING
-        holder.textView_readDate.text = MainActivityAdapter.instance._arrayList[position].READ_DATE
+        holder.textView_BookName.text = instance._arrayList[position].BOOK_NAME
+        holder.textView_BookReview.text = instance._arrayList[position].REVIEW
+        holder.ratingBar_Star.rating = instance._arrayList[position].STAR_RATING
+        holder.textView_readDate.text = instance._arrayList[position].READ_DATE
 
-        if(MainActivityAdapter.instance._arrayList[position].READ_COMPLETE == "1") {
+        if(instance._arrayList[position].READ_COMPLETE == "1") {
             holder.textView_ReadComplete.text = "완독"
             holder.textView_ReadComplete.visibility = View.VISIBLE
             holder.textView_ReadComplete.setTextColor(Color.GRAY)
