@@ -2,7 +2,6 @@ package com.youngsbook.ui.bookreview
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,8 +24,7 @@ import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.common.scan.ScanBookActivity
 import com.youngsbook.common.scan.ScanBookModel
 import com.youngsbook.databinding.WriteBookReviewBinding
-import com.youngsbook.ui.login.LoginActivity
-import com.youngsbook.ui.main.MainActivityAdapter
+import com.youngsbook.ui.main.myBookList.MyBookListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,8 +34,8 @@ import org.json.JSONObject
 class WriteBookReview : DialogFragment() {
 
     lateinit var binding: WriteBookReviewBinding
-    private lateinit var sharedPrefer : SharedPreferences
     val youngsProgress = NetworkProgress()
+    private lateinit var sharedPrefer : SharedPreferences
 
     var status : String = "Default"
     private var scanBook : JSONObject? = null
@@ -82,7 +80,7 @@ class WriteBookReview : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = WriteBookReviewBinding.inflate(layoutInflater)
-        sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
+        sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.SAVE_LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
     }
 
@@ -102,9 +100,9 @@ class WriteBookReview : DialogFragment() {
 
     private fun whenOpen()
     {
-        binding.textviewGoalReadDate.text = MainActivityAdapter.instance.currentItem?.GOAL_READ_DATE
+        binding.textviewGoalReadDate.text = MyBookListAdapter.instance.currentItem?.GOAL_READ_DATE
 
-        if(MainActivityAdapter.instance.currentItem?.READ_COMPLETE == "1")
+        if(MyBookListAdapter.instance.currentItem?.READ_COMPLETE == "1")
             binding.checkboxReadComplete.isChecked = true
 
         if (status == Define.STATUS_INSERT)
@@ -113,10 +111,10 @@ class WriteBookReview : DialogFragment() {
         }
         else if (status == Define.STATUS_UPDATE)
         {
-            binding.editTextBookName.setText(MainActivityAdapter.instance.currentItem?.BOOK_NAME)
+            binding.editTextBookName.setText(MyBookListAdapter.instance.currentItem?.BOOK_NAME)
             binding.editTextBookName.isEnabled = false
-            binding.editTextBookReview.setText(MainActivityAdapter.instance.currentItem?.REVIEW)
-            binding.ratingBarStar.rating = MainActivityAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
+            binding.editTextBookReview.setText(MyBookListAdapter.instance.currentItem?.REVIEW)
+            binding.ratingBarStar.rating = MyBookListAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
             binding.buttonScanBarCode.visibility = View.GONE
         }
     }
@@ -138,6 +136,7 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
                 jsonObject.addProperty("read_complete", binding.checkboxReadComplete.isChecked)
+                jsonObject.addProperty("reader_code", Define.NOW_LOGIN_USER_CODE)
 
                 if (status == Define.STATUS_INSERT) {
 
@@ -151,11 +150,11 @@ class WriteBookReview : DialogFragment() {
 
                     jsonObject.addProperty(
                         "reader_id",
-                        sharedPrefer.getString(SharedPreference.LOGIN_ID, " ")
+                        sharedPrefer.getString(SharedPreference.SAVE_LOGIN_ID, " ")
                     )
                     jsonObject.addProperty(
                         "reader_name",
-                        sharedPrefer.getString(SharedPreference.LOGIN_NAME, " ")
+                        sharedPrefer.getString(SharedPreference.SAVE_LOGIN_NAME, " ")
                     )
                     
                     youngsProgress.startProgress(binding.progressbar)
@@ -196,7 +195,7 @@ class WriteBookReview : DialogFragment() {
                     }
 
                     
-                    jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem!!.REVIEW_NO)
+                    jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem!!.REVIEW_NO)
                     youngsProgress.startProgress(binding.progressbar)
                     youngsProgress.notTouchable(dialog?.window!!)
 
@@ -229,7 +228,7 @@ class WriteBookReview : DialogFragment() {
         binding.buttonDelete.setOnClickListener()
         {
             val jsonObject : JsonObject = JsonObject()
-            jsonObject.addProperty("review_no", MainActivityAdapter.instance.currentItem?.REVIEW_NO)
+            jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
             youngsProgress.startProgress(binding.progressbar)
             youngsProgress.notTouchable(dialog?.window!!)
             CoroutineScope(Dispatchers.Default).launch {

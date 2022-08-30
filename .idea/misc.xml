@@ -3,26 +3,39 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable-v24/ic_book.xml" value="0.21" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable-v24/ic_goal.xml" value="0.21" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable-v24/ic_home.xml" value="0.276" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable-v24/ic_info.xml" value="0.276" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable-v24/ic_settings.xml" value="0.276" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/b_date.xml" value="0.1975" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/custom_ratingbar.xml" value="0.23541666666666666" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_button.xml" value="0.276" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_button_main.xml" value="0.276" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_floating_button.xml" value="0.403125" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_textview.xml" value="0.403125" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/customlayout_textview_left_right.xml" value="0.21" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/ic_launcher_background_books.xml" value="0.403125" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/drawable/splash.xml" value="0.276" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout-v21/activity_main.xml" value="0.38697916666666665" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.24866131191432397" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout-w936dp/activity_login.xml" value="0.290234375" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/activity_main.xml" value="0.17407407407407408" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/custom_spinner_item_center_black.xml" value="0.3183876811594203" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/find_user_information.xml" value="0.3183876811594203" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/goal.xml" value="0.20260416666666667" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/goal_setting.xml" value="0.3183876811594203" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/layout.xml" value="0.3183876811594203" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/my_book_list.xml" value="0.20260416666666667" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/recyclerview_book_item.xml" value="0.19791666666666666" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/recylerview_book_item.xml" value="0.38697916666666665" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/recylerview_book_list.xml" value="0.38697916666666665" />
-        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/sign_up.xml" value="0.21927083333333333" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/resign.xml" value="0.20260416666666667" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/setting.xml" value="0.20260416666666667" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/sign_up.xml" value="0.22" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/layout/write_book_review.xml" value="0.33" />
+        <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/menu/bottom_menu.xml" value="0.38697916666666665" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.23489583333333333" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.23489583333333333" />
         <entry key="..\:/Project/kotlin/YoungsBook/app/src/main/res/xml/customlayout_textview.xml" value="0.38697916666666665" />

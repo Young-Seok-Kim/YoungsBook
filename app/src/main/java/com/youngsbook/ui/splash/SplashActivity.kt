@@ -45,10 +45,9 @@ class SplashActivity : Activity(){
                 jsonObject,
                 applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                 , onSuccess = {
-                    val jsonArray : JSONArray
-                    jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+                    val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
 
-                    if(jsonArray[0].toString().toBoolean() == true) {
+                    if(jsonArray[0].toString().toBoolean()) {
 //                        setTheme(R.style.Theme_AppCompat)
                         val messageBox = AlertDialog.Builder(this@SplashActivity)
                         messageBox.setTitle("업데이트 필요")
@@ -85,7 +84,6 @@ class SplashActivity : Activity(){
                             finish()
                         }
                     )
-
                     youngsProgress.touchable(window)
                 }
             )

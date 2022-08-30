@@ -37,13 +37,54 @@
         <item name="android:textSize">15dp</item>
     </style>
 
-    <style name="ImageText_WidthWrapContent" parent="@android:style/Widget.TextView">
+    <style name="TextView_WidthWrapContent_Border" parent="@android:style/Widget.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:clickable">true</item>
         <item name="android:fontFamily">@font/s_core_dream4</item>
         <item name="android:background">@drawable/customlayout_textview</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="TextView_WidthWrapContent_Borderless" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:fontFamily">@font/s_core_dream4</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="Setting_LinearLayout" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="Setting_TextView" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:fontFamily">@font/s_core_dream4</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="LinearLayout_RightEditText" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fontFamily">@font/s_core_dream4</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="LinearLayout_RightTextView" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/s_core_dream4</item>
         <item name="android:textSize">15dp</item>
     </style>
 

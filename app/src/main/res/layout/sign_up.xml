@@ -62,12 +62,12 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:fontFamily="@font/s_core_dream4"
                         android:text="이름 *" />
 
                     <EditText
                         android:id="@+id/editText_Name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:hint="이름"
                         android:inputType="textPersonName" />
                 </LinearLayout>
@@ -80,12 +80,12 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:fontFamily="@font/s_core_dream4"
                         android:text="아이디 *" />
 
                     <EditText
                         android:id="@+id/editText_ID"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:hint="아이디" />
                 </LinearLayout>
 
@@ -97,12 +97,12 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:fontFamily="@font/s_core_dream4"
                         android:text="이메일 " />
 
                     <EditText
                         android:id="@+id/editText_Email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:hint="이메일"
                         android:inputType="textEmailAddress" />
                 </LinearLayout>
@@ -119,8 +119,7 @@
 
                     <EditText
                         android:id="@+id/editText_PhoneNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:layout_weight="1"
                         android:hint="휴대폰 번호"
                         android:inputType="phone"
@@ -150,8 +149,7 @@
 
                     <EditText
                         android:id="@+id/editText_InputCertifyNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:layout_weight="1"
                         android:hint="인증번호 입력"
                         android:inputType="number"
@@ -185,8 +183,7 @@
 
                     <EditText
                         android:id="@+id/editText_Password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:hint="비밀번호"
                         android:inputType="textPassword" />
                 </LinearLayout>
@@ -203,8 +200,7 @@
 
                     <EditText
                         android:id="@+id/editText_PasswordCheck"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/LinearLayout_RightEditText"
                         android:hint="비밀번호 확인"
                         android:inputType="textPassword"
                         app:layout_constraintStart_toStartOf="@+id/join_password" />

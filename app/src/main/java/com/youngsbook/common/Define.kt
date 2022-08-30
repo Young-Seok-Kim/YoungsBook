@@ -18,4 +18,6 @@ object Define {
     val STATUS_INSERT : String = "I"
     val STATUS_UPDATE : String = "U"
 
+    var NOW_LOGIN_USER_ID : String = ""
+    var NOW_LOGIN_USER_CODE : Int = 0
 }

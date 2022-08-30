@@ -1,13 +1,11 @@
 package com.youngsbook.ui.signUp
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth

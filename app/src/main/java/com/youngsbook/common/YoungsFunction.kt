@@ -37,13 +37,10 @@ object YoungsFunction {
         return resultJson
     }
 
-    fun stringIntToJson(jsonString : String ) : Int
-    {
+    fun stringIntToJson(jsonString: String): Int {
         val jsonObject = JSONObject(jsonString)
 
-        val resultJson : Int = jsonObject.get("RESULT_LIST").toString().toInt()
-
-        return resultJson
+        return jsonObject.get("RESULT_LIST").toString().toInt()
     }
 
     /**
@@ -58,12 +55,14 @@ object YoungsFunction {
      * Date형식을 입력하면 yyyy-MM-dd 형식의 String으로 반환해준다.
      */
     fun getDate(date: Date): String {
-        val simple : SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
-        val afterFormat = simple.format(date)
+        val simple: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-        return afterFormat
+        return simple.format(date)
     }
 
+    /*
+    단순 OK 버튼
+     */
     fun messageBoxOK(context: Context, title : String, Message : String){
         val messageBox = AlertDialog.Builder(context)
         .setTitle(title)
@@ -74,6 +73,10 @@ object YoungsFunction {
         .setCancelable(false)
         .show()
     }
+
+    /*
+    OK 버튼을 누르면 특정 액션이 동작하도록
+     */
     fun messageBoxOKAction(context: Context, title : String, Message : String, OKAction : () -> Unit){
         val messageBox = AlertDialog.Builder(context)
         messageBox.setTitle(title)
@@ -151,21 +154,22 @@ object YoungsFunction {
             runBlocking {
                 CoroutineScope(Dispatchers.IO).launch {
                     val text: String = URLEncoder.encode(searchWord, "UTF-8")
-                    val apiURL = "https://openapi.naver.com/v1/search/book.json" + "?query=" + text + "&display=20" // json 결과
+                    val apiURL =
+                        "https://openapi.naver.com/v1/search/book.json?query=$text&display=20" // json 결과
                     val url = URL(apiURL)
                     val con: HttpURLConnection = url.openConnection() as HttpURLConnection
                     con.setRequestMethod("GET")
                     con.setRequestProperty("X-Naver-Client-Id", clientId)
                     con.setRequestProperty("X-Naver-Client-Secret", clientSecret)
-                    Log.d("네이버 url", apiURL)
-                    Log.d("con.responseCode", con.responseCode.toString())
+//                    Log.d("네이버 url", apiURL)
+//                    Log.d("con.responseCode", con.responseCode.toString())
 
                     val responseCode: Int = con.getResponseCode()
                     val br: BufferedReader
                     if (responseCode == 200) { // 정상 호출
-                        br = BufferedReader(InputStreamReader(con.getInputStream(), "UTF-8"))
+                        br = BufferedReader(InputStreamReader(con.inputStream, "UTF-8"))
                     } else {  // 에러 발생
-                        br = BufferedReader(InputStreamReader(con.getErrorStream()))
+                        br = BufferedReader(InputStreamReader(con.errorStream))
                     }
                     var inputLine: String?
                     val response = StringBuffer()
@@ -175,7 +179,7 @@ object YoungsFunction {
                     }
                     br.close()
                     val naverHtml: String = response.toString()
-                    Log.d("con.responseCode", response.toString())
+//                    Log.d("con.responseCode", response.toString())
                     val bun = Bundle()
                     bun.putString("NAVER_HTML", naverHtml)
 

@@ -86,7 +86,7 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/ImageText_WidthWrapContent"
+                style="@style/TextView_WidthWrapContent_Border"
                 android:text="완독 목표일" />
 
             <ImageButton
@@ -110,7 +110,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                style="@style/ImageText_WidthWrapContent"
+                style="@style/TextView_WidthWrapContent_Border"
                 android:layout_marginLeft="10dp"
                 android:text="완독 여부" />
 

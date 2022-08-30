@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
+import com.youngsbook.common.Define
 import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
@@ -159,7 +160,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        binding.forgotLoginInfo.setOnClickListener(){
+        binding.linearLayoutForgotLoginInfo.setOnClickListener(){
             FindUserInformation().let{
                 it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                 it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
@@ -197,22 +198,26 @@ class LoginActivity : AppCompatActivity() {
 
                             if(jsonArray.get(0).toString().isBlank())
                             {
-                                Toast.makeText(applicationContext,"아이디, 비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext,"아이디, 비밀번호가 맞지 않거나\n아이디가 존재하지않습니다..",Toast.LENGTH_LONG).show()
                                 youngsProgress.endProgressBar(binding.progressbar)
                                 youngsProgress.touchable(window)
                                 return@connectHTTPS
                             }
+
+                            Define.NOW_LOGIN_USER_ID = binding.userid.text.toString()
+                            Define.NOW_LOGIN_USER_CODE = (jsonArray.get(0) as JSONObject).getString("CODE").toInt()
+
                             editor.putString( // 로그인한 아이디 저장
-                                SharedPreference.LOGIN_ID,
+                                SharedPreference.SAVE_LOGIN_ID,
                                 (jsonArray.get(0) as JSONObject).getString("ID")
                             )
                             editor.putString( // 로그인한 비밀번호
                                 // 저장
-                                SharedPreference.LOGIN_PASSWORD,
+                                SharedPreference.SAVE_LOGIN_PASSWORD,
                                 (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                             )
                             editor.putString( // 로그인한 이름 저장
-                                SharedPreference.LOGIN_NAME,
+                                SharedPreference.SAVE_LOGIN_NAME,
                                 (jsonArray.get(0) as JSONObject).getString("NAME")
                             )
                             if (binding.checkboxSaveLoginInfo.isChecked) { // 자동로그인이 클릭되었을때

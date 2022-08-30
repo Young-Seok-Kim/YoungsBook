@@ -34,7 +34,6 @@ import java.util.concurrent.TimeUnit
 class FindUserInformation : DialogFragment() {
 
     lateinit var binding: FindUserInformationBinding
-    private lateinit var sharedPrefer : SharedPreferences
 
     val youngsProgress = NetworkProgress()
 
@@ -46,7 +45,6 @@ class FindUserInformation : DialogFragment() {
         super.onCreate(savedInstanceState)
         binding = FindUserInformationBinding.inflate(layoutInflater)
 
-        sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
         auth = Firebase.auth
 
         initButton()
