@@ -20,7 +20,7 @@ class YoungsContextFunction {
 
     fun loadAD(context: Context, adBinding : AdView){
 
-        MobileAds.initialize( context, context.getString(R.string.app_ad_id));
+//        MobileAds.initialize( context, context.getString(R.string.app_ad_id));
 
         m_adView = adBinding
         val adRequest = AdRequest.Builder().build()

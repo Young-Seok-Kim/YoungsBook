@@ -39,7 +39,8 @@ class SplashActivity : Activity(){
     {
         val jsonObject : JsonObject = JsonObject()
         jsonObject.addProperty("clientAppVersion", BuildConfig.VERSION_CODE.toString())
-        youngsProgress.notTouchable(window)
+        youngsProgress.startProgress(null,window)
+//        youngsProgress.notTouchable(window)
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("versionCheck.do",
                 jsonObject,
@@ -72,8 +73,7 @@ class SplashActivity : Activity(){
                         startActivity(intent)
                         finish()
                     }
-
-                    youngsProgress.touchable(window)
+                    youngsProgress.endProgressBar(null,window)
                 }
                 , onFailure = {
                     YoungsFunction.messageBoxOKAction(this@SplashActivity, "네트워크 연결오류!", "인터넷 연결을 확인해주세요.\n인터넷이 연결되어있다면 앱 관리자에게 문의해주세요."
@@ -84,7 +84,7 @@ class SplashActivity : Activity(){
                             finish()
                         }
                     )
-                    youngsProgress.touchable(window)
+                    youngsProgress.endProgressBar(null,window)
                 }
             )
         }

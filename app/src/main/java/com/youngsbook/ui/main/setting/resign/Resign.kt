@@ -52,21 +52,18 @@ class Resign : DialogFragment() {
 
         binding.buttonOK.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
-                youngsProgress.startProgress(binding.progressbar)
-                youngsProgress.notTouchable(window = dialog?.window!!)
+                youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
 
                 if (!(binding.editTextPassword.text.toString() == binding.editTextPasswordCheck.text.toString()) )
                 {
                     Toast.makeText(requireContext(),"비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
-                    youngsProgress.endProgressBar(binding.progressbar)
-                    youngsProgress.touchable(dialog?.window!!)
+                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                     return
                 }
                 else if (binding.editTextPassword.text.toString().isBlank() || binding.editTextPasswordCheck.text.toString().isBlank())
                 {
                     Toast.makeText(requireContext(),"비밀번호를 입력해주세요",Toast.LENGTH_LONG).show()
-                    youngsProgress.endProgressBar(binding.progressbar)
-                    youngsProgress.touchable(dialog?.window!!)
+                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                     return
                 }
 
@@ -87,8 +84,7 @@ class Resign : DialogFragment() {
                             if(deleteCount == 0)
                             {
                                 Toast.makeText(requireContext(),"아이디, 비밀번호가 맞지 않습니다.", Toast.LENGTH_LONG).show()
-                                youngsProgress.endProgressBar(binding.progressbar)
-                                youngsProgress.touchable(dialog?.window!!)
+                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                                 return@connectHTTPS
                             }
 
@@ -97,8 +93,7 @@ class Resign : DialogFragment() {
 
                             Toast.makeText(requireContext(),"그동안 YoungsBook을 이용해주셔서 감사합니다.", Toast.LENGTH_LONG).show()
 
-                            youngsProgress.endProgressBar(binding.progressbar)
-                            youngsProgress.touchable(dialog?.window!!)
+                            youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
 
                             val intent = Intent(requireContext(), LoginActivity::class.java)
                             startActivity(intent)
@@ -106,8 +101,7 @@ class Resign : DialogFragment() {
 
                         }
                         , onFailure = {
-                            youngsProgress.endProgressBar(binding.progressbar)
-                            youngsProgress.touchable(dialog?.window!!)
+                            youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                         }
                     )
 

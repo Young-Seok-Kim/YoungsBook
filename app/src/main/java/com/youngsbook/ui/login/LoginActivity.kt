@@ -169,15 +169,14 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.buttonLogin.setOnClickListener() {
-            youngsProgress.startProgress(this@LoginActivity.binding.progressbar)
-            youngsProgress.notTouchable(window)
+            youngsProgress.startProgress(this@LoginActivity.binding.progressbar,window)
+//            youngsProgress.notTouchable(window)
 
 
             if(binding.userid.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
             {
                 Toast.makeText(applicationContext,"아이디 혹은 비밀번호를 입력해주시기 바랍니다.",Toast.LENGTH_SHORT).show()
-                youngsProgress.endProgressBar(binding.progressbar)
-                youngsProgress.touchable(window)
+                youngsProgress.endProgressBar(binding.progressbar,window)
                 return@setOnClickListener
             }
 
@@ -199,8 +198,7 @@ class LoginActivity : AppCompatActivity() {
                             if(jsonArray.get(0).toString().isBlank())
                             {
                                 Toast.makeText(applicationContext,"아이디, 비밀번호가 맞지 않거나\n아이디가 존재하지않습니다..",Toast.LENGTH_LONG).show()
-                                youngsProgress.endProgressBar(binding.progressbar)
-                                youngsProgress.touchable(window)
+                                youngsProgress.endProgressBar(binding.progressbar,window)
                                 return@connectHTTPS
                             }
 
@@ -240,15 +238,10 @@ class LoginActivity : AppCompatActivity() {
                             loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
 
                             openMainActivity()
-
-
-                            youngsProgress.endProgressBar(binding.progressbar)
-                            youngsProgress.touchable(window)
-
+                            youngsProgress.endProgressBar(binding.progressbar,window)
                         }
                     , onFailure = {
-                            youngsProgress.endProgressBar(binding.progressbar)
-                            youngsProgress.touchable(window)
+                            youngsProgress.endProgressBar(binding.progressbar,window)
                         }
                     )
 
@@ -259,8 +252,8 @@ class LoginActivity : AppCompatActivity() {
             else
             {
                 Toast.makeText(applicationContext, "아이디, 비밀번호를 규칙에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show()
-                youngsProgress.endProgressBar(binding.progressbar)
-                youngsProgress.touchable(window)
+                youngsProgress.endProgressBar(binding.progressbar,window)
+//                youngsProgress.touchable(window)
                 return@setOnClickListener
             }
         }

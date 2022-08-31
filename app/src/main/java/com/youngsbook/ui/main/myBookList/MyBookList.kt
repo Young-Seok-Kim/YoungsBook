@@ -1,13 +1,11 @@
 package com.youngsbook.ui.main.myBookList
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +15,6 @@ import com.google.gson.JsonObject
 import com.youngsbook.R
 import com.youngsbook.common.Define
 import com.youngsbook.common.RecyclerViewAdapter
-import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
@@ -74,8 +71,7 @@ class MyBookList : Fragment() {
                     OKAction = {
                         val jsonObject : JsonObject = JsonObject()
                         jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-                        youngsProgress.startProgress(binding.progressbar)
-                        youngsProgress.notTouchable(activity?.window!! )
+                        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
                         CoroutineScope(Dispatchers.Main).launch {
                             NetworkConnect.connectHTTPS("DeleteBookReview.do",
                                 jsonObject,
@@ -84,8 +80,7 @@ class MyBookList : Fragment() {
                                     updateList()
                                 }
                                 , onFailure = {
-                                    youngsProgress.endProgressBar(binding.progressbar)
-                                    youngsProgress.touchable(activity?.window!!)
+                                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
                                 }
                             )
 
@@ -177,8 +172,7 @@ class MyBookList : Fragment() {
         val jsonObject : JsonObject = JsonObject()
 //        jsonObject.addProperty("ID", Define.NOW_LOGIN_USER_ID)
         jsonObject.addProperty("CODE", Define.NOW_LOGIN_USER_CODE)
-        youngsProgress.startProgress(binding.progressbar)
-        youngsProgress.notTouchable(activity?.window!!)
+        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",
                 jsonObject,
@@ -199,12 +193,10 @@ class MyBookList : Fragment() {
                     }
                     binding.title.text = "현재 책을 ${MyBookListAdapter.instance.itemCount}권 읽었어요"
 
-                    youngsProgress.endProgressBar(binding.progressbar)
-                    youngsProgress.touchable(activity?.window!!)
+                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
                 }
                 , onFailure = {
-                    youngsProgress.endProgressBar(binding.progressbar)
-                    youngsProgress.touchable(activity?.window!!)
+                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
                 }
             )
         }

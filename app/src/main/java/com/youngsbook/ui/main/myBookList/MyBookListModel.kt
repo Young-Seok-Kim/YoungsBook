@@ -10,6 +10,6 @@ data class MyBookListModel(
     val BOOK_NAME : String,
     val READER_ID : String,
     val REVIEW : String,
-    val GOAL_READ_DATE : String,
+    val GOAL_READ_DATE : String?,
     val READ_COMPLETE : String
 )

@@ -162,8 +162,8 @@ class SignUp : DialogFragment() {
         }
         jsonObject.addProperty("SIGNUP_DATE", YoungsFunction.getNowDate())
 
-        youngsProgress.startProgress(binding.progressbar)
-        youngsProgress.notTouchable(window = dialog?.window!!)
+        youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+//        youngsProgress.notTouchable(window = dialog?.window!!)
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SignUp.do",
                 jsonObject,
@@ -187,11 +187,9 @@ class SignUp : DialogFragment() {
                         this@SignUp.dismiss()
                     }
 
-                    youngsProgress.endProgressBar(binding.progressbar)
-                    youngsProgress.touchable(dialog?.window!!)
+                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                 }, onFailure = {
-                    youngsProgress.endProgressBar(binding.progressbar)
-                    youngsProgress.touchable(dialog?.window!!)
+                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                 }
             )
         }

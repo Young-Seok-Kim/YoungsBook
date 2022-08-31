@@ -157,8 +157,7 @@ class WriteBookReview : DialogFragment() {
                         sharedPrefer.getString(SharedPreference.SAVE_LOGIN_NAME, " ")
                     )
                     
-                    youngsProgress.startProgress(binding.progressbar)
-                    youngsProgress.notTouchable(dialog?.window!!)
+                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
 
                     CoroutineScope(Dispatchers.Default).launch {
                         NetworkConnect.connectHTTPS("InsertBookReview.do",
@@ -171,15 +170,13 @@ class WriteBookReview : DialogFragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                youngsProgress.endProgressBar(binding.progressbar)
-                                youngsProgress.touchable(dialog?.window!!)
+                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
 
                                 dismiss()
                             }
                             , onFailure = {
-                                youngsProgress.endProgressBar(binding.progressbar)
-                                youngsProgress.touchable(dialog?.window!!)
-                            }
+                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                          }
                         )
 
                     }
@@ -196,8 +193,7 @@ class WriteBookReview : DialogFragment() {
 
                     
                     jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem!!.REVIEW_NO)
-                    youngsProgress.startProgress(binding.progressbar)
-                    youngsProgress.notTouchable(dialog?.window!!)
+                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
 
                     CoroutineScope(Dispatchers.Default).launch {
                         NetworkConnect.connectHTTPS("UpdateBookReview.do",
@@ -211,13 +207,10 @@ class WriteBookReview : DialogFragment() {
                                 ).show()
                                 this@WriteBookReview.dismiss()
 
-                                youngsProgress.endProgressBar(binding.progressbar)
-                                youngsProgress.touchable(dialog?.window!!)
-
+                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                             }
                             , onFailure = {
-                                youngsProgress.endProgressBar(binding.progressbar)
-                                youngsProgress.touchable(dialog?.window!!)
+                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                             }
                         )
                     }
@@ -229,8 +222,7 @@ class WriteBookReview : DialogFragment() {
         {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-            youngsProgress.startProgress(binding.progressbar)
-            youngsProgress.notTouchable(dialog?.window!!)
+            youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",
                     jsonObject,
@@ -242,14 +234,12 @@ class WriteBookReview : DialogFragment() {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        youngsProgress.endProgressBar(binding.progressbar)
-                        youngsProgress.touchable(dialog?.window!!)
+                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
 
                         this@WriteBookReview.dismiss()
                     }
                 , onFailure = {
-                        youngsProgress.endProgressBar(binding.progressbar)
-                        youngsProgress.touchable(dialog?.window!!)
+                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                     }
                 )
             }
