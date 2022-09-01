@@ -1,13 +1,11 @@
 package com.youngsbook.ui.signUp
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -17,10 +15,9 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.JsonObject
-import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
-import com.youngsbook.common.network.NetworkProgress
+import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.databinding.FindUserInformationBinding
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +32,7 @@ class FindUserInformation : DialogFragment() {
 
     lateinit var binding: FindUserInformationBinding
 
-    val youngsProgress = NetworkProgress()
+    val youngsProgressDialog = NetworkProgressDialog
 
     private var auth : FirebaseAuth = Firebase.auth // 전화번호 인증을 위한 변수
     var verificationId = "" // 인증번호 저장을 위한 변수
@@ -117,8 +114,8 @@ class FindUserInformation : DialogFragment() {
                     return
                 }
 
-                youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
-
+//                youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+                youngsProgressDialog.start(requireContext())
                 if(binding.radiobuttonFindID.isChecked){ // 아이디 찾기
                     val jsonToServer : JsonObject = JsonObject()
                     jsonToServer.addProperty("PHONE_NUMBER", this@FindUserInformation.binding.editTextPhoneNumber.text.toString())
@@ -133,18 +130,20 @@ class FindUserInformation : DialogFragment() {
                                 val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
                                 if (jsonArray.get(0).toString().isBlank()) {
                                     Toast.makeText(requireContext(),"해당정보로 가입된 회원이 없습니다.",Toast.LENGTH_LONG).show()
-                                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                    youngsProgressDialog.end()
                                     return@connectHTTPS
                                 }
 
 
                                 YoungsFunction.messageBoxOK(requireContext(),"정보","회원님의 아이디는 ${jsonArray.getJSONObject(0).get("ID")}입니다.")
 
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
-
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                             }
                             , onFailure = {
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                             }
                         )
 
@@ -154,14 +153,16 @@ class FindUserInformation : DialogFragment() {
 
                     if(binding.editTextPasswordCheck.text.length < 6){
                         YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호는 6자리 이상 입력해주세요" )
-                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                        youngsProgressDialog.end()
                         return
                     }
 
                     if((binding.editTextPasswordCheck.text.toString() != binding.editTextPassword.text.toString()) == true)
                     {
                         YoungsFunction.messageBoxOK(requireContext(), "오류!", "비밀번호와 비밀번호 확인이 같지않습니다." )
-                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                        youngsProgressDialog.end()
                         return
                     }
 
@@ -185,13 +186,15 @@ class FindUserInformation : DialogFragment() {
                                 else{
                                     Toast.makeText(context,"비밀번호가 재설정 되었습니다.", Toast.LENGTH_LONG).show()
                                 }
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                                 dismiss()
 
                             }
                             , onFailure = {
                                 binding.linearLayoutResetPassword.visibility = View.VISIBLE
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                             }
                         )
 

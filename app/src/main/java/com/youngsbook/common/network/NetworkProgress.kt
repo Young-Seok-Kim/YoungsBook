@@ -7,7 +7,7 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import androidx.fragment.app.DialogFragment
 
-class NetworkProgress{
+class NetworkProgress{ // XML에 progressbar를 생성했을때 사용하는 함수, 액티비티간 전환하면서 Progressbar를 사용하는 클래스
     fun startProgress(bindingProgressBar: ProgressBar?, window : Window)
     {
         bindingProgressBar?.visibility = View.VISIBLE

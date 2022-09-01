@@ -17,7 +17,7 @@ import com.youngsbook.common.Define
 import com.youngsbook.common.RecyclerViewAdapter
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
-import com.youngsbook.common.network.NetworkProgress
+import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.databinding.MyBookListBinding
 import com.youngsbook.ui.bookreview.WriteBookReview
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +29,7 @@ import org.json.JSONArray
 class MyBookList : Fragment() {
 
     lateinit var binding: MyBookListBinding
-    val youngsProgress = NetworkProgress()
+    val youngsProgressDialog = NetworkProgressDialog
 
     var pastVisiblesItems: Int = 0
     var visibleItemCount: Int = 0
@@ -71,7 +71,8 @@ class MyBookList : Fragment() {
                     OKAction = {
                         val jsonObject : JsonObject = JsonObject()
                         jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-                        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
+//                        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
+                        youngsProgressDialog.start(requireContext())
                         CoroutineScope(Dispatchers.Main).launch {
                             NetworkConnect.connectHTTPS("DeleteBookReview.do",
                                 jsonObject,
@@ -80,7 +81,8 @@ class MyBookList : Fragment() {
                                     updateList()
                                 }
                                 , onFailure = {
-                                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
+//                                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
+                                    youngsProgressDialog.end()
                                 }
                             )
 
@@ -172,7 +174,8 @@ class MyBookList : Fragment() {
         val jsonObject : JsonObject = JsonObject()
 //        jsonObject.addProperty("ID", Define.NOW_LOGIN_USER_ID)
         jsonObject.addProperty("CODE", Define.NOW_LOGIN_USER_CODE)
-        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
+//        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
+        NetworkProgressDialog.start(requireContext())
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",
                 jsonObject,
@@ -193,10 +196,12 @@ class MyBookList : Fragment() {
                     }
                     binding.title.text = "현재 책을 ${MyBookListAdapter.instance.itemCount}권 읽었어요"
 
-                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
+//                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
+                    NetworkProgressDialog.end()
                 }
                 , onFailure = {
-                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
+//                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
+                    NetworkProgressDialog.end()
                 }
             )
         }

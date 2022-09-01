@@ -5,6 +5,7 @@
 
     <dimen name="image_button_width">40dp</dimen>
     <dimen name="image_button_height">40dp</dimen>
+    <dimen name="setting_menu_margin_top">10dp</dimen>
 
 
 </resources>

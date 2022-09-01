@@ -10,10 +10,9 @@ import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.youngsbook.R
 import com.youngsbook.common.Define
-import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
-import com.youngsbook.common.network.NetworkProgress
+import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.databinding.ResignBinding
 import com.youngsbook.ui.login.LoginActivity
@@ -21,12 +20,10 @@ import com.youngsbook.ui.signUp.FindUserInformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 
 class Resign : DialogFragment() {
     lateinit var binding: ResignBinding
-    val youngsProgress = NetworkProgress()
+    val youngsProgressDialog = NetworkProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -52,18 +49,20 @@ class Resign : DialogFragment() {
 
         binding.buttonOK.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
-                youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
-
+//                youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+                youngsProgressDialog.start(requireContext())
                 if (!(binding.editTextPassword.text.toString() == binding.editTextPasswordCheck.text.toString()) )
                 {
                     Toast.makeText(requireContext(),"비밀번호가 맞지 않습니다.",Toast.LENGTH_LONG).show()
-                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                    youngsProgressDialog.end()
                     return
                 }
                 else if (binding.editTextPassword.text.toString().isBlank() || binding.editTextPasswordCheck.text.toString().isBlank())
                 {
                     Toast.makeText(requireContext(),"비밀번호를 입력해주세요",Toast.LENGTH_LONG).show()
-                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                    youngsProgressDialog.end()
                     return
                 }
 
@@ -84,7 +83,8 @@ class Resign : DialogFragment() {
                             if(deleteCount == 0)
                             {
                                 Toast.makeText(requireContext(),"아이디, 비밀번호가 맞지 않습니다.", Toast.LENGTH_LONG).show()
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                                 return@connectHTTPS
                             }
 
@@ -93,7 +93,8 @@ class Resign : DialogFragment() {
 
                             Toast.makeText(requireContext(),"그동안 YoungsBook을 이용해주셔서 감사합니다.", Toast.LENGTH_LONG).show()
 
-                            youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                            youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                            youngsProgressDialog.end()
 
                             val intent = Intent(requireContext(), LoginActivity::class.java)
                             startActivity(intent)
@@ -101,7 +102,8 @@ class Resign : DialogFragment() {
 
                         }
                         , onFailure = {
-                            youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                            youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                            youngsProgressDialog.end()
                         }
                     )
 

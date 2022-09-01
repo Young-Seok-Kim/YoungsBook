@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.buttonLogin.setOnClickListener() {
             youngsProgress.startProgress(this@LoginActivity.binding.progressbar,window)
-//            youngsProgress.notTouchable(window)
+//            youngsProgress.start(applicationContext)
 
 
             if(binding.userid.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
@@ -237,8 +237,8 @@ class LoginActivity : AppCompatActivity() {
                             editor.commit()
                             loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
 
-                            openMainActivity()
                             youngsProgress.endProgressBar(binding.progressbar,window)
+                            openMainActivity()
                         }
                     , onFailure = {
                             youngsProgress.endProgressBar(binding.progressbar,window)
@@ -253,7 +253,6 @@ class LoginActivity : AppCompatActivity() {
             {
                 Toast.makeText(applicationContext, "아이디, 비밀번호를 규칙에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show()
                 youngsProgress.endProgressBar(binding.progressbar,window)
-//                youngsProgress.touchable(window)
                 return@setOnClickListener
             }
         }

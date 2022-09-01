@@ -20,7 +20,7 @@ import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsContextFunction
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
-import com.youngsbook.common.network.NetworkProgress
+import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.common.scan.ScanBookActivity
 import com.youngsbook.common.scan.ScanBookModel
 import com.youngsbook.databinding.WriteBookReviewBinding
@@ -34,7 +34,7 @@ import org.json.JSONObject
 class WriteBookReview : DialogFragment() {
 
     lateinit var binding: WriteBookReviewBinding
-    val youngsProgress = NetworkProgress()
+    val youngsProgressDialog = NetworkProgressDialog
     private lateinit var sharedPrefer : SharedPreferences
 
     var status : String = "Default"
@@ -157,7 +157,8 @@ class WriteBookReview : DialogFragment() {
                         sharedPrefer.getString(SharedPreference.SAVE_LOGIN_NAME, " ")
                     )
                     
-                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+//                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+                    NetworkProgressDialog.start(requireContext())
 
                     CoroutineScope(Dispatchers.Default).launch {
                         NetworkConnect.connectHTTPS("InsertBookReview.do",
@@ -170,12 +171,13 @@ class WriteBookReview : DialogFragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
-
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                                 dismiss()
                             }
                             , onFailure = {
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                           }
                         )
 
@@ -193,8 +195,8 @@ class WriteBookReview : DialogFragment() {
 
                     
                     jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem!!.REVIEW_NO)
-                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
-
+//                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+                    youngsProgressDialog.start(requireContext())
                     CoroutineScope(Dispatchers.Default).launch {
                         NetworkConnect.connectHTTPS("UpdateBookReview.do",
                             jsonObject,
@@ -207,10 +209,12 @@ class WriteBookReview : DialogFragment() {
                                 ).show()
                                 this@WriteBookReview.dismiss()
 
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                             }
                             , onFailure = {
-                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                                youngsProgressDialog.end()
                             }
                         )
                     }
@@ -222,7 +226,8 @@ class WriteBookReview : DialogFragment() {
         {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-            youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+//            youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+            youngsProgressDialog.start(requireContext())
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",
                     jsonObject,
@@ -234,12 +239,13 @@ class WriteBookReview : DialogFragment() {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
-
+//                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                        youngsProgressDialog.end()
                         this@WriteBookReview.dismiss()
                     }
                 , onFailure = {
-                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                    youngsProgressDialog.end()
                     }
                 )
             }

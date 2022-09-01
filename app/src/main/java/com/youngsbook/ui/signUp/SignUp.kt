@@ -18,6 +18,7 @@ import com.google.gson.JsonObject
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgress
+import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.databinding.SignUpBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ class SignUp : DialogFragment() {
 
     lateinit var binding: SignUpBinding
 
-    val youngsProgress = NetworkProgress()
+    val youngsProgress = NetworkProgressDialog
 
     private var auth : FirebaseAuth = Firebase.auth // 전화번호 인증을 위한 변수
     var verificationId = "" // 인증번호 저장을 위한 변수
@@ -162,8 +163,9 @@ class SignUp : DialogFragment() {
         }
         jsonObject.addProperty("SIGNUP_DATE", YoungsFunction.getNowDate())
 
-        youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
-//        youngsProgress.notTouchable(window = dialog?.window!!)
+//        youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
+        youngsProgress.start(requireContext())
+
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SignUp.do",
                 jsonObject,
@@ -187,9 +189,11 @@ class SignUp : DialogFragment() {
                         this@SignUp.dismiss()
                     }
 
-                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                    youngsProgress.end()
                 }, onFailure = {
-                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+//                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
+                    youngsProgress.end()
                 }
             )
         }
