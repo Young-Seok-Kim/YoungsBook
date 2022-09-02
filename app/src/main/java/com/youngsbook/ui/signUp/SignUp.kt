@@ -163,7 +163,6 @@ class SignUp : DialogFragment() {
         }
         jsonObject.addProperty("SIGNUP_DATE", YoungsFunction.getNowDate())
 
-//        youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
         youngsProgress.start(requireContext())
 
         CoroutineScope(Dispatchers.Default).launch {
@@ -189,10 +188,8 @@ class SignUp : DialogFragment() {
                         this@SignUp.dismiss()
                     }
 
-//                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                     youngsProgress.end()
                 }, onFailure = {
-//                    youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                     youngsProgress.end()
                 }
             )
@@ -225,7 +222,7 @@ class SignUp : DialogFragment() {
                             requireContext(), "계정 생성 완료.",
                             Toast.LENGTH_SHORT
                         ).show()
-        //                        finish() // 가입창 종료
+//                                finish() // 가입창 종료
                     } else {
                         Toast.makeText(
                             requireContext(), "계정 생성 실패",

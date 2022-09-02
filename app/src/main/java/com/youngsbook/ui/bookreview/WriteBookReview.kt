@@ -37,7 +37,7 @@ class WriteBookReview : DialogFragment() {
     val youngsProgressDialog = NetworkProgressDialog
     private lateinit var sharedPrefer : SharedPreferences
 
-    var status : String = "Default"
+//    var status : String = "Default"
     private var scanBook : JSONObject? = null
     private var scanBookModel : ScanBookModel? = null
     val test = ActivityResultContracts.StartActivityForResult()
@@ -105,11 +105,11 @@ class WriteBookReview : DialogFragment() {
         if(MyBookListAdapter.instance.currentItem?.READ_COMPLETE == "1")
             binding.checkboxReadComplete.isChecked = true
 
-        if (status == Define.STATUS_INSERT)
+        if (arguments?.getString("status") == Define.STATUS_INSERT)
         {
             binding.buttonDelete.visibility = View.GONE
         }
-        else if (status == Define.STATUS_UPDATE)
+        else if (arguments?.getString("status") == Define.STATUS_UPDATE)
         {
             binding.editTextBookName.setText(MyBookListAdapter.instance.currentItem?.BOOK_NAME)
             binding.editTextBookName.isEnabled = false
@@ -138,7 +138,7 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("read_complete", binding.checkboxReadComplete.isChecked)
                 jsonObject.addProperty("reader_code", Define.NOW_LOGIN_USER_CODE)
 
-                if (status == Define.STATUS_INSERT) {
+                if (arguments?.getString("status") == Define.STATUS_INSERT) {
 
                     if (binding.editTextBookName.text.isNullOrBlank()) {
                         Toast.makeText(context, "책 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
@@ -157,7 +157,6 @@ class WriteBookReview : DialogFragment() {
                         sharedPrefer.getString(SharedPreference.SAVE_LOGIN_NAME, " ")
                     )
                     
-//                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
                     NetworkProgressDialog.start(requireContext())
 
                     CoroutineScope(Dispatchers.Default).launch {
@@ -171,12 +170,10 @@ class WriteBookReview : DialogFragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                                 youngsProgressDialog.end()
                                 dismiss()
                             }
                             , onFailure = {
-//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                                 youngsProgressDialog.end()
                           }
                         )
@@ -184,7 +181,7 @@ class WriteBookReview : DialogFragment() {
                     }
 
                 }
-                else if (status == Define.STATUS_UPDATE)
+                else if (arguments?.getString("status") == Define.STATUS_UPDATE)
                 {
                     if (binding.editTextBookName.text.isNullOrBlank()) {
                         Toast.makeText(context, "책 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
@@ -195,7 +192,6 @@ class WriteBookReview : DialogFragment() {
 
                     
                     jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem!!.REVIEW_NO)
-//                    youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
                     youngsProgressDialog.start(requireContext())
                     CoroutineScope(Dispatchers.Default).launch {
                         NetworkConnect.connectHTTPS("UpdateBookReview.do",
@@ -209,11 +205,9 @@ class WriteBookReview : DialogFragment() {
                                 ).show()
                                 this@WriteBookReview.dismiss()
 
-//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                                 youngsProgressDialog.end()
                             }
                             , onFailure = {
-//                                youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                                 youngsProgressDialog.end()
                             }
                         )
@@ -226,7 +220,6 @@ class WriteBookReview : DialogFragment() {
         {
             val jsonObject : JsonObject = JsonObject()
             jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-//            youngsProgress.startProgress(binding.progressbar,dialog?.window!!)
             youngsProgressDialog.start(requireContext())
             CoroutineScope(Dispatchers.Default).launch {
                 NetworkConnect.connectHTTPS("DeleteBookReview.do",
@@ -239,12 +232,10 @@ class WriteBookReview : DialogFragment() {
                             Toast.LENGTH_SHORT
                         ).show()
 
-//                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                         youngsProgressDialog.end()
                         this@WriteBookReview.dismiss()
                     }
                 , onFailure = {
-//                        youngsProgress.endProgressBar(binding.progressbar,dialog?.window!!)
                     youngsProgressDialog.end()
                     }
                 )

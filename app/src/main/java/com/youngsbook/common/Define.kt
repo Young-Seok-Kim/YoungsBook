@@ -15,8 +15,8 @@ object Define {
     val NAVER_CLIENT_ID : String = "iUyBdHAwybdSHw37QhVo"
     val NAVER_CLIENT_SECRETE : String = "jtbUv8SooO"
 
-    val STATUS_INSERT : String = "I"
-    val STATUS_UPDATE : String = "U"
+    const val STATUS_INSERT : String = "I"
+    const val STATUS_UPDATE : String = "U"
 
     var NOW_LOGIN_USER_ID : String = ""
     var NOW_LOGIN_USER_CODE : Int = 0

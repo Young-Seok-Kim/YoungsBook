@@ -24,7 +24,7 @@ class SplashActivity : Activity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(true) // 업데이트를 반드시 해야한다면 해당값을 true로 변경
+        if(false) // 업데이트를 반드시 해야한다면 해당값을 true로 변경
             versionCheck()
         else {
             val intent = Intent(this@SplashActivity, LoginActivity::class.java)

@@ -39,8 +39,10 @@ class MainActivity : AppCompatActivity() {
                     YoungsFunction.messageBoxOK(context = this@MainActivity, "정보","해당 서비스는 준비중입니다.")
                 }
                 R.id.setting->{
-                    supportFragmentManager.beginTransaction()
-                        .replace(binding.frameLayoutActivityMain.id, Setting()).commit()
+                    Setting().let {
+                        supportFragmentManager.beginTransaction()
+                            .replace(binding.frameLayoutActivityMain.id, it).commit()
+                    }
                 }
                 else -> {
                     supportFragmentManager.beginTransaction()

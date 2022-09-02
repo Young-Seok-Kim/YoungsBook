@@ -28,7 +28,7 @@ import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.common.network.SelfSigningHelper
 import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.ui.main.MainActivity
-import com.youngsbook.ui.signUp.FindUserInformation
+import com.youngsbook.ui.findUserInformation.FindUserInformation
 import com.youngsbook.ui.signUp.SignUp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater,null,false)
-//        EqMstrDtlBinding.inflate(inflater, container, false)
 
         setContentView(binding.root)
         binding.appVersion.text = "Version : ${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})${if(BuildConfig.DEBUG) ", Debug" else ""}"
@@ -170,8 +169,6 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.buttonLogin.setOnClickListener() {
             youngsProgress.startProgress(this@LoginActivity.binding.progressbar,window)
-//            youngsProgress.start(applicationContext)
-
 
             if(binding.userid.text.isNullOrBlank() || binding.password.text.isNullOrBlank())
             {

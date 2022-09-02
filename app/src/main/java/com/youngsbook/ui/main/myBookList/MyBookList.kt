@@ -1,5 +1,6 @@
 package com.youngsbook.ui.main.myBookList
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -35,7 +36,6 @@ class MyBookList : Fragment() {
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +46,6 @@ class MyBookList : Fragment() {
         updateList()
         initFAB()
         initListener()
-
     }
 
 
@@ -71,7 +70,6 @@ class MyBookList : Fragment() {
                     OKAction = {
                         val jsonObject : JsonObject = JsonObject()
                         jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-//                        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
                         youngsProgressDialog.start(requireContext())
                         CoroutineScope(Dispatchers.Main).launch {
                             NetworkConnect.connectHTTPS("DeleteBookReview.do",
@@ -81,7 +79,6 @@ class MyBookList : Fragment() {
                                     updateList()
                                 }
                                 , onFailure = {
-//                                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
                                     youngsProgressDialog.end()
                                 }
                             )
@@ -104,7 +101,11 @@ class MyBookList : Fragment() {
 
             override fun onSingleTap(position: Int) {
                 WriteBookReview().let {
-                    it.status = Define.STATUS_UPDATE
+                    val bundle = Bundle()
+                    bundle.putString("status", Define.STATUS_UPDATE)
+                    it.arguments = bundle
+
+//                    it.status =
                     it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                     it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
                     it.showNow(childFragmentManager,"")
@@ -154,9 +155,10 @@ class MyBookList : Fragment() {
     {
         binding.FAB.setOnClickListener()
         {
-//            childFragmentManager.executePendingTransactions()
             WriteBookReview().let {
-                it.status = Define.STATUS_INSERT
+                val bundle = Bundle()
+                bundle.putString("status", Define.STATUS_INSERT)
+                it.arguments = bundle
                 it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                 it.showNow(childFragmentManager,"")
                 it.dialog?.window?.setWindowAnimations(android.R.style.Animation_Dialog)
@@ -172,9 +174,7 @@ class MyBookList : Fragment() {
     private fun updateList() {
 
         val jsonObject : JsonObject = JsonObject()
-//        jsonObject.addProperty("ID", Define.NOW_LOGIN_USER_ID)
         jsonObject.addProperty("CODE", Define.NOW_LOGIN_USER_CODE)
-//        youngsProgress.startProgress(binding.progressbar,activity?.window!!)
         NetworkProgressDialog.start(requireContext())
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",
@@ -196,11 +196,9 @@ class MyBookList : Fragment() {
                     }
                     binding.title.text = "현재 책을 ${MyBookListAdapter.instance.itemCount}권 읽었어요"
 
-//                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
                     NetworkProgressDialog.end()
                 }
                 , onFailure = {
-//                    youngsProgress.endProgressBar(binding.progressbar,activity?.window!!)
                     NetworkProgressDialog.end()
                 }
             )

@@ -2,12 +2,14 @@ package com.youngsbook.ui.main.setting
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.youngsbook.R
+import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.SettingMenuBinding
 import com.youngsbook.ui.login.LoginActivity
 import com.youngsbook.ui.main.setting.resign.Resign
@@ -21,6 +23,8 @@ class Setting : Fragment() {
         super.onCreate(savedInstanceState)
 
         binding = SettingMenuBinding.inflate(layoutInflater)
+        Log.d("번들",arguments.toString())
+        Log.d("번들",arguments?.getString("key").toString())
         initLinearLayoutTapEvent()
     }
 
@@ -37,9 +41,15 @@ class Setting : Fragment() {
 
         binding.linearLayoutLogout.setOnClickListener(object :View.OnClickListener{
             override fun onClick(p0: View?) {
-                val intent = Intent(context, LoginActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
+                YoungsFunction.messageBoxOKCancelAction(requireContext(),"주의!","정말 로그아웃 하시겠습니까?",
+                OKAction = {
+                    val intent = Intent(context, LoginActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                },
+                cancelAction = {
+
+                })
             }
         })
 

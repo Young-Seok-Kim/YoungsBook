@@ -3,10 +3,7 @@ package com.youngsbook.common.network
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
-import android.view.Gravity
-import android.view.KeyEvent
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 
@@ -16,14 +13,15 @@ object NetworkProgressDialog { // XML에 progressbar를 사용하지 않았을�
 
     fun start(contextParam: Context) {
         val context = contextParam
-//        if (context == null) context = Emaintec.activity!!
-        val unit = if (dialog == null || dialog!!.context !== context) {
+//        if (context == null) context = Emaintec.activity?
+        val unit = if (dialog == null || dialog?.context !== context) {
             dialog?.dismiss()
             dialog = null
 
             val linearLayout = LinearLayout(context)
             linearLayout.gravity = Gravity.CENTER
             linearLayout.setBackgroundColor(Color.TRANSPARENT)
+
 
             val progressBar = ProgressBar(context)
 //            progressBar.indeterminateDrawable.setColorFilter(
@@ -41,21 +39,24 @@ object NetworkProgressDialog { // XML에 progressbar를 사용하지 않았을�
             )
 
             dialog = Dialog(context)
-            dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            if (dialog!!.window != null) {
-                dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            if (dialog?.window != null) {
+                dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
             }
-            dialog!!.setContentView(
+            dialog?.setContentView(
                 linearLayout,
                 ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
             )
-            dialog!!.setCancelable(false)
-            dialog!!.setOnKeyListener { dialog, keyCode, event -> keyCode == KeyEvent.KEYCODE_SEARCH && event.repeatCount == 0 }
+            dialog?.setCancelable(false)
+            dialog?.setOnKeyListener { dialog, keyCode, event -> keyCode == KeyEvent.KEYCODE_SEARCH && event.repeatCount == 0 }
+
+            dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // Dialog 뒷 배경 검정색으로 나오지않게하기
+
             dialog?.show()
-        } else if (!(dialog?.isShowing?: false)) {
+        } else if (dialog?.isShowing == false) {
             dialog?.show()
         }
         else
@@ -63,8 +64,8 @@ object NetworkProgressDialog { // XML에 progressbar를 사용하지 않았을�
     }
 
     fun end() {
-        if (dialog != null && dialog!!.isShowing) {
-            dialog!!.dismiss()
+        if (dialog != null && dialog?.isShowing == true) {
+            dialog?.dismiss()
             dialog = null
         }
     }
