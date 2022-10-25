@@ -25,3 +25,6 @@ Firebase를 이용해 이용자들에게 푸시알림을 보낼수있습니다.
 로그인후 메인화면 우측 하단의 (+) 버튼을 눌러서 자신이 읽었던 책을 추가할수있습니다.
 
 바코드를 스캔하면 네이버 API를 이용해 도서의 정보를 자동으로 입력할수있습니다.
+
+
+페이지별 설명 : https://youngsblog.tistory.com/entry/%ED%8F%AC%ED%8A%B8%ED%8F%B4%EB%A6%AC%EC%98%A4-Android-%EB%8F%85%EC%84%9C-%EA%B4%80%EB%A6%AC%EC%95%B1?category=1005017
