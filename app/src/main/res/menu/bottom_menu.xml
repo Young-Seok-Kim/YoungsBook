@@ -9,12 +9,12 @@
             android:title="나의 책"
             app:showAsAction="always" />
 
-        <item
+        <!--<item
             android:id="@+id/goal"
             android:enabled="true"
             android:icon="@drawable/ic_goal"
             android:title="목표"
-            app:showAsAction="always" />
+            app:showAsAction="always" />-->
 
         <item
             android:id="@+id/setting"

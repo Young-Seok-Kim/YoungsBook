@@ -57,9 +57,8 @@ class MyBookList : Fragment() {
     {
         val recyclerView = binding.listview
 
-        val mLayoutManager: LinearLayoutManager
-        mLayoutManager = LinearLayoutManager(context)
-        recyclerView.setLayoutManager(mLayoutManager)
+        val mLayoutManager: LinearLayoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = mLayoutManager
 
         MyBookListAdapter.instance.setOnItemTapListener(object : RecyclerViewAdapter.OnItemTapListener{
             override fun onDoubleTap(position: Int) {

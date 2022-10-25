@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
+import com.kakao.sdk.common.KakaoSdk
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Define
@@ -35,9 +36,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
+import com.kakao.sdk.user.model.User
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
@@ -46,13 +51,16 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editor : SharedPreferences.Editor
     val youngsProgress = NetworkProgress()
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater,null,false)
 
         setContentView(binding.root)
+
+        KakaoSdk.init(this, "418199908136a18cc519fe9dfbc48335")
+//        kakaoLogin()
+
+
         binding.appVersion.text = "Version : ${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})${if(BuildConfig.DEBUG) ", Debug" else ""}"
 
         sharedPreferences = getSharedPreferences("login_Info", MODE_PRIVATE)
@@ -121,17 +129,20 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+
     override fun onStart() {
         super.onStart()
 
-        if(BuildConfig.DEBUG) {
-            binding.buttonTest.visibility = View.VISIBLE
-        }
-        else
+//        if(BuildConfig.DEBUG) {
+//            binding.buttonTest.visibility = View.VISIBLE
+//            binding.buttonKakaoLogin.visibility = View.VISIBLE
+//        }
+//        else
+//        {
             binding.buttonTest.visibility = View.GONE
-
+            binding.buttonKakaoLogin.visibility = View.GONE
+//        }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -139,13 +150,6 @@ class LoginActivity : AppCompatActivity() {
         initButton()
         YoungsContextFunction().loadAD(this,binding.adBanner)
     }
-
-
-    private fun openPlayStore(){
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.youngsbook"))
-        startActivity(intent)
-    }
-
 
     private fun initButton() {
 
@@ -258,6 +262,11 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+        binding.buttonKakaoLogin.setOnClickListener()
+        {
+            kakaoLogin()
+        }
+
     }
 
 
@@ -286,9 +295,14 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
+    private fun kakaoLogin() {
+        KakaoLogin.instance.listener = this
+        KakaoLogin.instance.login(this)
+    }
+    override fun onKakaoLoginResult(user: User?) {
+        Toast.makeText(this, "$user 로그인성공",Toast.LENGTH_SHORT).show()
+    }
 }
-
-
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.

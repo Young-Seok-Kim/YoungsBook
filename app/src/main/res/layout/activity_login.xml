@@ -92,8 +92,19 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/customlayout_button_sub"
-            android:text="@string/action_sign_up"
-            android:textColor="@color/little_light_black"/>
+            android:textColor="@color/little_light_black"
+            android:text="@string/action_sign_up"/>
+
+        <Button
+            android:id="@+id/button_KakaoLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="16dp"
+            android:text="카카오톡 로그인"
+            android:background="@drawable/customlayout_button_main"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
     <LinearLayout
@@ -129,9 +140,9 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:background="@drawable/customlayout_button_main"
-            android:textColor="@color/white"
             android:gravity="center"
             android:text="테스트"
+            android:textColor="@color/white"
             android:visibility="gone"
             tools:visibility="visible" />
     </RelativeLayout >

@@ -33,11 +33,11 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(binding.frameLayoutActivityMain.id, MyBookList()).commit()
                 }
-                R.id.goal->{
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(binding.frameLayoutActivityMain.id, Goal()).commit()
-                    YoungsFunction.messageBoxOK(context = this@MainActivity, "정보","해당 서비스는 준비중입니다.")
-                }
+//                R.id.goal->{
+////                    supportFragmentManager.beginTransaction()
+////                        .replace(binding.frameLayoutActivityMain.id, Goal()).commit()
+//                    YoungsFunction.messageBoxOK(context = this@MainActivity, "정보","해당 서비스는 준비중입니다.")
+//                }
                 R.id.setting->{
                     Setting().let {
                         supportFragmentManager.beginTransaction()
