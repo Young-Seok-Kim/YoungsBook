@@ -12,9 +12,9 @@ android {
         applicationId "com.youngsbook"
         minSdk 26
         multiDexEnabled true
-        targetSdk 30
-        versionCode 31
-        versionName "1.2.7"
+        targetSdk 31
+        versionCode 32
+        versionName "1.2.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,11 +35,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-//    lintOptions {
-//
-//        abortOnError false
-//
-//    }
     dataBinding{
         enabled = true
     }
@@ -51,9 +46,9 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.google-services'
 
 dependencies {
+//    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+
     implementation 'com.google.code.gson:gson:2.8.9' // gson 사용을 위한 라이브러리
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
-    // 인터넷 연결을 쉽게 하기위한 라이브러리
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

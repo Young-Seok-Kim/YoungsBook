@@ -136,7 +136,7 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
                 jsonObject.addProperty("read_complete", binding.checkboxReadComplete.isChecked)
-                jsonObject.addProperty("reader_code", Define.NOW_LOGIN_USER_CODE)
+//                jsonObject.addProperty("reader_code", Define.NOW_LOGIN_USER_CODE)
 
                 if (arguments?.getString("status") == Define.STATUS_INSERT) {
 
@@ -150,7 +150,14 @@ class WriteBookReview : DialogFragment() {
 
                     jsonObject.addProperty(
                         "reader_id",
-                        sharedPrefer.getString(SharedPreference.SAVE_LOGIN_ID, " ")
+                        if(sharedPrefer.getString(SharedPreference.SAVE_LOGIN_ID, " ").isNullOrBlank())
+                        {
+                            Define.NOW_LOGIN_USER_ID
+                        }
+                        else
+                        {
+                            sharedPrefer.getString(SharedPreference.SAVE_LOGIN_ID, " ")
+                        }
                     )
                     jsonObject.addProperty(
                         "reader_name",
