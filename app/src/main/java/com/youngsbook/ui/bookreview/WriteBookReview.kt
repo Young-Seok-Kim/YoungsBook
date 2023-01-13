@@ -225,28 +225,37 @@ class WriteBookReview : DialogFragment() {
 
         binding.buttonDelete.setOnClickListener()
         {
-            val jsonObject : JsonObject = JsonObject()
-            jsonObject.addProperty("review_no", MyBookListAdapter.instance.currentItem?.REVIEW_NO)
-            youngsProgressDialog.start(requireContext())
-            CoroutineScope(Dispatchers.Default).launch {
-                NetworkConnect.connectHTTPS("DeleteBookReview.do",
-                    jsonObject,
-                    requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
-                    , onSuccess = { ->
-                        Toast.makeText(
-                            context,
-                            "${binding.editTextBookName.text}를 삭제했습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            YoungsFunction.messageBoxOKCancelAction(requireContext(),"경고","${MyBookListAdapter.instance.currentItem?.BOOK_NAME}의 리뷰를 삭제하시겠습니까?"
+            , OKAction = {
+                    val jsonObject: JsonObject = JsonObject()
+                    jsonObject.addProperty(
+                        "review_no",
+                        MyBookListAdapter.instance.currentItem?.REVIEW_NO
+                    )
+                    youngsProgressDialog.start(requireContext())
+                    CoroutineScope(Dispatchers.Default).launch {
+                        NetworkConnect.connectHTTPS("DeleteBookReview.do",
+                            jsonObject,
+                            requireContext()// 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                            , onSuccess = { ->
+                                Toast.makeText(
+                                    context,
+                                    "${binding.editTextBookName.text}를 삭제했습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
-                        youngsProgressDialog.end()
-                        this@WriteBookReview.dismiss()
+                                youngsProgressDialog.end()
+                                this@WriteBookReview.dismiss()
+                            }, onFailure = {
+                                youngsProgressDialog.end()
+                            }
+                        )
                     }
-                , onFailure = {
-                    youngsProgressDialog.end()
-                    }
-                )
-            }
+
+            },cancelAction = {
+
+                })
+
         }
 
         binding.buttonScanBarCode.setOnClickListener(View.OnClickListener {

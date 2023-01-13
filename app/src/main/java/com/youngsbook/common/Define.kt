@@ -19,5 +19,6 @@ object Define {
     const val STATUS_UPDATE : String = "U"
 
     var NOW_LOGIN_USER_ID : String = ""
-    var NOW_LOGIN_USER_CODE : Int = 0
+
+    var whenLogin : Boolean = true
 }

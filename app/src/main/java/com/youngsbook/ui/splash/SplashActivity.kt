@@ -48,7 +48,7 @@ class SplashActivity : Activity(){
 //                        setTheme(R.style.Theme_AppCompat)
                         val messageBox = AlertDialog.Builder(this@SplashActivity)
                         messageBox.setTitle("업데이트 필요")
-                            .setMessage("업데이트를 하지않을경우 사용중 앱이 종료될수도 있습니다.")
+                            .setMessage("업데이트를 하지않을경우 사용중 앱이 종료되거나, 일부 기능이 제대로 동작하지 않을수 있습니다.")
                             .setPositiveButton("업데이트") {
                                     _: DialogInterface, _: Int ->
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.youngsbook"))

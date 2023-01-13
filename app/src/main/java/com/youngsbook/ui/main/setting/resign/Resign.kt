@@ -66,7 +66,7 @@ class Resign : DialogFragment() {
                 val enterLogin : JsonObject = JsonObject()
                 enterLogin.addProperty("ID", this@Resign.binding.textViewIDValue.text.toString().replace(" ",""))
                 enterLogin.addProperty("PASSWORD", this@Resign.binding.editTextPassword.text.toString().replace(" ",""))
-                enterLogin.addProperty("RESIGN_USER_CODE", Define.NOW_LOGIN_USER_CODE)
+//                enterLogin.addProperty("RESIGN_USER_CODE", Define.NOW_LOGIN_USER_CODE)
 
                 CoroutineScope(Dispatchers.Default).launch {
                     SelfSigningHelper(context = requireContext())
@@ -85,7 +85,6 @@ class Resign : DialogFragment() {
                             }
 
                             Define.NOW_LOGIN_USER_ID = ""
-                            Define.NOW_LOGIN_USER_CODE = 0
 
                             Toast.makeText(requireContext(),"그동안 YoungsBook을 이용해주셔서 감사합니다.", Toast.LENGTH_LONG).show()
 

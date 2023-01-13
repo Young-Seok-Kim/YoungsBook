@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.youngsbook.R
+import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.SettingMenuBinding
 import com.youngsbook.ui.login.LoginActivity
@@ -44,6 +45,7 @@ class Setting : Fragment() {
                 YoungsFunction.messageBoxOKCancelAction(requireContext(),"주의!","정말 로그아웃 하시겠습니까?",
                 OKAction = {
                     val intent = Intent(context, LoginActivity::class.java)
+                    Define.whenLogin = false
                     startActivity(intent)
                     requireActivity().finish()
                 },

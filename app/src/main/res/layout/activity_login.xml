@@ -57,6 +57,17 @@
             android:id="@+id/saveLoginInfo"
             android:text="로그인 정보 저장"/>
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30sp"
+            android:id="@+id/checkbox_AutoLogin"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_AutoLogin"
+            android:text="자동 로그인"/>
+
     </LinearLayout>
 
     <LinearLayout

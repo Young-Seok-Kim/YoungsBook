@@ -1,6 +1,7 @@
 package com.youngsbook.ui.main.myBookList
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.databinding.MyBookListBinding
 import com.youngsbook.ui.bookreview.WriteBookReview
+import com.youngsbook.ui.login.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -172,8 +174,19 @@ class MyBookList : Fragment() {
 
     private fun updateList() {
 
+        if(Define.NOW_LOGIN_USER_ID.isBlank()) {
+            YoungsFunction.messageBoxOKAction(requireContext(),
+                "경고!",
+                "로그인 정보가 소멸되었습니다. 다시 로그인해주세요.",
+                OKAction = {
+                    val intent = Intent(context, LoginActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                })
+        }
+
         val jsonObject : JsonObject = JsonObject()
-        jsonObject.addProperty("CODE", Define.NOW_LOGIN_USER_CODE)
+        jsonObject.addProperty("USER_ID", Define.NOW_LOGIN_USER_ID)
         NetworkProgressDialog.start(requireContext())
         CoroutineScope(Dispatchers.Default).launch {
             NetworkConnect.connectHTTPS("SelectMyBookReview.do",

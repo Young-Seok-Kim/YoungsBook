@@ -3,7 +3,6 @@ package com.youngsbook.ui.login
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -36,9 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
-import com.kakao.sdk.template.model.Content
-import com.kakao.sdk.template.model.FeedTemplate
-import com.kakao.sdk.template.model.Link
 import com.kakao.sdk.user.model.User
 
 
@@ -146,12 +142,34 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
 
     override fun onResume() {
         super.onResume()
-
         initButton()
+        if (binding.checkboxAutoLogin.isChecked && Define.whenLogin)
+            binding.buttonLogin.performClick()
         YoungsContextFunction().loadAD(this,binding.adBanner)
     }
 
     private fun initButton() {
+
+        binding.checkboxAutoLogin.setOnClickListener(object  : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if ( ! binding.checkboxSaveLoginInfo.isChecked)
+                {
+                    Toast.makeText(applicationContext,"로그인정보 저장을 먼저 선택해주세요.", Toast.LENGTH_SHORT).show()
+                    binding.checkboxAutoLogin.isChecked = false
+                }
+            }
+        })
+
+        binding.checkboxSaveLoginInfo.setOnClickListener(object  : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if (binding.checkboxAutoLogin.isChecked)
+                {
+                    Toast.makeText(applicationContext,"자동로그인을 먼저 해제해주세요.", Toast.LENGTH_SHORT).show()
+                    binding.checkboxSaveLoginInfo.isChecked = true
+                }
+            }
+        })
+
 
         binding.buttonSignUp.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
@@ -171,6 +189,7 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
                 it.showNow(supportFragmentManager,"")
             }
         }
+
         binding.buttonLogin.setOnClickListener() {
             youngsProgress.startProgress(this@LoginActivity.binding.progressbar,window)
 
@@ -193,8 +212,9 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
                         enterLogin,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
-                            val jsonArray : JSONArray
-                            jsonArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+                            val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+
+                            Define.whenLogin = true
 
                             if(jsonArray.get(0).toString().isBlank())
                             {
@@ -204,7 +224,7 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
                             }
 
                             Define.NOW_LOGIN_USER_ID = binding.userid.text.toString()
-                            Define.NOW_LOGIN_USER_CODE = (jsonArray.get(0) as JSONObject).getString("CODE").toInt()
+//                            Define.NOW_LOGIN_USER_CODE = (jsonArray.get(0) as JSONObject).getString("CODE").toInt()
 
                             editor.putString( // 로그인한 아이디 저장
                                 SharedPreference.SAVE_LOGIN_ID,
@@ -219,20 +239,26 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
                                 SharedPreference.SAVE_LOGIN_NAME,
                                 (jsonArray.get(0) as JSONObject).getString("NAME")
                             )
-                            if (binding.checkboxSaveLoginInfo.isChecked) { // 자동로그인이 클릭되었을때
-                                editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, true)
+                            if (binding.checkboxSaveLoginInfo.isChecked) { // 로그인 정보 저장이 클릭되었을때
+                                editor.putBoolean(SharedPreference.SAVE_LOGIN_INFO_BOOLEAN, true)
                                 editor.putString(
-                                    SharedPreference.AUTO_LOGIN_ID,
+                                    SharedPreference.SAVE_LOGIN_INFO_ID,
                                     (jsonArray.get(0) as JSONObject).getString("ID")
                                 )
                                 editor.putString(
-                                    SharedPreference.AUTO_LOGIN_PASSWORD,
+                                    SharedPreference.SAVE_LOGIN_INFO_PASSWORD,
                                     (jsonArray.get(0) as JSONObject).getString("PASSWORD")
                                 )
+                            } else { // 로그인 정보 저장이 클리되어있지 않을때
+                                editor.putBoolean(SharedPreference.SAVE_LOGIN_INFO_BOOLEAN, false)
+                                editor.putString(SharedPreference.SAVE_LOGIN_INFO_ID, "")
+                                editor.putString(SharedPreference.SAVE_LOGIN_INFO_PASSWORD, "")
+                            }
+
+                            if (binding.checkboxAutoLogin.isChecked) { // 자동로그인이 클릭되었을때
+                                editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, true)
                             } else { // 자동로그인이 클리되어있지 않을때
                                 editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, false)
-                                editor.putString(SharedPreference.AUTO_LOGIN_ID, "")
-                                editor.putString(SharedPreference.AUTO_LOGIN_PASSWORD, "")
                             }
 
                             editor.commit()
@@ -278,11 +304,12 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
         return false
     }
 
-    fun checkSharedPreference()
+    private fun checkSharedPreference()
     {
-        binding.checkboxSaveLoginInfo.isChecked = sharedPreferences.getBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN,false)
-        binding.userid.setText(sharedPreferences.getString(SharedPreference.AUTO_LOGIN_ID,""))
-        binding.password.setText(sharedPreferences.getString(SharedPreference.AUTO_LOGIN_PASSWORD,""))
+        binding.checkboxSaveLoginInfo.isChecked = sharedPreferences.getBoolean(SharedPreference.SAVE_LOGIN_INFO_BOOLEAN,false)
+        binding.checkboxAutoLogin.isChecked = sharedPreferences.getBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN,false)
+        binding.userid.setText(sharedPreferences.getString(SharedPreference.SAVE_LOGIN_INFO_ID,""))
+        binding.password.setText(sharedPreferences.getString(SharedPreference.SAVE_LOGIN_INFO_PASSWORD,""))
     }
 
     private fun openMainActivity() {
