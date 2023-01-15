@@ -3,6 +3,7 @@ package com.youngsbook.ui.main
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import com.youngsbook.R
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkProgress
@@ -30,8 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationview.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(binding.frameLayoutActivityMain.id, MyBookList()).commit()
+                    supportFragmentManager.beginTransaction().replace(binding.frameLayoutActivityMain.id, MyBookList()).commit()
                 }
 //                R.id.goal->{
 ////                    supportFragmentManager.beginTransaction()
@@ -62,10 +62,17 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
+        if(!binding.bottomNavigationview.menu[0].isChecked)
+        {
+            supportFragmentManager.beginTransaction().replace(binding.frameLayoutActivityMain.id, MyBookList()).commit()
+            binding.bottomNavigationview.menu[0].isChecked = true
+            return
+        }
+
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
-            return;
+            Toast.makeText( this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            return
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
 //            super.onBackPressed()

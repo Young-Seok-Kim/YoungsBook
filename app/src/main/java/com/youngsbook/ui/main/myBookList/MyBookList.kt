@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +36,8 @@ class MyBookList : Fragment() {
     lateinit var binding: MyBookListBinding
     val youngsProgressDialog = NetworkProgressDialog
 
+    private lateinit var callback: OnBackPressedCallback
+
     var pastVisiblesItems: Int = 0
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
@@ -45,9 +49,27 @@ class MyBookList : Fragment() {
         binding = MyBookListBinding.inflate(layoutInflater)
 
         initList()
-        updateList()
+        if (Define.firstOpen) {
+            updateList()
+            Define.firstOpen = false
+        }
+        else
+        {
+            binding.title.text = "현재 책을 ${MyBookListAdapter.instance.itemCount}권 읽었어요"
+        }
         initFAB()
         initListener()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                childFragmentManager.beginTransaction().replace(R.id.home, MyBookList()).commit()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
 
@@ -63,8 +85,7 @@ class MyBookList : Fragment() {
         recyclerView.layoutManager = mLayoutManager
 
         MyBookListAdapter.instance.setOnItemTapListener(object : RecyclerViewAdapter.OnItemTapListener{
-            override fun onDoubleTap(position: Int) {
-            }
+            override fun onDoubleTap(position: Int) { }
 
             override fun onLongTap(position: Int){
                 YoungsFunction.messageBoxOKCancelAction(requireContext(), "삭제", "${MyBookListAdapter.instance.currentItem?.BOOK_NAME} 리뷰를 삭제하시겠습니까?",
@@ -216,5 +237,10 @@ class MyBookList : Fragment() {
             )
         }
 
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }

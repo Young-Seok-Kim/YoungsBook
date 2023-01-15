@@ -215,6 +215,7 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
                             val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
 
                             Define.whenLogin = true
+                            Define.firstOpen = true
 
                             if(jsonArray.get(0).toString().isBlank())
                             {

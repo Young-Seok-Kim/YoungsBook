@@ -24,8 +24,6 @@ class Setting : Fragment() {
         super.onCreate(savedInstanceState)
 
         binding = SettingMenuBinding.inflate(layoutInflater)
-        Log.d("번들",arguments.toString())
-        Log.d("번들",arguments?.getString("key").toString())
         initLinearLayoutTapEvent()
     }
 

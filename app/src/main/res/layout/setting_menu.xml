@@ -38,7 +38,7 @@
         android:id="@+id/linearLayout_Logout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout_Resign"
-        android:layout_marginTop="@dimen/setting_menu_margin_top">>
+        android:layout_marginTop="@dimen/setting_menu_margin_top">
         <TextView
             style="@style/Setting_TextView"
             android:text="로그아웃"/>
