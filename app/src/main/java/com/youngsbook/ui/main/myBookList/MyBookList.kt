@@ -36,8 +36,6 @@ class MyBookList : Fragment() {
     lateinit var binding: MyBookListBinding
     val youngsProgressDialog = NetworkProgressDialog
 
-    private lateinit var callback: OnBackPressedCallback
-
     var pastVisiblesItems: Int = 0
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
@@ -60,18 +58,6 @@ class MyBookList : Fragment() {
         initFAB()
         initListener()
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                childFragmentManager.beginTransaction().replace(R.id.home, MyBookList()).commit()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -237,10 +223,5 @@ class MyBookList : Fragment() {
             )
         }
 
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        callback.remove()
     }
 }
