@@ -23,6 +23,7 @@ import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkConnect
 import com.youngsbook.common.network.NetworkProgressDialog
 import com.youngsbook.databinding.MyBookListBinding
+import com.youngsbook.parent.ParentFragment
 import com.youngsbook.ui.bookreview.WriteBookReview
 import com.youngsbook.ui.login.LoginActivity
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 
-class MyBookList : Fragment() {
+class MyBookList : ParentFragment() {
 
     lateinit var binding: MyBookListBinding
     val youngsProgressDialog = NetworkProgressDialog
@@ -180,17 +181,8 @@ class MyBookList : Fragment() {
     }
 
     private fun updateList() {
-
-        if(Define.NOW_LOGIN_USER_ID.isBlank()) {
-            YoungsFunction.messageBoxOKAction(requireContext(),
-                "경고!",
-                "로그인 정보가 소멸되었습니다. 다시 로그인해주세요.",
-                OKAction = {
-                    val intent = Intent(context, LoginActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                })
-        }
+        if(Define.NOW_LOGIN_USER_ID.isBlank())
+            return
 
         val jsonObject : JsonObject = JsonObject()
         jsonObject.addProperty("USER_ID", Define.NOW_LOGIN_USER_ID)

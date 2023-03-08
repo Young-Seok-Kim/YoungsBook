@@ -40,9 +40,9 @@ class SelfSigningHelper constructor(context: Context
                 해당 코드를 수정하고 싶다면 NetworkConnect.kt 코드에있는 동일한 부분또한 수정해야한다.
             */
 
-            if (BuildConfig.DEBUG)
-                caInput = context.resources.openRawResource(R.raw.youngsbook_chain)
-            else
+//            if (BuildConfig.DEBUG)
+//                caInput = context.resources.openRawResource(R.raw.youngsbook_chain)
+//            else
                 caInput = context.resources.openRawResource(R.raw.awsyoungsbook_chain)
 
 //            val caInput: InputStream = BufferedInputStream(FileInputStream("youngsbook.crt"))

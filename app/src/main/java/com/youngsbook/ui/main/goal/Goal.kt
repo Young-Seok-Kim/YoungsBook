@@ -9,13 +9,11 @@ import androidx.fragment.app.Fragment
 import com.youngsbook.R
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.GoalBinding
-
-
-class Goal : Fragment() {
+import com.youngsbook.parent.ParentFragment
+class Goal : ParentFragment() {
 
     lateinit var binding: GoalBinding
     val youngsProgress = NetworkProgress()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = GoalBinding.inflate(layoutInflater)
@@ -34,7 +32,6 @@ class Goal : Fragment() {
             }
         })
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root

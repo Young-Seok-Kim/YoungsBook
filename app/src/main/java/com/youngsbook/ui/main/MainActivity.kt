@@ -1,13 +1,16 @@
 package com.youngsbook.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.youngsbook.R
+import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.ActivityMainBinding
+import com.youngsbook.ui.login.LoginActivity
 import com.youngsbook.ui.main.myBookList.MyBookList
 import com.youngsbook.ui.main.setting.Setting
 
@@ -47,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     supportFragmentManager.beginTransaction()
                         .replace(binding.frameLayoutActivityMain.id, MyBookList()).commit()
-
                 }
             }
             true
@@ -75,7 +77,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-//            super.onBackPressed()
             finishAndRemoveTask()
         }
     }

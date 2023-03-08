@@ -12,11 +12,12 @@ import com.youngsbook.R
 import com.youngsbook.common.Define
 import com.youngsbook.common.YoungsFunction
 import com.youngsbook.databinding.SettingMenuBinding
+import com.youngsbook.parent.ParentFragment
 import com.youngsbook.ui.login.LoginActivity
 import com.youngsbook.ui.main.setting.resign.Resign
 
 
-class Setting : Fragment() {
+class Setting : ParentFragment() {
 
     lateinit var binding: SettingMenuBinding
 

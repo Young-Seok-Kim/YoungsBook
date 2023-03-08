@@ -73,6 +73,8 @@
             android:hint="이곳에 책이름을 입력합니다."
             android:singleLine="true" />
 
+
+
         <LinearLayout
             android:id="@+id/linearLayout_GoalReadDate"
             android:layout_width="match_parent"
@@ -115,6 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
+
 
         </LinearLayout>
 
