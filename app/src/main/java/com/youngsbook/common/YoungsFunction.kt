@@ -75,7 +75,7 @@ object YoungsFunction {
     }
 
     /*
-    OK 버튼을 누르면 특정 액션이 동작하도록
+    OK 버튼을 누르면 특정 액션이 동작하도록 하는 메시지 박스
      */
     fun messageBoxOKAction(context: Context, title : String, Message : String, OKAction : () -> Unit){
         val messageBox = AlertDialog.Builder(context)

@@ -8,9 +8,6 @@ import com.youngsbook.common.YoungsFunction
 import com.youngsbook.ui.login.LoginActivity
 
 open class ParentFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onResume() {
         super.onResume()

@@ -129,13 +129,9 @@ class FindUserInformation : DialogFragment() {
                                 val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
                                 if (jsonArray.get(0).toString().isBlank()) {
                                     Toast.makeText(requireContext(),"해당정보로 가입된 회원이 없습니다.",Toast.LENGTH_LONG).show()
-                                    youngsProgressDialog.end()
-                                    return@connectHTTPS
+                                }else{
+                                    YoungsFunction.messageBoxOK(requireContext(),"정보","회원님의 아이디는 ${jsonArray.getJSONObject(0).get("ID")}입니다.")
                                 }
-
-
-                                YoungsFunction.messageBoxOK(requireContext(),"정보","회원님의 아이디는 ${jsonArray.getJSONObject(0).get("ID")}입니다.")
-
                                 youngsProgressDialog.end()
                             }
                             , onFailure = {

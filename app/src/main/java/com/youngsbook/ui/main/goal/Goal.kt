@@ -11,7 +11,7 @@ import com.youngsbook.common.network.NetworkProgress
 import com.youngsbook.databinding.GoalBinding
 import com.youngsbook.parent.ParentFragment
 class Goal : ParentFragment() {
-
+    // 해당 페이지는 기능을 구현하려고 했으나 구현하지 않음
     lateinit var binding: GoalBinding
     val youngsProgress = NetworkProgress()
     override fun onCreate(savedInstanceState: Bundle?) {

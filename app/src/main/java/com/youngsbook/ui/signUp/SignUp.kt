@@ -89,8 +89,6 @@ class SignUp : DialogFragment() {
                         return@messageBoxOKCancelAction
                     }
                 )
-
-//                return@setOnClickListener
             }
             else {
                     signUp()
@@ -100,7 +98,6 @@ class SignUp : DialogFragment() {
         binding.buttonSendCertifyNumber.setOnClickListener(){
             if(binding.editTextPhoneNumber.text.toString().length < 4) {
                 Toast.makeText(requireContext(),"휴대폰번호를 입력해주세요",Toast.LENGTH_SHORT).show()
-                Log.d("휴대폰번호",binding.editTextInputCertifyNumber.text.toString())
                 return@setOnClickListener
             }
 

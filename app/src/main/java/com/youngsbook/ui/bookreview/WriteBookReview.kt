@@ -1,5 +1,6 @@
 package com.youngsbook.ui.bookreview
 
+import android.R
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,10 +12,12 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.google.gson.JsonObject
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.skydoves.balloon.*
 import com.youngsbook.common.Define
 import com.youngsbook.common.SharedPreference
 import com.youngsbook.common.YoungsContextFunction
@@ -31,16 +34,16 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 
+
 class WriteBookReview : DialogFragment() {
 
     lateinit var binding: WriteBookReviewBinding
+    lateinit var balloon: Balloon
     val youngsProgressDialog = NetworkProgressDialog
     private lateinit var sharedPrefer : SharedPreferences
 
-//    var status : String = "Default"
     private var scanBook : JSONObject? = null
     private var scanBookModel : ScanBookModel? = null
-    val test = ActivityResultContracts.StartActivityForResult()
 
     private val activityResultLauncher : ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -80,6 +83,27 @@ class WriteBookReview : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = WriteBookReviewBinding.inflate(layoutInflater)
+        balloon = Balloon.Builder(requireContext())
+            .setWidthRatio(1.0f)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("바코드를 스캔하여 책의 정보를 간편하게 입력할수있습니다!")
+//        .setTextColorResource(R.color.white_87)
+            .setTextSize(15f)
+//        .setIconDrawableResource(R.drawable.ic_edit)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setCornerRadius(8f)
+//        .setBackgroundColorResource(R.color.skyBlue)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+//        .setLifecycleOwner(lifecycle)
+            .build()
+
+        binding.buttonBarcodeTip.setOnClickListener(){
+            balloon.showAlignBottom(binding.buttonScanBarCode)
+        }
+
         sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.SAVE_LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
     }
@@ -95,6 +119,7 @@ class WriteBookReview : DialogFragment() {
         whenOpen()
         initButton()
 
+
         return binding.root
     }
 
@@ -108,6 +133,8 @@ class WriteBookReview : DialogFragment() {
         if (arguments?.getString("status") == Define.STATUS_INSERT)
         {
             binding.buttonDelete.visibility = View.GONE
+            binding.buttonScanBarCode.visibility = View.VISIBLE
+//            binding.textviewBarcodeTip.visibility = View.VISIBLE
         }
         else if (arguments?.getString("status") == Define.STATUS_UPDATE)
         {
@@ -116,6 +143,7 @@ class WriteBookReview : DialogFragment() {
             binding.editTextBookReview.setText(MyBookListAdapter.instance.currentItem?.REVIEW)
             binding.ratingBarStar.rating = MyBookListAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
             binding.buttonScanBarCode.visibility = View.GONE
+//            binding.textviewBarcodeTip.visibility = View.GONE
         }
     }
 
