@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -16,7 +17,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
+import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.user.UserApiClient
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Define
@@ -38,14 +44,17 @@ import org.json.JSONObject
 import com.kakao.sdk.user.model.User
 
 
-class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
+class LoginActivity : AppCompatActivity()/*, KakaoLogin.IKLoginResult*/ {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
     private lateinit var sharedPreferences : SharedPreferences
     private lateinit var editor : SharedPreferences.Editor
-    val youngsProgress = NetworkProgress()
+    private val youngsProgress = NetworkProgress()
+
+    var user: User? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,13 +62,13 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
 
         setContentView(binding.root)
 
-        KakaoSdk.init(this, "418199908136a18cc519fe9dfbc48335")
+//        KakaoSdk.init(this, "418199908136a18cc519fe9dfbc48335")
 //        kakaoLogin()
 
 
         binding.appVersion.text = "Version : ${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})${if(BuildConfig.DEBUG) ", Debug" else ""}"
 
-        sharedPreferences = getSharedPreferences("login_Info", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(SharedPreference.SAVE_LOGIN_INFO, MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
         checkSharedPreference() // 저장된 값을 가져오는 함수
@@ -129,15 +138,13 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
     override fun onStart() {
         super.onStart()
 
-//        if(BuildConfig.DEBUG) {
-//            binding.buttonTest.visibility = View.VISIBLE
-//            binding.buttonKakaoLogin.visibility = View.VISIBLE
-//        }
-//        else
-//        {
-            binding.buttonTest.visibility = View.GONE
+        if(BuildConfig.DEBUG) {
+            binding.buttonKakaoLogin.visibility = View.VISIBLE
+        }
+        else
+        {
             binding.buttonKakaoLogin.visibility = View.GONE
-//        }
+        }
     }
 
     override fun onResume() {
@@ -224,20 +231,16 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
                                 return@connectHTTPS
                             }
 
-                            Define.NOW_LOGIN_USER_ID = binding.userid.text.toString()
+                            Define.NOW_LOGIN_USER_ID = (jsonArray.get(0) as JSONObject).getString("ID")
+                            Define.NOW_LOGIN_USER_NAME = (jsonArray.get(0) as JSONObject).getString("NAME")
 //                            Define.NOW_LOGIN_USER_CODE = (jsonArray.get(0) as JSONObject).getString("CODE").toInt()
 
                             editor.putString( // 로그인한 아이디 저장
-                                SharedPreference.SAVE_LOGIN_ID,
+                                SharedPreference.NOW_LOGIN_USER_ID,
                                 (jsonArray.get(0) as JSONObject).getString("ID")
                             )
-                            editor.putString( // 로그인한 비밀번호
-                                // 저장
-                                SharedPreference.SAVE_LOGIN_PASSWORD,
-                                (jsonArray.get(0) as JSONObject).getString("PASSWORD")
-                            )
                             editor.putString( // 로그인한 이름 저장
-                                SharedPreference.SAVE_LOGIN_NAME,
+                                SharedPreference.NOW_LOGIN_USER_NAME,
                                 (jsonArray.get(0) as JSONObject).getString("NAME")
                             )
                             if (binding.checkboxSaveLoginInfo.isChecked) { // 로그인 정보 저장이 클릭되었을때
@@ -285,9 +288,7 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
             }
         }
 
-        binding.buttonTest.setOnClickListener(){
 
-        }
 
         binding.buttonKakaoLogin.setOnClickListener()
         {
@@ -324,11 +325,81 @@ class LoginActivity : AppCompatActivity(), KakaoLogin.IKLoginResult {
     }
 
     private fun kakaoLogin() {
-        KakaoLogin.instance.listener = this
-        KakaoLogin.instance.login(this)
+//        KakaoLogin.instance.listener = this
+//        KakaoLogin.instance.login(this)
+
+        if (AuthApiClient.instance.hasToken()) {
+            UserApiClient.instance.accessTokenInfo { _, error ->
+                if (error != null) {
+                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
+                        //로그인 필요
+                        if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity))
+                            UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
+                        else
+                            UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
+                    }
+                    else {
+                        //기타 에러
+                    }
+                }
+                else {
+                    //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+                }
+            }
+        }
+        else {
+            //로그인 필요
+
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity))
+                UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
+            else
+                UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
+        }
     }
-    override fun onKakaoLoginResult(user: User?) {
-        Toast.makeText(this, "$user 로그인성공",Toast.LENGTH_SHORT).show()
+//    override fun onKakaoLoginResult(user: User?) {
+//        Toast.makeText(this, "$user 로그인성공",Toast.LENGTH_SHORT).show()
+//    }
+
+
+    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+
+        if (error != null) {
+            Log.d("TAG", "로그인 실패", error)
+//            if (listener != null)
+//                listener!!.onKakaoLoginResult(null)
+
+
+            if (error.toString().contains("statusCode=302")) {
+                Log.d("에러","302에러")
+                loginWithKakaoAccount()
+            }
+        } else if (token != null) {
+            Log.i("TAG", "로그인 성공 ${token.accessToken}")
+
+            UserApiClient.instance.me { user, error ->
+
+                if (error != null) {
+                    Log.e("TAG", "사용자 정보 요청 실패", error)
+                } else if (user != null) {
+                    Log.i(
+                        "TAG", "사용자 정보 요청 성공" +
+                                "\n회원번호: ${user.id}" +
+                                "\n이메일: ${user.kakaoAccount?.email}" +
+                                "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
+                                "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
+                    )
+
+                    this.user = user
+
+//                    if (listener != null)
+//                        listener!!.onKakaoLoginResult(user)
+                }
+            }
+        }
+    }
+
+    private fun loginWithKakaoAccount(){
+        UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
     }
 }
 

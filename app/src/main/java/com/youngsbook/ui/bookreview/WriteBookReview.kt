@@ -40,7 +40,6 @@ class WriteBookReview : DialogFragment() {
     lateinit var binding: WriteBookReviewBinding
     lateinit var balloon: Balloon
     val youngsProgressDialog = NetworkProgressDialog
-    private lateinit var sharedPrefer : SharedPreferences
 
     private var scanBook : JSONObject? = null
     private var scanBookModel : ScanBookModel? = null
@@ -82,20 +81,21 @@ class WriteBookReview : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = WriteBookReviewBinding.inflate(layoutInflater)
         balloon = Balloon.Builder(requireContext())
             .setWidthRatio(1.0f)
             .setHeight(BalloonSizeSpec.WRAP)
-            .setText("바코드를 스캔하여 책의 정보를 간편하게 입력할수있습니다!")
+            .setText("책의 바코드를 스캔해보세요!")
 //        .setTextColorResource(R.color.white_87)
             .setTextSize(15f)
-//        .setIconDrawableResource(R.drawable.ic_edit)
+        .setIconDrawableResource(R.drawable.ic_dialog_info)
             .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
             .setArrowSize(10)
             .setArrowPosition(0.5f)
             .setPadding(12)
             .setCornerRadius(8f)
-//        .setBackgroundColorResource(R.color.skyBlue)
+//        .setBackgroundColorResource(ContextCompat.getColor(this,R.color.))
             .setBalloonAnimation(BalloonAnimation.ELASTIC)
 //        .setLifecycleOwner(lifecycle)
             .build()
@@ -104,7 +104,6 @@ class WriteBookReview : DialogFragment() {
             balloon.showAlignBottom(binding.buttonScanBarCode)
         }
 
-        sharedPrefer = requireActivity().getSharedPreferences(SharedPreference.SAVE_LOGIN_INFO,AppCompatActivity.MODE_PRIVATE)
 
     }
 
@@ -130,20 +129,19 @@ class WriteBookReview : DialogFragment() {
         if(MyBookListAdapter.instance.currentItem?.READ_COMPLETE == "1")
             binding.checkboxReadComplete.isChecked = true
 
-        if (arguments?.getString("status") == Define.STATUS_INSERT)
+        if (arguments?.getString("status") == "I")
         {
             binding.buttonDelete.visibility = View.GONE
             binding.buttonScanBarCode.visibility = View.VISIBLE
-//            binding.textviewBarcodeTip.visibility = View.VISIBLE
+            binding.linearLayoutBarcode.visibility = View.VISIBLE
         }
-        else if (arguments?.getString("status") == Define.STATUS_UPDATE)
+        else if (arguments?.getString("status") == "U")
         {
             binding.editTextBookName.setText(MyBookListAdapter.instance.currentItem?.BOOK_NAME)
             binding.editTextBookName.isEnabled = false
             binding.editTextBookReview.setText(MyBookListAdapter.instance.currentItem?.REVIEW)
             binding.ratingBarStar.rating = MyBookListAdapter.instance.currentItem?.STAR_RATING ?: 0F // 기본값 0.0
-            binding.buttonScanBarCode.visibility = View.GONE
-//            binding.textviewBarcodeTip.visibility = View.GONE
+            binding.linearLayoutBarcode.visibility = View.GONE
         }
     }
 
@@ -151,12 +149,6 @@ class WriteBookReview : DialogFragment() {
     private fun initButton() {
         binding.buttonSave.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (binding.editTextBookName.text.length >= 200)
-                {
-                    Toast.makeText(context,"책 제목을 더 짧게 입력해주세요.",Toast.LENGTH_LONG).show()
-                    return
-                }
-
                 val jsonObject: JsonObject = JsonObject() // insert와 update에서 동일하게 필요한값은 이곳에서 추가
                 jsonObject.addProperty("book_name", binding.editTextBookName.text.toString())
                 jsonObject.addProperty("read_date", YoungsFunction.getNowDate())
@@ -164,9 +156,8 @@ class WriteBookReview : DialogFragment() {
                 jsonObject.addProperty("review",binding.editTextBookReview.text.toString())
                 jsonObject.addProperty("star_rating", binding.ratingBarStar.rating)
                 jsonObject.addProperty("read_complete", binding.checkboxReadComplete.isChecked)
-//                jsonObject.addProperty("reader_code", Define.NOW_LOGIN_USER_CODE)
 
-                if (arguments?.getString("status") == Define.STATUS_INSERT) {
+                if (arguments?.getString("status") == "I") {
 
                     if (binding.editTextBookName.text.isNullOrBlank()) {
                         Toast.makeText(context, "책 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
@@ -176,21 +167,8 @@ class WriteBookReview : DialogFragment() {
                     }
 
 
-                    jsonObject.addProperty(
-                        "reader_id",
-                        if(sharedPrefer.getString(SharedPreference.SAVE_LOGIN_ID, " ").isNullOrBlank())
-                        {
-                            Define.NOW_LOGIN_USER_ID
-                        }
-                        else
-                        {
-                            sharedPrefer.getString(SharedPreference.SAVE_LOGIN_ID, " ")
-                        }
-                    )
-                    jsonObject.addProperty(
-                        "reader_name",
-                        sharedPrefer.getString(SharedPreference.SAVE_LOGIN_NAME, " ")
-                    )
+                    jsonObject.addProperty("reader_id", Define.NOW_LOGIN_USER_ID)
+                    jsonObject.addProperty("reader_name",Define.NOW_LOGIN_USER_NAME)
                     
                     NetworkProgressDialog.start(requireContext())
 
@@ -216,7 +194,7 @@ class WriteBookReview : DialogFragment() {
                     }
 
                 }
-                else if (arguments?.getString("status") == Define.STATUS_UPDATE)
+                else if (arguments?.getString("status") == "U")
                 {
                     if (binding.editTextBookName.text.isNullOrBlank()) {
                         Toast.makeText(context, "책 이름을 입력해주세요", Toast.LENGTH_SHORT).show()

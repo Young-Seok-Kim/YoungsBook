@@ -7,8 +7,7 @@ object SharedPreference {
     val SAVE_LOGIN_INFO_PASSWORD : String = "save_login_info_password"
     val AUTO_LOGIN_BOOLEAN : String = "auto_login_boolean"
 
-    val SAVE_LOGIN_ID : String = "login_id" // SAVE_LOGIN_** -> 현재 로그인한 아이디, 로그인 정보를 저장하지 않았을때를 대비 해당 변수를 사용
-    val SAVE_LOGIN_PASSWORD : String = "login_password"
-    val SAVE_LOGIN_NAME : String = "login_name"
-    val SAVE_LOGIN_INFO : String = "login_Info"
+    val NOW_LOGIN_USER_ID : String = "login_id" // 현재 로그인한 아이디, 로그인 정보를 저장하지 않았을때를 대비 해당 변수를 사용
+    val NOW_LOGIN_USER_NAME : String = "login_name"
+    val SAVE_LOGIN_INFO : String = "login_Info" // 현재 로그인한 정보
 }

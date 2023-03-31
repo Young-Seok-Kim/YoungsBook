@@ -145,8 +145,8 @@ object YoungsFunction {
     }
 
     fun bookSearch(searchWord : String) : JSONObject{
-        val clientId : String = Define.NAVER_CLIENT_ID
 
+        val clientId : String = Define.NAVER_CLIENT_ID
         val clientSecret : String = Define.NAVER_CLIENT_SECRETE
         var bookJsonObject : JSONObject = JSONObject()
 

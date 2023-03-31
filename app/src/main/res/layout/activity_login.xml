@@ -138,28 +138,6 @@
 
     </LinearLayout>
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout_ForgotLoginInfo">
-
-        <Button
-            android:id="@+id/button_Test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:background="@drawable/customlayout_button_main"
-            android:gravity="center"
-            android:text="테스트"
-            android:textColor="@color/white"
-            android:visibility="gone"
-            tools:visibility="visible" />
-    </RelativeLayout >
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

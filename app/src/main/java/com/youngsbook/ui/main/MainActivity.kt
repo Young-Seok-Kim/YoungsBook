@@ -1,21 +1,23 @@
 package com.youngsbook.ui.main
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.youngsbook.R
+import com.youngsbook.common.SharedPreference
 import com.youngsbook.databinding.ActivityMainBinding
 import com.youngsbook.ui.main.myBookList.MyBookList
 import com.youngsbook.ui.main.setting.Setting
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var sharedPreferences : SharedPreferences
     private var backKeyPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        sharedPreferences = getSharedPreferences(SharedPreference.SAVE_LOGIN_INFO, MODE_PRIVATE)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

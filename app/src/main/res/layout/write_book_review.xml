@@ -68,6 +68,7 @@
             android:layout_alignTop="@+id/textview_bookName"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/textview_bookName"
+            android:maxLength="100"
             android:ellipsize="end"
             android:fontFamily="@font/s_core_dream4"
             android:hint="이곳에 책이름을 입력합니다."
@@ -176,6 +177,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/linearLayout_barcode"
                 android:layout_weight="2"
                 android:gravity="center"
                 android:weightSum="5"

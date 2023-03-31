@@ -54,9 +54,6 @@ object NetworkConnect {
         retrofitService.connectRequest(path, param).enqueue(object : Callback<ResponseDTO>{
             override fun onResponse(call: Call<ResponseDTO>?, response: Response<ResponseDTO>?) {
 
-                Log.d("서버 연결 성공", response?.code().toString())
-                Log.d("디버그 || 릴리즈", if(BuildConfig.DEBUG) "Debug" else "Release")
-
                 if(response?.isSuccessful == true) {
                     resultString = response.body()?.returnValue.toString()
                     onSuccess()

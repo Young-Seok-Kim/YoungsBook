@@ -111,7 +111,7 @@ class MyBookList : ParentFragment() {
             override fun onSingleTap(position: Int) {
                 WriteBookReview().let {
                     val bundle = Bundle()
-                    bundle.putString("status", Define.STATUS_UPDATE)
+                    bundle.putString("status", "U")
                     it.arguments = bundle
 
 //                    it.status =
@@ -166,7 +166,7 @@ class MyBookList : ParentFragment() {
         {
             WriteBookReview().let {
                 val bundle = Bundle()
-                bundle.putString("status", Define.STATUS_INSERT)
+                bundle.putString("status", "I")
                 it.arguments = bundle
                 it.setStyle(DialogFragment.STYLE_NORMAL, R.style.FullDialogTheme)
                 it.showNow(childFragmentManager,"")
