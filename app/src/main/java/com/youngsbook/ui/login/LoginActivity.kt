@@ -6,23 +6,15 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.common.util.Utility
-import com.kakao.sdk.user.UserApiClient
 import com.youngsbook.BuildConfig
 import com.youngsbook.R
 import com.youngsbook.common.Define
@@ -36,15 +28,15 @@ import com.youngsbook.databinding.ActivityLoginBinding
 import com.youngsbook.ui.main.MainActivity
 import com.youngsbook.ui.findUserInformation.FindUserInformation
 import com.youngsbook.ui.signUp.SignUp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import com.kakao.sdk.user.model.User
+import com.youngsbook.common.KakaoAPICall.getKakaoUserInfo
+import com.youngsbook.parent.ParentActivity
+import kotlinx.coroutines.*
 
 
-class LoginActivity : AppCompatActivity()/*, KakaoLogin.IKLoginResult*/ {
+class LoginActivity : ParentActivity()/*, KakaoLogin.IKLoginResult*/ {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
@@ -208,15 +200,16 @@ class LoginActivity : AppCompatActivity()/*, KakaoLogin.IKLoginResult*/ {
             }
 
             if (checkBeforeLogin()) { // 아이디를 1자리, 비밀번호를 6자리 이상 입력했는지 체크
-                val enterLogin : JsonObject = JsonObject()
-                enterLogin.addProperty("ID", this@LoginActivity.binding.userid.text.toString().replace(" ",""))
-                enterLogin.addProperty("PASSWORD", this@LoginActivity.binding.password.text.toString().replace(" ",""))
+                val jsonObject : JsonObject = JsonObject()
+                jsonObject.addProperty("IS_KAKAO_LOGIN", false)
+                jsonObject.addProperty("ID", this@LoginActivity.binding.userid.text.toString().replace(" ",""))
+                jsonObject.addProperty("PASSWORD", this@LoginActivity.binding.password.text.toString().replace(" ",""))
 
                 CoroutineScope(Dispatchers.Default).launch {
                     SelfSigningHelper(context = applicationContext)
 
                     NetworkConnect.connectHTTPS("login.do",
-                        enterLogin,
+                        jsonObject,
                         applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
                         , onSuccess = { ->
                             val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
@@ -292,7 +285,19 @@ class LoginActivity : AppCompatActivity()/*, KakaoLogin.IKLoginResult*/ {
 
         binding.buttonKakaoLogin.setOnClickListener()
         {
-            kakaoLogin()
+            runBlocking {
+                var mUser : User? = null
+                GlobalScope.launch {
+                    mUser = getKakaoUserInfo(context = this@LoginActivity)
+                }.join()
+
+                if (mUser == null)
+                {
+                    Toast.makeText(this@LoginActivity,"카카오 로그인을 진행해주세요",Toast.LENGTH_SHORT).show()
+                    return@runBlocking
+                }
+                kakaoLogin(mUser)
+            }
         }
 
     }
@@ -324,82 +329,80 @@ class LoginActivity : AppCompatActivity()/*, KakaoLogin.IKLoginResult*/ {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
-    private fun kakaoLogin() {
-//        KakaoLogin.instance.listener = this
-//        KakaoLogin.instance.login(this)
+    private fun kakaoLogin(pUser: User) {
 
-        if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { _, error ->
-                if (error != null) {
-                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                        //로그인 필요
-                        if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity))
-                            UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
-                        else
-                            UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
+        val jsonObject : JsonObject = JsonObject()
+        jsonObject.addProperty("IS_KAKAO_LOGIN", true)
+        jsonObject.addProperty("ID", pUser!!.id)
+//        jsonObject.addProperty("PASSWORD", this@LoginActivity.binding.password.text.toString().replace(" ",""))
+
+        CoroutineScope(Dispatchers.Default).launch {
+            SelfSigningHelper(context = applicationContext)
+
+            NetworkConnect.connectHTTPS("kakaoLogin.do",
+                jsonObject,
+                applicationContext // 실패했을때 Toast 메시지를 띄워주기 위한 Context
+                , onSuccess = { ->
+                    val jsonArray : JSONArray = YoungsFunction.stringArrayToJson(NetworkConnect.resultString)
+
+                    Define.whenLogin = true
+                    Define.firstOpen = true
+
+                    if(jsonArray.get(0).toString().isBlank())
+                    {
+                        YoungsFunction.messageBoxOK(applicationContext,"Notice","카카오 가입을 진행하지 않았습니다. 카카오 가입을 진행해주세요.")
+                        youngsProgress.endProgressBar(binding.progressbar,window)
+                        return@connectHTTPS
                     }
-                    else {
-                        //기타 에러
-                    }
+//
+//                    Define.NOW_LOGIN_USER_ID = (jsonArray.get(0) as JSONObject).getString("ID")
+//                    Define.NOW_LOGIN_USER_NAME = (jsonArray.get(0) as JSONObject).getString("NAME")
+////                            Define.NOW_LOGIN_USER_CODE = (jsonArray.get(0) as JSONObject).getString("CODE").toInt()
+//
+//                    editor.putString( // 로그인한 아이디 저장
+//                        SharedPreference.NOW_LOGIN_USER_ID,
+//                        (jsonArray.get(0) as JSONObject).getString("ID")
+//                    )
+//                    editor.putString( // 로그인한 이름 저장
+//                        SharedPreference.NOW_LOGIN_USER_NAME,
+//                        (jsonArray.get(0) as JSONObject).getString("NAME")
+//                    )
+//                    if (binding.checkboxSaveLoginInfo.isChecked) { // 로그인 정보 저장이 클릭되었을때
+//                        editor.putBoolean(SharedPreference.SAVE_LOGIN_INFO_BOOLEAN, true)
+//                        editor.putString(
+//                            SharedPreference.SAVE_LOGIN_INFO_ID,
+//                            (jsonArray.get(0) as JSONObject).getString("ID")
+//                        )
+//                        editor.putString(
+//                            SharedPreference.SAVE_LOGIN_INFO_PASSWORD,
+//                            (jsonArray.get(0) as JSONObject).getString("PASSWORD")
+//                        )
+//                    } else { // 로그인 정보 저장이 클리되어있지 않을때
+//                        editor.putBoolean(SharedPreference.SAVE_LOGIN_INFO_BOOLEAN, false)
+//                        editor.putString(SharedPreference.SAVE_LOGIN_INFO_ID, "")
+//                        editor.putString(SharedPreference.SAVE_LOGIN_INFO_PASSWORD, "")
+//                    }
+//
+//                    if (binding.checkboxAutoLogin.isChecked) { // 자동로그인이 클릭되었을때
+//                        editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, true)
+//                    } else { // 자동로그인이 클리되어있지 않을때
+//                        editor.putBoolean(SharedPreference.AUTO_LOGIN_BOOLEAN, false)
+//                    }
+//
+//                    editor.commit()
+//                    loginViewModel.login(binding.userid.text.toString(), binding.password.text.toString())
+//
+//                    youngsProgress.endProgressBar(binding.progressbar,window)
+//                    openMainActivity()
                 }
-                else {
-                    //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+                , onFailure = {
+                    youngsProgress.endProgressBar(binding.progressbar,window)
                 }
-            }
+            )
+
         }
-        else {
-            //로그인 필요
-
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity))
-                UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
-            else
-                UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
-        }
-    }
-//    override fun onKakaoLoginResult(user: User?) {
-//        Toast.makeText(this, "$user 로그인성공",Toast.LENGTH_SHORT).show()
-//    }
 
 
-    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-
-        if (error != null) {
-            Log.d("TAG", "로그인 실패", error)
-//            if (listener != null)
-//                listener!!.onKakaoLoginResult(null)
-
-
-            if (error.toString().contains("statusCode=302")) {
-                Log.d("에러","302에러")
-                loginWithKakaoAccount()
-            }
-        } else if (token != null) {
-            Log.i("TAG", "로그인 성공 ${token.accessToken}")
-
-            UserApiClient.instance.me { user, error ->
-
-                if (error != null) {
-                    Log.e("TAG", "사용자 정보 요청 실패", error)
-                } else if (user != null) {
-                    Log.i(
-                        "TAG", "사용자 정보 요청 성공" +
-                                "\n회원번호: ${user.id}" +
-                                "\n이메일: ${user.kakaoAccount?.email}" +
-                                "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
-                                "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
-                    )
-
-                    this.user = user
-
-//                    if (listener != null)
-//                        listener!!.onKakaoLoginResult(user)
-                }
-            }
-        }
-    }
-
-    private fun loginWithKakaoAccount(){
-        UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
     }
 }
 
